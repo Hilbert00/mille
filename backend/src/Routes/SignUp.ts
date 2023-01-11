@@ -7,11 +7,11 @@ import conn from "../Config/Database.config.js";
 
 const router = express.Router();
 
-router.get("/signup", (req, res) => {
-    return res.send("Usuário Criado!");
+router.get("/test", (req, res) => {
+    return res.json({status: "working"});
 });
 
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
     const firstName: string = req.body.first_name;
     const lastName: string = req.body.last_name;
     const userName: string = req.body.user_name;
@@ -47,6 +47,8 @@ router.post("/", async (req, res) => {
             console.log(err);
         }
     });
+
+    return res.json({"created": userName})
 });
 
 export default router;

@@ -14,9 +14,9 @@ app.use(bodyParser.default.urlencoded({ extended: true }));
 import signUp from "./Routes/SignUp.js";
 
 app.get("/", (req, res) => {
-    return res.json({ message: "API is active" });
+    return res.json({ message: "The API is working" });
 });
 
-app.use("/signup", signUp);
+app.use("/api", signUp);
 
 app.listen(PORT, () => console.log(`Rodando na porta: ${PORT}`));
