@@ -11,7 +11,7 @@ app.use(bodyParser.default.json());
 app.use(bodyParser.default.urlencoded({ extended: true }));
 
 // ROUTES
-import signUp from "./Routes/SignUp.js";
+import signUp from "./Routes/SignUp.route.js";
 
 app.get("/", (req, res) => {
     return res.json({ message: "The API is working" });
