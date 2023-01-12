@@ -1,15 +1,9 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import * as express from "express";
 import * as HashHelper from "../Helpers/Hash.helper.js";
+import * as TokenHelper from "../Helpers/Token.helper.js";
 import conn from "../Config/Database.config.js";
 
 const router = express.Router();
-
-router.get("/test", (req, res) => {
-    return res.json({status: "working"});
-});
 
 router.post("/signup", async (req, res) => {
     const firstName: string = req.body.first_name;
@@ -21,8 +15,8 @@ router.post("/signup", async (req, res) => {
     const challengeMatches: string = req.body.challenge_matches;
     const challengeWins: string = req.body.challenge_wins;
 
-    const query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, 1, 0, 0, 0, 0)`;
-    const data = [
+    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, 1, 0, 0, 0, 0)`;
+    let data = [
         "first_name",
         "last_name",
         "user_name",
@@ -48,7 +42,28 @@ router.post("/signup", async (req, res) => {
         }
     });
 
-    return res.json({"created": userName})
+    query = "SELECT * FROM users WHERE ?? = ?";
+    data = ["user_name", userName];
+
+    conn.query(query, data, async (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+
+        result = JSON.parse(JSON.stringify(result))[0];
+
+        const token = TokenHelper.signToken({
+            firstName: result.first_name,
+            lastName: result.last_name,
+            userName: result.user_name,
+            userLevel: result.user_level,
+            userEXP: result.user_EXP,
+            challengeMatches: result.challenge_matches,
+            challengeWins: result.challenge_wins,
+        });
+
+        return res.json({ created: userName, token });
+    });
 });
 
 export default router;
