@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const { JWT_SECRET, JWT_SECRET_EXPIRE } = process.env;
 
 function signToken(data: object): string {
-    return jwt.sign(data, JWT_SECRET, { expiresIn: JWT_SECRET_EXPIRE });
+    return jwt.sign(data, JWT_SECRET as string, { expiresIn: JWT_SECRET_EXPIRE });
 }
 
 export { signToken };
