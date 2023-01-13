@@ -12,7 +12,7 @@ router.get("/test", verifyToken, (req, res) => {
     return res.json({ status: "accepted" });
 });
 
-router.post("/login", (req, res) => {
+router.post("/", (req, res) => {
     const { user_name, password } = req.body;
 
     const query = "SELECT * FROM users WHERE ?? = ?";

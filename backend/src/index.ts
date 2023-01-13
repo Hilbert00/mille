@@ -14,7 +14,7 @@ app.use(bodyParser.default.urlencoded({ extended: true }));
 import signUp from "./Routes/SignUp.route.js";
 import auth from "./Routes/Auth.route.js"
 
-app.use("/api", signUp);
-app.use("/api", auth);
+app.use("/api/signup", signUp);
+app.use("/api/login", auth);
 
 app.listen(PORT, () => console.log(`Rodando na porta: ${PORT}`));

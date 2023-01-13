@@ -5,7 +5,7 @@ import conn from "../Config/Database.config.js";
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post("/", async (req, res) => {
     const firstName: string = req.body.first_name;
     const lastName: string = req.body.last_name;
     const userName: string = req.body.user_name;
