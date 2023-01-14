@@ -13,10 +13,10 @@ router.get("/test", verifyToken, (req, res) => {
 });
 
 router.post("/", (req, res) => {
-    const { user_name, password } = req.body;
+    const { username, password } = req.body;
 
     const query = "SELECT * FROM users WHERE ?? = ?";
-    const data = ["user_name", user_name];
+    const data = ["user_name", username];
 
     conn.query(query, data, async (err, result) => {
         if (err) {
@@ -37,7 +37,7 @@ router.post("/", (req, res) => {
 
         const token = TokenHelper.signToken(
             {
-                userName: result.user_name,
+                userName: result.username,
                 userLevel: result.user_level,
                 userEXP: result.user_EXP,
                 challengeMatches: result.challenge_matches,
