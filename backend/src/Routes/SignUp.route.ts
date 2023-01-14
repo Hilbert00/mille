@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
     const challengeMatches: string = req.body.challenge_matches;
     const challengeWins: string = req.body.challenge_wins;
 
-    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, ?, 1, 0, 0, 0, 0)`;
+    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, 1, 0, 0, 0, 0)`;
     let data = [
         "user_name",
         "password",
