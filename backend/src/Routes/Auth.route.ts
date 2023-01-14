@@ -37,8 +37,6 @@ router.post("/", (req, res) => {
 
         const token = TokenHelper.signToken(
             {
-                firstName: result.first_name,
-                lastName: result.last_name,
                 userName: result.user_name,
                 userLevel: result.user_level,
                 userEXP: result.user_EXP,
