@@ -1,0 +1,22 @@
+.feature {
+    align-items: center;
+    display: flex;
+    gap: 5px;
+    margin-bottom: 50px;
+}
+
+.feature__text h2 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.feature__text p {
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+.feature__image {
+    display: flex;
+    align-items: center;
+}

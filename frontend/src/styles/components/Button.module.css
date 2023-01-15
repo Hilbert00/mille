@@ -1,0 +1,11 @@
+.button {
+    border: none;
+    border-radius: 12px;
+    height: 45px;
+    transition: 0.5s all ease-in-out;
+}
+
+.button:active {
+    filter: brightness(120%);
+    transform: scale(0.9);
+}

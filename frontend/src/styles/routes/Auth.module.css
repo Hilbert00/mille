@@ -1,0 +1,32 @@
+.fieldInput {
+    background-color: #3c3c3c;
+    border: none;
+    border-radius: 12px;
+    color: #8e8e8e;
+    height: 45px;
+    margin-bottom: 50px;
+    padding: 10px;
+    width: 100%;
+}
+
+#linksContainer {
+    bottom: 20vh;
+    color: #8e8e8e;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    gap: 10px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+}
+
+#linksContainer p {
+    display: inline;
+}
+
+#linksContainer a {
+    text-decoration: none;
+    color: #1a66e5;
+}
