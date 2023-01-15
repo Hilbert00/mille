@@ -3,6 +3,8 @@ import * as HashHelper from "../Helpers/Hash.helper.js";
 import * as TokenHelper from "../Helpers/Token.helper.js";
 import conn from "../Config/Database.config.js";
 
+import { serialize } from "cookie";
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -33,7 +35,7 @@ router.post("/", async (req, res) => {
         query = "SELECT * FROM users WHERE ?? = ?";
         data = ["username", userName];
 
-        conn.query(query, data, async (err, result) => {
+        conn.query(query, data, (err, result) => {
             if (err) {
                 console.log(err);
             }
@@ -48,7 +50,16 @@ router.post("/", async (req, res) => {
                 challengeWins: result.challenge_wins,
             });
 
-            return res.json({ created: userName, token });
+            const serialized = serialize("AuthJWT", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                maxAge: 60 * 60 * 24 * 30,
+                path: "/",
+            });
+
+            res.setHeader("Set-Cookie", serialized);
+            res.status(200).json({ message: "success" });
         });
     });
 });
