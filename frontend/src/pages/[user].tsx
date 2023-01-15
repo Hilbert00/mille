@@ -52,9 +52,6 @@ export default function User({ userPath }: any) {
             <>
                 <Head>
                     <title>Mille - Plataforma de Estudos para o ENEM</title>
-                    <meta charSet="UTF-8" />
-                    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 </Head>
                 <div>Carregando...</div>
             </>
@@ -65,9 +62,6 @@ export default function User({ userPath }: any) {
         <>
             <Head>
                 <title>{user.username} - Mille</title>
-                <meta charSet="UTF-8" />
-                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             </Head>
             <div>
                 <div>
