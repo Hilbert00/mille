@@ -16,7 +16,7 @@ export default function FeatureDisplay(props: FeatureProps) {
                 <p>{props.children}</p>
             </div>
             <div className={styles.feature__image}>
-                <Image src={`/landingPage/${props.type}.png`} alt={props.type} width={100} height={100} />
+                <Image src={`/images/landingPage/${props.type}.png`} alt={props.type} width={100} height={100} />
             </div>
         </div>
     );
