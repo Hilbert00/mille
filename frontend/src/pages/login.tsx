@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import swal from "sweetalert";
 
 export default function Home() {
     const [username, setUsername] = useState<string>("");
@@ -18,14 +19,26 @@ export default function Home() {
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        const formData = new FormData(e.currentTarget as HTMLFormElement);
-        const payload = new URLSearchParams(formData as any);
+        if (username.length && password.length) {
+            const formData = new FormData(e.currentTarget as HTMLFormElement);
+            const payload = new URLSearchParams(formData as any);
 
-        fetch("http://localhost:8080/api/auth/login", { method: "post", body: payload, credentials: "include" })
-            .then(() => {
-                router.push(`/@${username}`);
-            })
-            .catch((err) => console.log(err));
+            fetch("http://localhost:8080/api/auth/login", { method: "post", body: payload, credentials: "include" })
+                .then(() => {
+                    router.push(`/@${username}`);
+                })
+                .catch((err) => console.log(err));
+        } else {
+            swal("Oops", "Preencha todos os campos!", "error");
+        }
+    }
+
+    function checkEmpty(e: any) {
+        console.log(String(e.currentTarget.value));
+        if (!String(e.currentTarget.value).length) {
+            return (e.currentTarget.style.outline = "2px solid red");
+        }
+        return (e.currentTarget.style.outline = "none");
     }
 
     return (
@@ -46,7 +59,11 @@ export default function Home() {
                         type="text"
                         placeholder={"Nome de Usuário"}
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                            checkEmpty(e);
+                            setUsername(e.target.value);
+                        }}
+                        onBlur={checkEmpty}
                     />
 
                     <input
@@ -55,7 +72,11 @@ export default function Home() {
                         type="password"
                         placeholder={"Senha"}
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => {
+                            checkEmpty(e);
+                            setPassword(e.target.value);
+                        }}
+                        onBlur={checkEmpty}
                     />
                     <Button type="submit">{"Login"}</Button>
                 </form>
