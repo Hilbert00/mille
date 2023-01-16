@@ -6,9 +6,9 @@ import Head from "next/head";
 interface UserData {
     id: number;
     username: string;
-    user_level: string;
-    challenge_matches: number;
-    challenge_wins: number;
+    userLevel: string;
+    challengeMatches: number;
+    challengeWins: number;
 }
 
 export default function User({ userPath }: any) {
@@ -66,9 +66,9 @@ export default function User({ userPath }: any) {
             <div>
                 <div>
                     <p>Nome: {user.username}</p>
-                    <p>Lvl: {user.user_level}</p>
-                    <p>Duelos: {user.challenge_matches}</p>
-                    <p>Vitórias em Duelos: {user.challenge_wins}</p>
+                    <p>Lvl: {user.userLevel}</p>
+                    <p>Duelos: {user.challengeMatches}</p>
+                    <p>Vitórias em Duelos: {user.challengeWins}</p>
                 </div>
             </div>
         </>

@@ -27,13 +27,13 @@ export default function Home() {
 
         const json = JSON.parse(JSON.stringify(object));
 
-        fetch("http://localhost:8080/api/auth/signup", {
+        fetch("http://localhost:8080/api/auth/changepass", {
             body: payload,
             method: "post",
             credentials: "include",
         })
             .then((res) => res.json())
-            .then((data) => {
+            .then(() => {
                 router.push(`/@${json.username}`);
             })
             .catch((err) => console.log(err));
@@ -73,16 +73,16 @@ export default function Home() {
                         className={Styles.fieldInput}
                         name="password"
                         type="password"
-                        placeholder={"Senha"}
+                        placeholder={"Nova senha"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button type="submit">{"Cadastrar-se"}</Button>
+                    <Button type="submit">{"Confirme a nova senha"}</Button>
                 </form>
 
                 <div id={Styles.linksContainer}>
                     <p>
-                        Já tem uma conta?{" "}
+                        Lembrou sua senha?{" "}
                         <Link href={"/login"}>
                             <span>Login</span>
                         </Link>

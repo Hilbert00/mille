@@ -24,10 +24,12 @@ app.use(
 // ROUTES
 import signUp from "./Routes/SignUp.route.js";
 import auth from "./Routes/Auth.route.js";
+import changePass from "./Routes/ChangePass.route.js"
 import user from "./Routes/User.route.js";
 
 app.use("/api/auth/signup", signUp);
 app.use("/api/auth/login", auth);
+app.use("/api/auth/changepass", changePass);
 app.use("/api", user);
 
 app.listen(PORT, () => console.log(`Rodando na porta: ${PORT}`));

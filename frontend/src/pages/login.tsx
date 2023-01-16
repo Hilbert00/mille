@@ -62,14 +62,14 @@ export default function Home() {
 
                 <div id={Styles.linksContainer}>
                     <p>
-                        Ainda não tem uma conta?
+                        Ainda não tem uma conta?{" "}
                         <Link href={"/signup"}>
-                            <span> Cadastre-se</span>
+                            <span>Cadastre-se</span>
                         </Link>
                     </p>
 
                     <p>
-                        <Link href={"#"}>Esqueci minha senha</Link>
+                        <Link href={"/changepass"}>Esqueci minha senha</Link>
                     </p>
                 </div>
             </main>

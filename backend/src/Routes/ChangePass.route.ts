@@ -2,45 +2,36 @@ import * as express from "express";
 import * as HashHelper from "../Helpers/Hash.helper.js";
 import * as TokenHelper from "../Helpers/Token.helper.js";
 import conn from "../Config/Database.config.js";
-
 import { serialize } from "cookie";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-    const username: string = req.body.username;
-    const email: string = req.body.email;
-    const password = await HashHelper.getHash(req.body.password);
-
-    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, 1, 0, 0, 0, 0)`;
-    let data = [
-        "username",
-        "email",
-        "password",
-        "user_level",
-        "user_EXP",
-        "challenge_matches",
-        "challenge_wins",
-        "user_type",
-        username,
-        email,
-        password,
-    ];
-
-    conn.query(query, data, (err) => {
+router.post("/", (req, res) => {
+    const { username, email, password } = req.body;
+     
+    let query = "SELECT * FROM users WHERE ?? = ? AND ?? = ?";
+    let data = ["username", username, "email", email];
+    
+    conn.query(query, data, async (err, result) => {
         if (err) {
             console.log(err);
         }
 
-        query = "SELECT * FROM users WHERE ?? = ?";
-        data = ["username", username];
+        result = JSON.parse(JSON.stringify(result))[0];
 
-        conn.query(query, data, (err, result) => {
+        if (!result) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const newPass = await HashHelper.getHash(password);
+
+        query = "UPDATE users SET ?? = ? WHERE ?? = ?";
+        data = ["password", newPass, "username", username];
+
+        conn.query(query, data, (err) => {
             if (err) {
                 console.log(err);
             }
-
-            result = JSON.parse(JSON.stringify(result))[0];
 
             const token = TokenHelper.signToken({
                 username: result.username,

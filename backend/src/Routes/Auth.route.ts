@@ -7,14 +7,7 @@ import * as TokenHelper from "../Helpers/Token.helper.js";
 import conn from "../Config/Database.config.js";
 import { serialize } from "cookie";
 
-// MIDDLEWARES
-import { verifyToken } from "../Middlewares/Auth.middleware.js";
-
 const router = express.Router();
-
-router.get("/test", verifyToken, (req, res) => {
-    return res.json({ status: "accepted" });
-});
 
 router.post("/", (req, res) => {
     const { username, password } = req.body;
@@ -40,7 +33,7 @@ router.post("/", (req, res) => {
         }
 
         const token = TokenHelper.signToken({
-            userName: result.username,
+            username: result.username,
             userLevel: result.user_level,
             userEXP: result.user_EXP,
             challengeMatches: result.challenge_matches,
@@ -51,7 +44,7 @@ router.post("/", (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 60 * 60 * 24 * 30,
+            maxAge: Number(process.env.COOKIE_EXPIRE),
             path: "/",
         });
 
