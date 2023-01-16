@@ -1,8 +1,7 @@
 import * as express from "express";
 import * as HashHelper from "../Helpers/Hash.helper.js";
-import * as TokenHelper from "../Helpers/Token.helper.js";
+import * as CookieHelper from "../Helpers/Cookie.helper.js";
 import conn from "../Config/Database.config.js";
-import { serialize } from "cookie";
 
 const router = express.Router();
 
@@ -33,23 +32,10 @@ router.post("/", (req, res) => {
                 console.log(err);
             }
 
-            const token = TokenHelper.signToken({
-                username: result.username,
-                userLevel: result.user_level,
-                userEXP: result.user_EXP,
-                challengeMatches: result.challenge_matches,
-                challengeWins: result.challenge_wins,
-            });
+            const cookie = CookieHelper.generateUserCookie(result);
 
-            const serialized = serialize("AuthJWT", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "none",
-                maxAge: Number(process.env.COOKIE_EXPIRE),
-                path: "/",
-            });
 
-            res.setHeader("Set-Cookie", serialized);
+            res.setHeader("Set-Cookie", cookie);
             res.status(200).json({ message: "success" });
         });
     });
