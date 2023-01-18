@@ -43,7 +43,7 @@ export default function Home() {
                         Participe de duelos com seus amigos e adquira prêmios enquanto estuda!
                     </FeatureDisplay>
 
-                    <FeatureDisplay title={"Interaje na comunidade!"} type={"community"}>
+                    <FeatureDisplay title={"Interaja na comunidade!"} type={"community"}>
                         Publique suas perguntas, responda as de outros usuários, e participe de eventos na comunidade!
                     </FeatureDisplay>
                 </div>
