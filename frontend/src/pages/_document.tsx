@@ -11,7 +11,7 @@ export default function Document() {
             <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
             <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
             <Head />
-            <body>
+            <body className="from-white bg-gradient-to-b to-bgWhite text-primary dark:from-bgBlack-light dark:to-bgBlack  dark:text-primary-white">
                 <Main />
                 <NextScript />
             </body>

@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import Styles from "@/styles/routes/Auth.module.css";
 
 import Logo from "@/components/logo";
 import Button from "@/components/button";
@@ -34,7 +33,6 @@ export default function Home() {
     }
 
     function checkEmpty(e: any) {
-        console.log(String(e.currentTarget.value));
         if (!String(e.currentTarget.value).length) {
             return (e.currentTarget.style.outline = "2px solid red");
         }
@@ -47,14 +45,14 @@ export default function Home() {
                 <title>Mille - Plataforma de Estudos para o ENEM</title>
             </Head>
 
-            <header>
+            <header className="flex h-28 items-center justify-center">
                 <Logo type={"full"} />
             </header>
 
-            <main>
-                <form method="post" onSubmit={handleSubmit}>
+            <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
+                <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className={Styles.fieldInput}
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#3C3C3C]"
                         name="username"
                         type="text"
                         placeholder={"Nome de Usuário"}
@@ -67,7 +65,7 @@ export default function Home() {
                     />
 
                     <input
-                        className={Styles.fieldInput}
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#3C3C3C]"
                         name="password"
                         type="password"
                         placeholder={"Senha"}
@@ -78,19 +76,21 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit">{"Login"}</Button>
+                    <Button type="submit" width={75}>{"Login"}</Button>
                 </form>
 
-                <div id={Styles.linksContainer}>
+                <div className=" absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
                     <p>
                         Ainda não tem uma conta?{" "}
-                        <Link href={"/signup"}>
+                        <Link href={"/signup"} className="text-[#1A66E5]">
                             <span>Cadastre-se</span>
                         </Link>
                     </p>
 
                     <p>
-                        <Link href={"/changepass"}>Esqueci minha senha</Link>
+                        <Link href={"/changepass"} className="text-[#1A66E5]">
+                            Esqueci minha senha
+                        </Link>
                     </p>
                 </div>
             </main>

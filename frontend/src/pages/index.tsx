@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import Styles from "@/styles/routes/Landing.module.css";
 
 import Logo from "@/components/logo";
 import Button from "@/components/button";
@@ -14,26 +13,26 @@ export default function Home() {
                 <title>Mille - Plataforma de Estudos para o ENEM</title>
             </Head>
 
-            <header>
+            <header className="flex h-28 items-center justify-center">
                 <Logo type={"full"} />
             </header>
 
-            <main>
-                <div className={Styles.container}>
-                    <div id={Styles.titleContainer}>
-                        <h1 id={Styles.mainTitle}>Venha hoje estudar com a gente!</h1>
-                        <p id={Styles.mainText}>
+            <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
+                <section className="mb-8 min-h-[calc(100vh-12rem)]">
+                    <div className="mb-14">
+                        <h1 className="mb-3 text-2xl font-medium sm:text-6xl sm:mb-8">Venha hoje estudar com a gente!</h1>
+                        <p className="font-light sm:text-3xl">
                             Participe de comunidades de estudo sobre as áreas do conhecimento do ENEM enquanto estuda no
                             modo solo e participa de duelos com seus amigos no modo desafio!
                         </p>
                     </div>
 
                     <Link href={"/signup"}>
-                        <Button type="button">{"Crie sua conta agora!"}</Button>
+                        <Button type="button" width={70}>{"Crie sua conta agora!"}</Button>
                     </Link>
-                </div>
+                </section>
 
-                <div className={Styles.container}>
+                <section className="mb-8">
                     <FeatureDisplay title={"4 mundos únicos e mais por vir!"} type={"solo"}>
                         Quatro mundos disponíveis para as seguintes disciplinas: matemática, química, física e biologia.
                         E o número continuará aumentando no futuro!
@@ -46,7 +45,7 @@ export default function Home() {
                     <FeatureDisplay title={"Interaja na comunidade!"} type={"community"}>
                         Publique suas perguntas, responda as de outros usuários, e participe de eventos na comunidade!
                     </FeatureDisplay>
-                </div>
+                </section>
             </main>
 
             <Footer />

@@ -1,4 +1,3 @@
-import styles from "@/styles/components/Button.module.css";
 import { MouseEventHandler } from "react";
 
 interface ButtonProps {
@@ -17,7 +16,7 @@ export default function Button(props: ButtonProps) {
 
     return (
         <input
-            className={styles.button}
+            className="mx-auto block h-11 rounded-xl border-none transition-all duration-500 active:scale-90 active:brightness-125"
             style={{ backgroundColor: bgColor, color: textColor, width: `${width}%` }}
             onClick={props.action}
             value={props.children}

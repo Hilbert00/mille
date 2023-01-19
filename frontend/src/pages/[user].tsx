@@ -63,13 +63,11 @@ export default function User({ userPath }: any) {
             <Head>
                 <title>{user.username} - Mille</title>
             </Head>
-            <div>
-                <div>
-                    <p>Nome: {user.username}</p>
-                    <p>Lvl: {user.user_level}</p>
-                    <p>Duelos: {user.challenge_matches}</p>
-                    <p>Vitórias em Duelos: {user.challenge_wins}</p>
-                </div>
+            <div className="min-h-screen">
+                <p>Nome: {user.username}</p>
+                <p>Lvl: {user.user_level}</p>
+                <p>Duelos: {user.challenge_matches}</p>
+                <p>Vitórias em Duelos: {user.challenge_wins}</p>
             </div>
         </>
     );
