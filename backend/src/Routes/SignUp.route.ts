@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
 
     conn.query(query, data, (err) => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
 
         query = "SELECT * FROM users WHERE ?? = ?";
@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
 
         conn.query(query, data, (err, result) => {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
 
             result = JSON.parse(JSON.stringify(result))[0];

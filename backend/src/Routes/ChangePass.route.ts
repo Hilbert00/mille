@@ -13,7 +13,7 @@ router.post("/", (req, res) => {
     
     conn.query(query, data, async (err, result) => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
 
         result = JSON.parse(JSON.stringify(result))[0];
@@ -29,7 +29,7 @@ router.post("/", (req, res) => {
 
         conn.query(query, data, (err) => {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
 
             const cookie = CookieHelper.generateUserCookie(result);

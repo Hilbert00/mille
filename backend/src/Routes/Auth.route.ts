@@ -16,7 +16,7 @@ router.post("/", (req, res) => {
 
     conn.query(query, data, async (err, result) => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
 
         result = JSON.parse(JSON.stringify(result))[0];

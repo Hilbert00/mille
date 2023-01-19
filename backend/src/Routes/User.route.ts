@@ -17,7 +17,7 @@ router.get("/@:user", verifyToken, (req, res) => {
 
         conn.query(query, data, (err, result) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 return res.status(404).json({ message: "user not found" });
             }
 
