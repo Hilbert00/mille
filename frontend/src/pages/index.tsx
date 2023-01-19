@@ -13,14 +13,16 @@ export default function Home() {
                 <title>Mille - Plataforma de Estudos para o ENEM</title>
             </Head>
 
-            <header className="flex h-28 items-center justify-center">
+            <header className="flex h-28 w-full items-center justify-center">
                 <Logo type={"full"} />
             </header>
 
-            <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
-                <section className="mb-8 min-h-[calc(100vh-12rem)]">
-                    <div className="mb-14">
-                        <h1 className="mb-3 text-2xl font-medium sm:text-6xl sm:mb-8">Venha hoje estudar com a gente!</h1>
+            <main className="mx-auto min-h-[calc(100vh-9rem)] max-w-[calc(100vw-40px)] md:max-w-3xl">
+                <section className="mb-6 sm:mb-14">
+                    <div className="mb-6 sm:mb-14">
+                        <h1 className="mb-3 text-2xl font-medium sm:mb-8 sm:text-6xl">
+                            Venha hoje estudar com a gente!
+                        </h1>
                         <p className="font-light sm:text-3xl">
                             Participe de comunidades de estudo sobre as áreas do conhecimento do ENEM enquanto estuda no
                             modo solo e participa de duelos com seus amigos no modo desafio!
@@ -28,7 +30,9 @@ export default function Home() {
                     </div>
 
                     <Link href={"/signup"}>
-                        <Button type="button" width={70}>{"Crie sua conta agora!"}</Button>
+                        <Button type="button" width={70}>
+                            {"Crie sua conta agora!"}
+                        </Button>
                     </Link>
                 </section>
 

@@ -27,18 +27,19 @@ export default function User({ userPath }: any) {
             try {
                 const response = await fetch(`http://localhost:8080/api/${userPath}`, { credentials: "include" });
 
-                if (!response.ok) throw `${response.status}: Not Authenticated`;
+                if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
                 const data = await response.json();
 
-                if (!Object.keys(data).length || userPath[0] != "@") {
+                if (!Object.keys(data).length) {
                     router.push("/");
+                    return;
                 }
 
                 setUser(data);
                 setLoading(false);
             } catch (err) {
-                console.log(err);
+                console.error(err);
                 router.push("/login");
                 return;
             }

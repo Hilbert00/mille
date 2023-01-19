@@ -35,7 +35,8 @@ export default function Home() {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    router.push(`/@${json.username}`);
+                    router.push(`/user/@${json.username}`);
+                    return;
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -63,7 +64,7 @@ export default function Home() {
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#3C3C3C]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="username"
                         type="text"
                         placeholder={"Nome de Usuário"}
@@ -76,7 +77,7 @@ export default function Home() {
                     />
 
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#3C3C3C]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="email"
                         type="email"
                         placeholder={"Email"}
@@ -89,7 +90,7 @@ export default function Home() {
                     />
 
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#3C3C3C]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="password"
                         type="password"
                         placeholder={"Senha"}
@@ -100,7 +101,9 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit" width={75}>{"Cadastrar-se"}</Button>
+                    <Button type="submit" width={75}>
+                        {"Cadastrar-se"}
+                    </Button>
                 </form>
 
                 <div className=" absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
