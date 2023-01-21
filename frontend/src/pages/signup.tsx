@@ -26,17 +26,18 @@ export default function Home() {
             let object = {} as any;
             formData.forEach((value, key) => (object[key] = value));
 
-            const json = JSON.parse(JSON.stringify(object));
-
             fetch("http://localhost:8080/api/auth/signup", {
                 body: payload,
                 method: "post",
                 credentials: "include",
             })
-                .then((res) => res.json())
-                .then((data) => {
-                    router.push(`/user/@${json.username}`);
-                    return;
+                .then((res) => {
+                    if (res.ok) {
+                        router.push("/");
+                        return;
+                    }
+
+                    swal("Oops", "Nome de usuário ou email em uso por outra conta!", "error");
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -62,7 +63,7 @@ export default function Home() {
             </header>
 
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
-                <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
+                <form className="min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="username"
@@ -101,12 +102,12 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit" width={75}>
+                    <Button type="submit" className="w-3/4">
                         {"Cadastrar-se"}
                     </Button>
                 </form>
 
-                <div className=" absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
                     <p>
                         Já tem uma conta?{" "}
                         <Link href={"/login"} className="text-[#1A66E5]">

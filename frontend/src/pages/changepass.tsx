@@ -26,17 +26,18 @@ export default function Home() {
             let object = {} as any;
             formData.forEach((value, key) => (object[key] = value));
 
-            const json = JSON.parse(JSON.stringify(object));
-
             fetch("http://localhost:8080/api/auth/changepass", {
                 body: payload,
                 method: "post",
                 credentials: "include",
             })
-                .then((res) => res.json())
-                .then(() => {
-                    router.push(`/user/@${json.username}`);
-                    return;
+                .then((res) => {
+                    if (res.ok) {
+                        router.push("/");
+                        return;
+                    }
+
+                    swal("Oops", "Nome de usuário ou email incorretos!", "error");
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -101,10 +102,12 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit" width={75}>{"Confirme a nova senha"}</Button>
+                    <Button type="submit" className="w-3/4">
+                        {"Confirme a nova senha"}
+                    </Button>
                 </form>
 
-                <div className=" absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
                     <p>
                         Lembrou sua senha?{" "}
                         <Link href={"/login"} className="text-[#1A66E5]">

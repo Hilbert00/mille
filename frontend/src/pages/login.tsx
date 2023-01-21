@@ -25,11 +25,11 @@ export default function Home() {
             fetch("http://localhost:8080/api/auth/login", { method: "post", body: payload, credentials: "include" })
                 .then((res) => {
                     if (res.ok) {
-                        router.push(`/user/@${username}`);
+                        router.push("/");
                         return;
-                    } else {
-                        swal("Oops", "Nome de usuário ou senha incorretos!", "error");
                     }
+                    
+                    swal("Oops", "Nome de usuário ou senha incorretos!", "error");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -57,7 +57,7 @@ export default function Home() {
             </header>
 
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
-                <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
+                <form className="min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="username"
@@ -83,12 +83,12 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit" width={75}>
+                    <Button type="submit" className="w-3/4">
                         {"Login"}
                     </Button>
                 </form>
 
-                <div className=" absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
                     <p>
                         Ainda não tem uma conta?{" "}
                         <Link href={"/signup"} className="text-[#1A66E5]">
