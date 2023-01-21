@@ -15,7 +15,6 @@ function verifyToken(req: Request, res: Response, next: NextFunction) {
 
     jwt.verify(token, JWT_SECRET as string, (err, user) => {
         if (err) {
-            console.error(err);
             return res.status(403).json({ message: "not authorized" });
         }
         req.user = user;

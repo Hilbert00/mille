@@ -10,13 +10,16 @@ router.post("/", async (req, res) => {
     const email: string = req.body.email;
     const password = await HashHelper.getHash(req.body.password);
 
-    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, 1, 0, 0, 0, 0)`;
+    let query = `INSERT INTO users (??, ??, ??, ??, ??, ??, ??, ??, ??, ??, ??) VALUES (?, ?, ?, 1, 0, 0, 100, 0, 0, 0, 0)`;
     let data = [
         "username",
         "email",
         "password",
         "user_level",
         "user_EXP",
+        "user_coins",
+        "user_behavior",
+        "user_sequence",
         "challenge_matches",
         "challenge_wins",
         "user_type",
@@ -28,6 +31,7 @@ router.post("/", async (req, res) => {
     conn.query(query, data, (err) => {
         if (err) {
             console.error(err);
+            return res.status(409).json({ message: "username or email already in use" });
         }
 
         query = "SELECT * FROM users WHERE ?? = ?";
