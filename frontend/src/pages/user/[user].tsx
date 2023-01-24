@@ -41,7 +41,7 @@ export default function User({ userPath }: any) {
 
             <Topbar />
 
-            <main className="relative mx-auto mt-10 mb-24 max-w-[calc(100vw-40px)] pb-24 md:max-w-3xl">
+            <main className="relative mx-auto mt-10 max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <div className="flex w-full flex-col items-center sm:flex-row sm:justify-between">
                     <div className="flex w-full flex-col items-center sm:w-[45%]">
                         <div className="w-full">

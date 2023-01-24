@@ -13,7 +13,7 @@ export default function Social() {
 
             <Topbar></Topbar>
 
-            <main className="mx-auto mt-10 mb-24 min-h-[calc(100vh-9rem)] max-w-[calc(100vw-40px)] md:max-w-3xl">
+            <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-wrap justify-between gap-10">
                     <Card soon={true}></Card>
                 </div>
