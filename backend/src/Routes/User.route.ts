@@ -2,7 +2,7 @@ import { Router } from "express";
 import conn from "../Config/Database.config.js";
 
 // MIDDLEWARES
-import { verifyToken } from "../Middlewares/Auth.middleware.js";
+import verifyToken from "../Middlewares/Auth.middleware.js";
 
 const router = Router();
 
@@ -12,13 +12,13 @@ router.get("/:user", verifyToken, (req, res) => {
 
     if (userToken.username !== userParams) {
         const query =
-            "SELECT username, user_level, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM users WHERE ?? = ?";
+            "SELECT username, user_level, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM user WHERE ?? = ?";
         const data = ["username", userParams];
 
         conn.query(query, data, (err, result) => {
             if (err) {
                 console.error(err);
-                return res.status(404).json({ message: "user not found" });
+                return res.sendStatus(404).json({ message: "user not found" });
             }
 
             return res.json({ ...result[0] });

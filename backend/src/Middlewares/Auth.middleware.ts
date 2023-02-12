@@ -6,20 +6,18 @@ import jwt from "jsonwebtoken";
 
 const { JWT_SECRET } = process.env;
 
-function verifyToken(req: Request, res: Response, next: NextFunction) {
+export default function verifyToken(req: Request, res: Response, next: NextFunction) {
     const token: string = req.cookies.AuthJWT;
 
     if (token == null) {
-        return res.status(401).json({ message: "missing token" });
+        return res.sendStatus(401);
     }
 
     jwt.verify(token, JWT_SECRET as string, (err, user) => {
         if (err) {
-            return res.status(403).json({ message: "not authorized" });
+            return res.sendStatus(403);
         }
         req.user = user;
         next();
     });
 }
-
-export { verifyToken };
