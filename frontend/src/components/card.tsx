@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface CardProps {
     title?: string;
     main?: string;
@@ -5,6 +7,7 @@ interface CardProps {
     extra?: string;
     extraData?: string;
     color?: string;
+    linksTo?: string;
     soon?: boolean;
 }
 
@@ -20,21 +23,23 @@ export default function Card(props: CardProps) {
     }
 
     return (
-        <div className="relative h-44 w-[45%] rounded-xl">
-            <div className="p-3">
-                <p className="mb-3 font-semibold">
-                    {props.main} {props.mainData}
-                </p>
-                <p className="font-semibold">
-                    {props.extra} {props.extraData}
-                </p>
+        <Link href={props.linksTo ? props.linksTo : ""} className="w-full sm:w-[45%]">
+            <div className="relative h-44 w-full rounded-xl bg-primary-white dark:bg-primary">
+                <div className="p-3">
+                    <p className="mb-3 font-semibold">
+                        {props.main} {props.mainData}
+                    </p>
+                    <p className="font-semibold">
+                        {props.extra} {props.extraData}
+                    </p>
+                </div>
+                <div
+                    className="absolute bottom-0 flex h-12 w-full items-center rounded-b-xl p-3"
+                    style={{ background: props.color }}
+                >
+                    <h1 className="text-xl text-primary-white">{props.title}</h1>
+                </div>
             </div>
-            <div
-                className="absolute bottom-0 flex h-12 w-full items-center rounded-b-xl p-3"
-                style={{ background: props.color }}
-            >
-                <h1 className="text-xl text-primary-white">{props.title}</h1>
-            </div>
-        </div>
+        </Link>
     );
 }

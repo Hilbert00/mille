@@ -7,7 +7,7 @@ import Footer from "@/components/footer";
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
-import swal from "sweetalert";
+import swal from "sweetalert2";
 
 export default function Home() {
     const [username, setUsername] = useState("");
@@ -37,11 +37,23 @@ export default function Home() {
                         return;
                     }
 
-                    swal("Oops", "Nome de usuário ou email em uso por outra conta!", "error");
+                    swal.fire({
+                        title: "Oops",
+                        text: "Nome de usuário e/ou email em uso por outro usuário!",
+                        icon: "error",
+                        background: "#1E1E1E80",
+                        color: "#fff",
+                    });
                 })
                 .catch((err) => console.log(err));
         } else {
-            swal("Oops", "Preencha todos os campos!", "error");
+            swal.fire({
+                title: "Oops",
+                text: "Preencha todos os campos!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            });
         }
     }
 

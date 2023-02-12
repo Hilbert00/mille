@@ -1,16 +1,16 @@
 import * as express from "express";
-import * as HashHelper from "../Helpers/Hash.helper.js";
-import * as CookieHelper from "../Helpers/Cookie.helper.js";
-import conn from "../Config/Database.config.js";
+import * as HashHelper from "../../Helpers/Hash.helper.js";
+import * as CookieHelper from "../../Helpers/Cookie.helper.js";
+import conn from "../../Config/Database.config.js";
 
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.put("/", (req, res) => {
     const { username, email, password } = req.body;
-     
-    let query = "SELECT * FROM users WHERE ?? = ? AND ?? = ?";
+
+    let query = "SELECT * FROM user WHERE ?? = ? AND ?? = ?";
     let data = ["username", username, "email", email];
-    
+
     conn.query(query, data, async (err, result) => {
         if (err) {
             console.error(err);
@@ -19,12 +19,12 @@ router.post("/", (req, res) => {
         result = JSON.parse(JSON.stringify(result))[0];
 
         if (!result) {
-            return res.status(404).json({ message: "User not found" });
+            return res.sendStatus(404);
         }
 
         const newPass = await HashHelper.getHash(password);
 
-        query = "UPDATE users SET ?? = ? WHERE ?? = ?";
+        query = "UPDATE user SET ?? = ? WHERE ?? = ?";
         data = ["password", newPass, "username", username];
 
         conn.query(query, data, (err) => {
@@ -34,9 +34,7 @@ router.post("/", (req, res) => {
 
             const cookie = CookieHelper.generateUserCookie(result);
 
-
-            res.setHeader("Set-Cookie", cookie);
-            res.status(200).json({ message: "success" });
+            return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
         });
     });
 });

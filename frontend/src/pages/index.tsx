@@ -3,23 +3,72 @@ import Head from "next/head";
 import Topbar from "@/components/topbar";
 import Card from "@/components/card";
 import Menubar from "@/components/menubar";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function Home({ cardData }: any) {
+    const [data, setData] = useState([]);
+    const cardColors = ["#1A66E5", "#00BB29", "#C81652", "#7106C5"];
+
+    useEffect(() => {
+        (async function () {
+            if (!cardData) {
+                setData([<Card key={0} soon={true}></Card>] as any);
+                return;
+            }
+
+            const dataCards = cardData.map((e: any, i: number) => {
+                return (
+                    <Card
+                        key={e.id_subject}
+                        title={e.name}
+                        linksTo={String(e.name).toLowerCase().substring(0, 3)}
+                        color={cardColors[i]}
+                    ></Card>
+                );
+            });
+
+            setData(dataCards);
+        })();
+    }, []);
+
+    if (!data.length) {
+        return (
+            <>
+                <Topbar type="default" />
+                <Menubar active={2}></Menubar>
+            </>
+        );
+    }
+
     return (
         <>
             <Head>
                 <title>Mille - Solo</title>
             </Head>
 
-            <Topbar></Topbar>
+            <Topbar type="default" />
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
-                <div className="flex w-full flex-wrap justify-between gap-10">
-                    <Card soon={true}></Card>
-                </div>
+                <div className="flex w-full flex-wrap justify-between gap-10">{data}</div>
             </main>
 
             <Menubar active={1}></Menubar>
         </>
     );
+}
+
+export async function getServerSideProps() {
+    const url = `http://localhost:8080/api/world`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) throw `${response.status}: ${response.statusText}`;
+
+    const data = await response.json();
+
+    return {
+        props: {
+            cardData: data,
+        },
+    };
 }

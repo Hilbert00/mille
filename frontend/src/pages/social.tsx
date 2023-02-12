@@ -8,10 +8,10 @@ export default function Social() {
     return (
         <>
             <Head>
-                <title>Mille - Comunidade</title>
+                <title>Mille - Social</title>
             </Head>
 
-            <Topbar></Topbar>
+            <Topbar type="default" />
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-wrap justify-between gap-10">

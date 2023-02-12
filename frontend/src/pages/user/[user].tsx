@@ -1,47 +1,30 @@
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-
 import Head from "next/head";
 import Image from "next/image";
 
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 
-import { getUserData } from "utils/getUserData";
-
-interface UserData {
-    username: string;
-    user_level: number;
-    user_coins: number;
-    user_behavior: number;
-    user_sequence: number;
-    challenge_matches: number;
-    challenge_wins: number;
-}
+import { getUserData } from "hooks/getUserData";
 
 export default function User({ userPath }: any) {
-    const router = useRouter();
+    const [user] = getUserData(userPath);
 
-    const [user, setUser] = useState({} as UserData);
-
-    useEffect(() => {
-        (async function () {
-            if ((await getUserData(setUser, userPath)) === false) {
-                router.push("/");
-                return;
-            }
-        })();
-    }, []);
+    if (!user.username)
+        return (
+            <>
+                <Topbar type="default" />
+                <Menubar active={2}></Menubar>
+            </>
+        );
 
     return (
         <>
             <Head>
-                <title>{`Mille - ${user.username}`}</title>
+                <title>{`Mille - @${user.username}`}</title>
             </Head>
 
-            <Topbar />
-
-            <main className="relative mx-auto mt-10 max-w-[calc(100vw-40px)] md:max-w-3xl">
+            <Topbar type="default" />
+            <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-col items-center sm:flex-row sm:justify-between">
                     <div className="flex w-full flex-col items-center sm:w-[45%]">
                         <div className="w-full">

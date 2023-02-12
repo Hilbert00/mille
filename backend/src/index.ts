@@ -22,14 +22,20 @@ app.use(
 );
 
 // ROUTES
-import signUp from "./Routes/SignUp.route.js";
-import auth from "./Routes/Auth.route.js";
-import changePass from "./Routes/ChangePass.route.js"
+import signUp from "./Routes/auth/SignUp.route.js";
+import auth from "./Routes/auth/Auth.route.js";
+import changePass from "./Routes/auth/ChangePass.route.js";
+
 import user from "./Routes/User.route.js";
+import quiz from "./Routes/solo/Quiz.route.js";
+import world from "./Routes/solo/World.route.js";
 
 app.use("/api/auth/signup", signUp);
 app.use("/api/auth/login", auth);
 app.use("/api/auth/changepass", changePass);
+
 app.use("/api/user", user);
+app.use("/api/quiz", quiz);
+app.use("/api/world", world);
 
 app.listen(PORT, () => console.log(`Rodando na porta: ${PORT}`));

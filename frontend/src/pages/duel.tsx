@@ -4,34 +4,18 @@ import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import User from "@/components/userduel";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-
-import { getUserData } from "utils/getUserData";
-
-interface UserData {
-    username: string;
-    user_level: number;
-    user_coins: number;
-    user_behavior: number;
-    user_sequence: number;
-    challenge_matches: number;
-    challenge_wins: number;
-}
+import { getUserData } from "hooks/getUserData";
 
 export default function Duel() {
-    const router = useRouter();
+    const [user] = getUserData();
 
-    const [user, setUser] = useState({} as UserData);
-
-    useEffect(() => {
-        (async function () {
-            if ((await getUserData(setUser)) === false) {
-                router.push("/login");
-                return;
-            }
-        })();
-    }, []);
+    if (!user.username)
+        return (
+            <>
+                <Topbar type="default" />
+                <Menubar active={2}></Menubar>
+            </>
+        );
 
     return (
         <>
@@ -39,7 +23,7 @@ export default function Duel() {
                 <title>Mille - Duelo</title>
             </Head>
 
-            <Topbar></Topbar>
+            <Topbar type="default" />
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex flex-col items-center justify-between sm:flex-row">
@@ -61,15 +45,6 @@ export default function Duel() {
                         >
                             <option value="0" className="text-base">
                                 Matemática
-                            </option>
-                            <option value="1" className="text-base">
-                                Química
-                            </option>
-                            <option value="2" className="text-base">
-                                Biologia
-                            </option>
-                            <option value="3" className="text-base">
-                                Física
                             </option>
                         </select>
                     </div>
@@ -111,23 +86,23 @@ export default function Duel() {
                             id="subject"
                             className="grow appearance-none rounded-xl border-none p-3 text-base dark:bg-bgBlack"
                         >
-                            <option value="10" className="text-base">
-                                10 segundos
-                            </option>
-                            <option value="20" className="text-base">
-                                20 segundos
-                            </option>
                             <option value="30" className="text-base">
                                 30 segundos
                             </option>
-                            <option value="40" className="text-base">
-                                40 segundos
-                            </option>
-                            <option value="50" className="text-base">
-                                50 segundos
-                            </option>
                             <option value="60" className="text-base">
-                                60 segundos
+                                1 minuto
+                            </option>
+                            <option value="90" className="text-base">
+                                1 minuto e 30 segundos
+                            </option>
+                            <option value="120" className="text-base">
+                                2 minutos
+                            </option>
+                            <option value="150" className="text-base">
+                                2 minutos 30 segundos
+                            </option>
+                            <option value="180" className="text-base">
+                                3 minutos
                             </option>
                         </select>
                     </div>
