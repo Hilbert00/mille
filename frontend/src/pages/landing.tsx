@@ -6,7 +6,7 @@ import Button from "@/components/button";
 import FeatureDisplay from "@/components/landingPage/featureDisplay";
 import Footer from "@/components/footer";
 
-export default function Home() {
+export default function LandingPage() {
     return (
         <>
             <Head>

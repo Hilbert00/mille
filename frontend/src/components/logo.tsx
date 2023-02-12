@@ -8,7 +8,13 @@ interface LogoType {
 export default function Logo(props: LogoType) {
     return (
         <Link href={"/landing"}>
-            <Image src={`/images/logo/mille-logo-${props.type}.png`} alt={"Logo"} width={"160"} height={"80"} priority />
+            <Image
+                src={`/images/logo/mille-logo-${props.type}.png`}
+                alt={"Logo"}
+                width={"160"}
+                height={"80"}
+                priority
+            />
         </Link>
     );
 }
