@@ -1,5 +1,5 @@
 export default async function getQuizData(quiz: number) {
-    const url = `http://localhost:8080/api/quiz/${quiz}`;
+    const url = `http://localhost:8080/api/quiz/get/${quiz}`;
 
     const response = await fetch(url, { credentials: "include" });
 

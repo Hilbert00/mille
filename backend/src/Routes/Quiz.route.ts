@@ -1,11 +1,11 @@
-import * as UserHelper from "../../Helpers/UserID.helper.js";
+import * as UserHelper from "../Helpers/UserID.helper.js";
 import { Router } from "express";
-import conn from "../../Config/Database.config.js";
-import queryPromise from "../../Helpers/QueryPromise.helper.js";
+import conn from "../Config/Database.config.js";
+import queryPromise from "../Helpers/QueryPromise.helper.js";
 
 // MIDDLEWARES
-import verifyToken from "../../Middlewares/Auth.middleware.js";
-import verifysubject from "../../Middlewares/Subject.middleware.js";
+import verifyToken from "../Middlewares/Auth.middleware.js";
+import verifysubject from "../Middlewares/Subject.middleware.js";
 
 // INTERFACES
 interface DataProps {
@@ -25,9 +25,10 @@ const router = Router();
 
 router.post("/create", verifyToken, verifysubject, async (req, res) => {
     const { area } = req.body;
-    const { quizType } = req.body;
-    const { quizNumber } = req.body;
-    const questionQuantity = req.body.questionQuantity ?? 5;
+    const { quizType } = req.body ?? null;
+    const { quizNumber } = req.body ?? null;
+    const questionQuantity = isNaN(parseInt(req.body.questionQuantity)) ? 5 : parseInt(req.body.questionQuantity);
+    const isDuel = req.body.isDuel ?? false;
 
     async function getQuestions() {
         const query = `SELECT id_question FROM question WHERE id_area = ${area}`;
@@ -113,7 +114,7 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
             if (a.correct == 1) return a.id_alternative;
         });
 
-        return answerArray.filter((a) => typeof a === "number")[0];
+        return answerArray.find((a) => typeof a === "number");
     });
 
     const quizData: { [key: string]: any } = {};
@@ -125,6 +126,10 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
             alternatives: { available: availableAnswers[i], correct: rightAnswers[i], answered: 0 },
         };
     });
+
+    if (isDuel) {
+        return res.json({ message: "successs", data: quizData });
+    }
 
     const quizCreateQuery = "INSERT INTO quiz (id_user, quiz_type, quiz_number, data) VALUES (?, ?, ?, ?)";
     const quizCreateData = [userID, quizType, quizNumber, JSON.stringify(quizData)];
@@ -138,7 +143,7 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
     });
 });
 
-router.get("/:type", verifyToken, async (req, res) => {
+router.get("/get/:type", verifyToken, async (req, res) => {
     const quizType = req.params.type;
     const quizID = req.query.num;
     const parsed = typeof req.query.parsed === "undefined" ? true : req.query.parsed === "true";
@@ -249,6 +254,77 @@ router.get("/:type", verifyToken, async (req, res) => {
             const finalResult = await Promise.all(multipleData.map((e) => getQObjects(e)));
             return res.json(finalResult);
         }
+    } catch (err) {
+        return res.sendStatus(204);
+    }
+});
+
+router.get("/get", verifyToken, async (req, res) => {
+    const quizData = req.query.data;
+
+    if (typeof quizData === "undefined") return res.sendStatus(404);
+
+    async function getQuestion(id: number) {
+        const query = `SELECT q.text, i.image_url FROM question AS q LEFT JOIN image AS i ON q.id_question = i.id_question WHERE q.id_question = ${id}`;
+
+        try {
+            const q: any = await queryPromise(query);
+            const question = JSON.parse(JSON.stringify(q[0]));
+            return question;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    async function getAlternatives(id: number) {
+        const query = `SELECT text, image_url FROM alternative WHERE id_alternative = ${id}`;
+
+        try {
+            const al: any = await queryPromise(query);
+            const alternatives = JSON.parse(JSON.stringify(al[0]));
+            return alternatives;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    async function getQObjects(data: DataProps) {
+        const qObjects = await Promise.all(
+            data.questions.map(async (e) => {
+                const availableAlternatives = await Promise.all(
+                    e.alternatives.available.map(async (e) => {
+                        const alt = await getAlternatives(e);
+                        return {
+                            id: e,
+                            text: alt.text,
+                            image_url: alt.image_url,
+                        };
+                    })
+                );
+
+                const question = await getQuestion(e.id);
+                const questionData = {
+                    id: e.id,
+                    text: question.text,
+                    image_url: question.image_url,
+                    alternatives: {
+                        available: availableAlternatives,
+                        answered: e.alternatives.answered,
+                        correct: e.alternatives.correct,
+                    },
+                };
+                return questionData;
+            })
+        );
+        return { id: data.id, done: data.done, questions: qObjects };
+    }
+
+    try {
+        const baseData: any = JSON.parse(quizData as any);
+
+        const finalResult: any = await getQObjects(baseData as DataProps);
+        return res.json(finalResult);
     } catch (err) {
         return res.sendStatus(204);
     }

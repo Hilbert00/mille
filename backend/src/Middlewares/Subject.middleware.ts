@@ -49,12 +49,12 @@ export default async function verifysubject(req: Request, res: Response, next: N
         const subjectParam = req.body.subject ?? req.params.subject;
         const areaParam = req.body.area;
 
-        const subjectObject = availableSubjects.filter((e) => e.short === subjectParam)[0];
+        const subjectObject = availableSubjects.find((e) => e.short === subjectParam);
         const subject = subjectObject.short;
         if (areaParam) {
-            const areaObject = availableSubjects[availableSubjects.indexOf(subjectObject)].areas.filter(
+            const areaObject = availableSubjects[availableSubjects.indexOf(subjectObject)].areas.find(
                 (x) => x.short === areaParam
-            )[0];
+            );
             const area = areaObject.short;
 
             if (subject === subjectParam) {
