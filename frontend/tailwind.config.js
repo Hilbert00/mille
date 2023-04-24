@@ -2,7 +2,16 @@
 module.exports = {
     content: ["./src/pages/**/*.{js,ts,jsx,tsx}", "./src/components/**/*.{js,ts,jsx,tsx}"],
     theme: {
-        extend: {},
+        extend: {
+            keyframes: {
+                ellipsis: {
+                    to: { width: "18px" },
+                },
+            },
+            animation: {
+                "loading-ellipsis": "ellipsis steps(4, end) 900ms infinite",
+            },
+        },
         fontFamily: {
             sans: ["Poppins", "sans-serif"],
         },

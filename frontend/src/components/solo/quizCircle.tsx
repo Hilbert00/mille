@@ -142,7 +142,7 @@ export default function QuizCircle(props: Props) {
             style={{ ...props.style, opacity: locked ? "0.3" : "1.0" }}
             onClick={async () => {
                 try {
-                    const test = await fetch(`http://localhost:8080/api/quiz/${props.type}?num=${props.linksTo}`, {
+                    const test = await fetch(`http://localhost:8080/api/quiz/get/${props.type}?num=${props.linksTo}`, {
                         credentials: "include",
                     });
 

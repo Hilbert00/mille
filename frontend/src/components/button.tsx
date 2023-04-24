@@ -7,6 +7,7 @@ interface ButtonProps {
     textColor?: string;
     type: "button" | "submit";
     className?: any;
+    disable?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
@@ -19,6 +20,7 @@ export default function Button(props: ButtonProps) {
             onClick={props.action}
             value={props.children}
             type={props.type}
+            disabled={props.disable}
         />
     );
 }

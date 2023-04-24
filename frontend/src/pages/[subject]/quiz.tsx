@@ -7,10 +7,11 @@ import Button from "@/components/button";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
+const colors = ["#7106C5", "#1A66E5", "#00BB29", "#E5AC1A", "#D2042D"];
+
 export default function Quiz(props: any) {
     const router = useRouter();
 
-    const colors = ["#7106C5", "#1A66E5", "#00BB29", "#E5AC1A", "#D2042D"];
     const questionQuantity = props.quantity ?? 5;
 
     const callApi = useRef(true);
@@ -23,7 +24,7 @@ export default function Quiz(props: any) {
     const [quizImage, setQuizImage] = useState([] as any);
     const [quizAlternatives, setQuizAlternatives] = useState([]);
 
-    const url = `http://localhost:8080/api/quiz/${props.quizType}?num=${props.quizID}`;
+    const url = `http://localhost:8080/api/quiz/get/${props.quizType}?num=${props.quizID}`;
 
     async function getData() {
         const response = await fetch(url, { credentials: "include" });
@@ -199,13 +200,9 @@ export default function Quiz(props: any) {
                     <h1 className="text-4xl font-bold">{"Resultados"}</h1>
                     <div className="my-6 grid text-primary-white sm:grid-cols-2 sm:gap-8">
                         {quizData.questions.map((e: any, i: number) => {
-                            const correct = e.alternatives.available.filter(
-                                (f: any) => f.id === e.alternatives.correct
-                            )[0];
+                            const correct = e.alternatives.available.find((f: any) => f.id === e.alternatives.correct);
 
-                            const answered = e.alternatives.available.filter(
-                                (f: any) => f.id === answers[i].answered
-                            )[0];
+                            const answered = e.alternatives.available.find((f: any) => f.id === answers[i].answered);
 
                             return (
                                 <div
@@ -263,7 +260,7 @@ export default function Quiz(props: any) {
                                 const correctQuantity = answers.filter((e: any) => e.isRight).length;
 
                                 const oldD = await fetch(
-                                    `http://localhost:8080/api/quiz/${props.quizType}?num=${
+                                    `http://localhost:8080/api/quiz/get/${props.quizType}?num=${
                                         props.quizID
                                     }&parsed=${false}`,
                                     { credentials: "include" }
@@ -284,7 +281,6 @@ export default function Quiz(props: any) {
                                                     }
                                                     break;
                                                 case "2":
-                                                    console.log("A");
                                                     if (props.quizID == 5) {
                                                         createNewQuiz("mat", false, "est", "2", "6");
                                                         createNewQuiz("mat", false, "gra", "2", "9");
@@ -383,8 +379,6 @@ export default function Quiz(props: any) {
                 quizType: props.quizType,
                 quizNumber: String(Number(props.quizID) + 1),
             };
-
-            console.log(bodyData);
 
             await fetch("http://localhost:8080/api/quiz/create", {
                 credentials: "include",
