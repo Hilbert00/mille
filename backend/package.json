@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "cls && npm run build && node ./dist/index.js",
+    "start": "npm run build && node ./dist/index.js",
     "test": "nodemon ./dist/index.js localhost 3000"
   },
   "keywords": [],
