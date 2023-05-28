@@ -34,13 +34,13 @@ export default function Topbar(props: TopbarProps) {
                     className="flex h-8 items-center justify-center bg-[#00BB29] transition-all"
                     style={{ width: `${percentage}%` }}
                 ></div>
-                <span className="absolute right-0 left-0 text-center font-semibold transition-all sm:text-xl text-[#FFF]">
+                <span className="absolute right-0 left-0 text-center font-semibold text-[#FFF] transition-all sm:text-xl">
                     {`${percentage}%`}
                 </span>
             </div>
         </div>
     );
-    
+
     const [extraInfo, setExtraInfo] = useState(null as any);
 
     useEffect(() => {

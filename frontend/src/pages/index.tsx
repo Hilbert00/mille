@@ -57,12 +57,10 @@ export default function Home({ cardData }: any) {
     );
 }
 
-export async function getServerSideProps() {
-    const url = `http://localhost:8080/api/world`;
+export async function getStaticProps() {
+    const url = process.env.NEXT_PUBLIC_API_URL + "/api/world";
 
     const response = await fetch(url);
-
-    if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
     const data = await response.json();
 

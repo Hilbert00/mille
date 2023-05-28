@@ -26,7 +26,7 @@ export default function Home() {
             let object = {} as any;
             formData.forEach((value, key) => (object[key] = value));
 
-            fetch("http://localhost:8080/api/auth/signup", {
+            fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/signup", {
                 body: payload,
                 method: "post",
                 credentials: "include",

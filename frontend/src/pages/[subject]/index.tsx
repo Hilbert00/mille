@@ -79,7 +79,7 @@ export default function Solo(props: Props) {
                     quizNumber: 1,
                 };
 
-                await fetch("http://localhost:8080/api/quiz/create", {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                     credentials: "include",
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -134,7 +134,7 @@ export default function Solo(props: Props) {
                             <h2 className="text-center font-semibold">{e.type_description}</h2>
                             {sections[i]}
                         </div>
-                        {i !== props.data.length - 1 && doneCount < 35 * (i + 1) && !quizData[i + 1]?.length ? (
+                        {i !== props.data.length - 1 && doneCount < 35 * (i + 1) || !quizData[i + 1]?.length ? (
                             <LockWall
                                 subject={props.subject}
                                 unlocks={i + 2}
@@ -153,8 +153,8 @@ export default function Solo(props: Props) {
     );
 }
 
-export async function getServerSideProps({ params }: any) {
-    const url = `http://localhost:8080/api/world/${params.subject}`;
+export async function getStaticProps({ params }: any) {
+    const url = process.env.NEXT_PUBLIC_API_URL + `/api/world/${params.subject}`;
 
     try {
         const response = await fetch(url, { credentials: "include" });
@@ -167,7 +167,7 @@ export async function getServerSideProps({ params }: any) {
             throw new Error();
         }
 
-        const url2 = "http://localhost:8080/api/world";
+        const url2 = process.env.NEXT_PUBLIC_API_URL + "/api/world";
 
         try {
             const response = await fetch(url2, { credentials: "include" });
@@ -203,4 +203,11 @@ export async function getServerSideProps({ params }: any) {
             },
         };
     }
+}
+
+export async function getStaticPaths() {
+    return {
+        paths: ["/mat"],
+        fallback: false,
+    };
 }

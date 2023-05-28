@@ -142,9 +142,12 @@ export default function QuizCircle(props: Props) {
             style={{ ...props.style, opacity: locked ? "0.3" : "1.0" }}
             onClick={async () => {
                 try {
-                    const test = await fetch(`http://localhost:8080/api/quiz/get/${props.type}?num=${props.linksTo}`, {
-                        credentials: "include",
-                    });
+                    const test = await fetch(
+                        process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${props.type}?num=${props.linksTo}`,
+                        {
+                            credentials: "include",
+                        }
+                    );
 
                     if (test.status === 204) throw new Error();
 

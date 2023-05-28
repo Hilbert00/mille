@@ -13,16 +13,18 @@ import { useRouter } from "next/router";
 import { getUserData } from "hooks/getUserData";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 
-export default function Duel(props: any) {
+export default function Duel() {
     const [user] = getUserData();
     const router = useRouter();
 
     const [state, setState] = useState({} as any);
-    const [roomID, setRoomID] = useState("");
+    const roomID = useRef("");
     const [matchResult, setMatchResult] = useState(["", ""]);
 
     const playerNumber = useRef(0);
-    const socket = useRef(io("http://localhost:8080", { autoConnect: false, closeOnBeforeunload: false }));
+    const socket = useRef(
+        io(String(process.env.NEXT_PUBLIC_API_URL), { autoConnect: false, closeOnBeforeunload: false })
+    );
 
     const [formData, setFormData] = useState(
         Object.freeze({
@@ -55,7 +57,7 @@ export default function Duel(props: any) {
                 if (playerPoints > enemyPoints) {
                     setMatchResult(["#00BB29", "Vitória"]);
 
-                    fetch("http://localhost:8080/api/user/update", {
+                    fetch(process.env.NEXT_PUBLIC_API_URL + "/api/user/update", {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
@@ -67,7 +69,7 @@ export default function Duel(props: any) {
                 } else if (playerPoints < enemyPoints) {
                     setMatchResult(["#C81652", "Derrota"]);
 
-                    fetch("http://localhost:8080/api/user/update", {
+                    fetch(process.env.NEXT_PUBLIC_API_URL + "/api/user/update", {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
@@ -79,7 +81,7 @@ export default function Duel(props: any) {
                 } else {
                     setMatchResult(["#FFFFFF", "Empate"]);
 
-                    fetch("http://localhost:8080/api/user/update", {
+                    fetch(process.env.NEXT_PUBLIC_API_URL + "/api/user/update", {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
@@ -92,17 +94,17 @@ export default function Duel(props: any) {
             }
         }
 
-        if (!roomID || !playerNumber) {
+        if (!roomID.current || !playerNumber) {
             socket.current.connect();
-            if (props.roomID) {
-                socket.current.emit("joinRoom", props.roomID, user);
+            if (router.query.roomID) {
+                socket.current.emit("joinRoom", router.query.roomID, user);
             } else {
                 socket.current.emit("createRoom", user);
             }
         }
 
         socket.current.on("createdRoom", (room, state) => {
-            setRoomID(room);
+            roomID.current = room;
             playerNumber.current = 1;
             setState(JSON.parse(state));
         });
@@ -134,8 +136,8 @@ export default function Duel(props: any) {
         });
 
         socket.current.on("joinedRoom", (state) => {
-            if (props.roomID && !playerNumber.current) {
-                setRoomID(props.roomID);
+            if (router.query.roomID && !playerNumber.current) {
+                roomID.current = String(router.query.roomID);
                 playerNumber.current = 2;
             }
 
@@ -157,7 +159,7 @@ export default function Duel(props: any) {
 
             setState(JSON.parse(state));
         });
-    }, [state, Object.keys(user).length]);
+    }, [state, Object.keys(user).length, router.query]);
 
     if (!user.username || !Object.keys(state).length)
         return (
@@ -308,7 +310,9 @@ export default function Duel(props: any) {
     function getInviteLink() {
         swal.fire({
             title: "Convite de Duelo",
-            text: `Copie este link e envie para seu amigo: ${window.location.origin + "/duel?roomID=" + roomID}`,
+            text: `Copie este link e envie para seu amigo: ${
+                window.location.origin + "/duel?roomID=" + roomID.current
+            }`,
             background: "#1E1E1E80",
             color: "#fff",
         });
@@ -453,7 +457,7 @@ export default function Duel(props: any) {
     }
 
     async function startDuel() {
-        const rawResponse = await fetch("http://localhost:8080/api/quiz/create", {
+        const rawResponse = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
             method: "POST",
             headers: {
                 Accept: "application/json",
@@ -466,14 +470,6 @@ export default function Duel(props: any) {
         const content = await rawResponse.json();
 
         const updatedState = { ...state, ...formData, questions: content.data.questions };
-        socket.current.emit("gameStart", JSON.stringify(updatedState), roomID);
+        socket.current.emit("gameStart", JSON.stringify(updatedState), roomID.current);
     }
-}
-
-export async function getServerSideProps({ query }: any) {
-    return {
-        props: {
-            roomID: query.roomID || null,
-        },
-    };
 }

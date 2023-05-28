@@ -1,6 +1,6 @@
 export default async function getDoneCount(array: number[] | string[]) {
     async function getData(quiz: number[] | string[]) {
-        const url = `http://localhost:8080/api/quiz/get/${quiz}?typeArray=${array}`;
+        const url = process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${quiz}?typeArray=${array}`;
         const response = await fetch(url, { credentials: "include" });
 
         if (!response.ok) throw `${response.status}: ${response.statusText}`;

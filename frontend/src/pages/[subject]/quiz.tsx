@@ -9,10 +9,18 @@ import { useRouter } from "next/router";
 
 const colors = ["#7106C5", "#1A66E5", "#00BB29", "#E5AC1A", "#D2042D"];
 
-export default function Quiz(props: any) {
+export default function Quiz() {
     const router = useRouter();
 
-    const questionQuantity = props.quantity ?? 5;
+    const quizSettings = useRef({
+        subject: router.query.subject,
+        quizType: router.query.quizType,
+        quizArea: router.query.quizArea,
+        quizID: Number(router.query.quizID),
+        quantity: 5,
+    });
+
+    const questionQuantity = quizSettings.current.quantity;
 
     const callApi = useRef(true);
     const [calledPush, setCalledPush] = useState(false);
@@ -24,7 +32,9 @@ export default function Quiz(props: any) {
     const [quizImage, setQuizImage] = useState([] as any);
     const [quizAlternatives, setQuizAlternatives] = useState([]);
 
-    const url = `http://localhost:8080/api/quiz/get/${props.quizType}?num=${props.quizID}`;
+    const url =
+        process.env.NEXT_PUBLIC_API_URL +
+        `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}`;
 
     async function getData() {
         const response = await fetch(url, { credentials: "include" });
@@ -35,7 +45,7 @@ export default function Quiz(props: any) {
             }
 
             setCalledPush(true);
-            router.push(`/${props.subject}`);
+            router.push(`/${quizSettings.current.subject}`);
             return;
         }
         const data = await response.json();
@@ -170,7 +180,7 @@ export default function Quiz(props: any) {
                 }
 
                 setCalledPush(true);
-                router.push(`/${props.subject}`);
+                router.push(`/${quizSettings.current.subject}`);
             }
         }
     }, [currentQuestion]);
@@ -260,44 +270,54 @@ export default function Quiz(props: any) {
                                 const correctQuantity = answers.filter((e: any) => e.isRight).length;
 
                                 const oldD = await fetch(
-                                    `http://localhost:8080/api/quiz/get/${props.quizType}?num=${
-                                        props.quizID
-                                    }&parsed=${false}`,
+                                    process.env.NEXT_PUBLIC_API_URL +
+                                        `/api/quiz/get/${quizSettings.current.quizType}?num=${
+                                            quizSettings.current.quizID
+                                        }&parsed=${false}`,
                                     { credentials: "include" }
                                 );
 
                                 const oldData = await oldD.json();
 
                                 if (correctQuantity >= 3) {
-                                    switch (props.subject) {
+                                    switch (quizSettings.current.subject) {
                                         case "mat":
-                                            switch (props.quizType) {
+                                            switch (quizSettings.current.quizType) {
                                                 case "1":
-                                                    if (props.quizID == 1) {
+                                                    if (quizSettings.current.quizID == 1) {
                                                         createNewQuiz("mat", false, "ari", "1", "2");
                                                         createNewQuiz("mat", false, "raz", "1", "7");
-                                                    } else if (props.quizID != 6 && props.quizID != 11) {
+                                                    } else if (
+                                                        quizSettings.current.quizID != 6 &&
+                                                        quizSettings.current.quizID != 11
+                                                    ) {
                                                         createNewQuiz("mat", true);
                                                     }
                                                     break;
                                                 case "2":
-                                                    if (props.quizID == 5) {
+                                                    if (quizSettings.current.quizID == 5) {
                                                         createNewQuiz("mat", false, "est", "2", "6");
                                                         createNewQuiz("mat", false, "gra", "2", "9");
-                                                    } else if (props.quizID != 8 && props.quizID != 11) {
+                                                    } else if (
+                                                        quizSettings.current.quizID != 8 &&
+                                                        quizSettings.current.quizID != 11
+                                                    ) {
                                                         createNewQuiz("mat", true);
                                                     }
                                                     break;
                                                 case "3":
-                                                    if (props.quizID != 5) {
+                                                    if (quizSettings.current.quizID != 5) {
                                                         createNewQuiz("mat", true);
                                                     }
                                                     break;
                                                 case "4":
-                                                    if (props.quizID == 4) {
+                                                    if (quizSettings.current.quizID == 4) {
                                                         createNewQuiz("mat", false, "tri", "4", "5");
                                                         createNewQuiz("mat", false, "pri", "4", "8");
-                                                    } else if (props.quizID != 7 && props.quizID != 10) {
+                                                    } else if (
+                                                        quizSettings.current.quizID != 7 &&
+                                                        quizSettings.current.quizID != 10
+                                                    ) {
                                                         createNewQuiz("mat", true);
                                                     }
                                                     break;
@@ -313,16 +333,19 @@ export default function Quiz(props: any) {
                                 try {
                                     const bodyData = {
                                         data: JSON.stringify(newData),
-                                        quizType: props.quizType,
-                                        quizNumber: props.quizID,
+                                        quizType: quizSettings.current.quizType,
+                                        quizNumber: quizSettings.current.quizID,
                                     };
 
-                                    const updateResponse = await fetch("http://localhost:8080/api/quiz/update", {
-                                        credentials: "include",
-                                        method: "PUT",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify(bodyData),
-                                    });
+                                    const updateResponse = await fetch(
+                                        process.env.NEXT_PUBLIC_API_URL + "/api/quiz/update",
+                                        {
+                                            credentials: "include",
+                                            method: "PUT",
+                                            headers: { "Content-Type": "application/json" },
+                                            body: JSON.stringify(bodyData),
+                                        }
+                                    );
 
                                     if (!updateResponse.ok)
                                         throw `${updateResponse.status}: ${updateResponse.statusText}`;
@@ -334,7 +357,7 @@ export default function Quiz(props: any) {
                                     }
 
                                     setCalledPush(true);
-                                    router.push(`/${props.subject}`);
+                                    router.push(`/${quizSettings.current.subject}`);
                                 }
                             }}
                         >
@@ -375,12 +398,12 @@ export default function Quiz(props: any) {
         if (defaultConfig) {
             const bodyData = {
                 subject,
-                area: props.quizArea,
-                quizType: props.quizType,
-                quizNumber: String(Number(props.quizID) + 1),
+                area: quizSettings.current.quizArea,
+                quizType: quizSettings.current.quizType,
+                quizNumber: String(Number(quizSettings.current.quizID) + 1),
             };
 
-            await fetch("http://localhost:8080/api/quiz/create", {
+            await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                 credentials: "include",
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -397,7 +420,7 @@ export default function Quiz(props: any) {
             quizNumber,
         };
 
-        await fetch("http://localhost:8080/api/quiz/create", {
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
             credentials: "include",
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -406,15 +429,4 @@ export default function Quiz(props: any) {
 
         return;
     }
-}
-
-export async function getServerSideProps(context: any) {
-    return {
-        props: {
-            subject: context.query.subject,
-            quizType: context.query.quizType,
-            quizArea: context.query.quizArea,
-            quizID: context.query.quizID,
-        },
-    };
 }

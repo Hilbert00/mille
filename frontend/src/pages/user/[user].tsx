@@ -5,11 +5,13 @@ import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 
 import { getUserData } from "hooks/getUserData";
+import { useRouter } from "next/router";
 
-export default function User({ userPath }: any) {
-    const [user] = getUserData(userPath);
+export default function User() {
+    const router = useRouter();
+    const [user] = getUserData(router.query.user ? String(router.query.user) : "");
 
-    if (!user.username)
+    if (!user)
         return (
             <>
                 <Topbar type="default" />
@@ -83,14 +85,4 @@ export default function User({ userPath }: any) {
             <Menubar active={0}></Menubar>
         </>
     );
-}
-
-export async function getServerSideProps(context: any) {
-    const userPath = context.query.user;
-
-    return {
-        props: {
-            userPath,
-        },
-    };
 }

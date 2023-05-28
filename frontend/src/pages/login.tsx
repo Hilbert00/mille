@@ -22,7 +22,11 @@ export default function Home() {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
 
-            fetch("http://localhost:8080/api/auth/login", { method: "post", body: payload, credentials: "include" })
+            fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/login", {
+                method: "post",
+                body: payload,
+                credentials: "include",
+            })
                 .then((res) => {
                     if (res.ok) {
                         router.push("/");

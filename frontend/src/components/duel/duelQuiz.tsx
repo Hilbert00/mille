@@ -40,7 +40,7 @@ export default function DuelQuiz(props: DuelProps) {
         } else if (currentQuestion !== questionQuantity.current) handleData(quizData);
 
         async function getData() {
-            const url = `http://localhost:8080/api/quiz/get?data=${JSON.stringify(props.data)}`;
+            const url = process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get?data=${JSON.stringify(props.data)}`;
             const response = await fetch(url, { credentials: "include" });
 
             const json = await response.json();

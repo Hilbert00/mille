@@ -16,7 +16,9 @@ export function getUserData(userPath?: string) {
     const [calledPush, setCalledPush] = useState(false);
 
     const router = useRouter();
-    const url = userPath ? `http://localhost:8080/api/user/${userPath}` : "http://localhost:8080/api/user";
+    const url = userPath
+        ? process.env.NEXT_PUBLIC_API_URL + `/api/user/${userPath}`
+        : process.env.NEXT_PUBLIC_API_URL + "/api/user";
 
     async function getData() {
         const response = await fetch(url, { credentials: "include" });
@@ -38,7 +40,7 @@ export function getUserData(userPath?: string) {
                 }
 
                 setData(data);
-            } catch {
+            } catch (err) {
                 if (calledPush) {
                     return;
                 }

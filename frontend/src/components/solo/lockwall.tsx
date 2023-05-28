@@ -46,7 +46,7 @@ export default function LockWall(props: LockWallProps) {
 
                 if (props.currentValue >= props.necessaryValue && !apiCalled) {
                     (async function () {
-                        const response = await fetch("http://localhost:8080/api/quiz/create", {
+                        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                             credentials: "include",
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
