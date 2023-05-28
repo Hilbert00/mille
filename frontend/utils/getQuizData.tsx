@@ -1,5 +1,5 @@
 export default async function getQuizData(quiz: number) {
-    const url = `http://localhost:8080/api/quiz/get/${quiz}`;
+    const url = process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${quiz}?parsed=false`;
 
     const response = await fetch(url, { credentials: "include" });
 
