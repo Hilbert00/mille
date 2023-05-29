@@ -134,7 +134,7 @@ export default function Solo(props: Props) {
                             <h2 className="text-center font-semibold">{e.type_description}</h2>
                             {sections[i]}
                         </div>
-                        {i !== props.data.length - 1 && doneCount < 35 * (i + 1) || !quizData[i + 1]?.length ? (
+                        {i !== props.data.length - 1 && (doneCount < 35 * (i + 1) || !quizData[i + 1]?.length) ? (
                             <LockWall
                                 subject={props.subject}
                                 unlocks={i + 2}
