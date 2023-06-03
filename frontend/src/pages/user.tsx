@@ -3,18 +3,27 @@ import Image from "next/image";
 
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
+import Loading from "@/components/loading";
 
 import { getUserData } from "hooks/getUserData";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function User() {
     const router = useRouter();
-    const [user] = getUserData(router.query.user ? String(router.query.user) : "");
+    const [user] = getUserData(router.query.name ? String(router.query.name) : "");
+
+    useEffect(() => {
+        if (!router.isReady) return;
+        if (!router.query.name) router.push("/");
+        return;
+    }, [router.isReady]);
 
     if (!user)
         return (
             <>
                 <Topbar type="default" />
+                <Loading />
                 <Menubar active={2}></Menubar>
             </>
         );

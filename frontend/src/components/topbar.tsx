@@ -63,7 +63,7 @@ export default function Topbar(props: TopbarProps) {
                 {extraInfo}
 
                 <div className="h-11 w-11">
-                    <Link href={`/user/${user.username}`}>
+                    <Link href={`/user?name=${user.username}`}>
                         <Image
                             src={"/images/usericons/default.png"}
                             width={100}
