@@ -10,52 +10,32 @@ import { useRouter } from "next/router";
 import swal from "sweetalert2";
 
 export default function Home() {
-    const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [password2, setPassword2] = useState<string>("");
 
     const router = useRouter();
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        if (email.length && password.length && password2.length) {
-            if (password !== password2) {
-                swal.fire({
-                    title: "Oops",
-                    text: "As senhas não correspondem!",
-                    icon: "error",
-                    background: "#1E1E1E80",
-                    color: "#fff",
-                });
-                return;
-            }
-
+        if (email.length) {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
+            const objectPayload = Object.fromEntries(payload);
 
-            let object = {} as any;
-            formData.forEach((value, key) => (object[key] = value));
-
-            fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/changepass", {
-                body: payload,
-                method: "PUT",
+            fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/verify/send", {
+                body: JSON.stringify({ ...objectPayload, changePass: true }),
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                method: "POST",
                 credentials: "include",
             })
                 .then((res) => {
                     if (res.ok) {
-                        router.push("/");
+                        router.push("/verify");
                         return;
                     }
-
-                    swal.fire({
-                        title: "Oops",
-                        text: "Nome de usuário ou email incorreto(s)!",
-                        icon: "error",
-                        background: "#1E1E1E80",
-                        color: "#fff",
-                    });
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -101,34 +81,8 @@ export default function Home() {
                         onBlur={checkEmpty}
                     />
 
-                    <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                        name="password"
-                        type="password"
-                        placeholder={"Nova senha"}
-                        value={password}
-                        onChange={(e) => {
-                            checkEmpty(e);
-                            setPassword(e.target.value);
-                        }}
-                        onBlur={checkEmpty}
-                    />
-
-                    <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                        name="password2"
-                        type="password"
-                        placeholder={"Repita a senha"}
-                        value={password2}
-                        onChange={(e) => {
-                            checkEmpty(e);
-                            setPassword2(e.target.value);
-                        }}
-                        onBlur={checkEmpty}
-                    />
-
                     <Button type="submit" className="w-3/4">
-                        {"Confirme a nova senha"}
+                        {"Enviar email de confirmação"}
                     </Button>
                 </form>
 

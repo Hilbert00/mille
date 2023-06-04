@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import * as express from "express";
 import nodemailer from "nodemailer";
 import handlebars from "handlebars";
+import conn from "../../Config/Database.config.js";
 import * as TokenHelper from "../../Helpers/Token.helper.js";
 
 const router = express.Router();
@@ -10,7 +11,7 @@ const router = express.Router();
 router.post("/send", async (req, res) => {
     const username: string = req.body.username;
     const email: string = req.body.email;
-    const password = req.body.password;
+    const changePass: boolean = req.body.changePass ? req.body.changePass : false;
 
     const transporter = nodemailer.createTransport({
         service: "gmail",
@@ -23,41 +24,79 @@ router.post("/send", async (req, res) => {
     const token = TokenHelper.signToken(
         {
             username,
-            email,
-            password,
+            changePass,
         },
-        process.env.JWT_EXPIRE_EMAIL
+        changePass ? process.env.JWT_EXPIRE_EMAIL : "0"
     );
 
-    fs.readFile("./src/Routes/auth/email/email.html", { encoding: "utf-8" }, (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
+    if (!changePass)
+        fs.readFile("./src/Routes/auth/email/email.html", { encoding: "utf-8" }, (err, data) => {
+            if (err) {
+                console.error(err);
+                return res.sendStatus(404);
+            }
 
-        const template = handlebars.compile(data);
-        const htmlToSend = template({ TOKEN: token });
+            const template = handlebars.compile(data);
+            const htmlToSend = template({ TOKEN: token });
 
-        const mailConfig = {
-            from: process.env.EMAIL_NAME,
-            to: email,
-            subject: "Mille - Verifique seu Email!",
-            html: htmlToSend,
-            attachments: [
-                {
-                    filename: "mille-logo-full.png",
-                    path: "./src/Routes/auth/email/mille-logo-full.png",
-                    cid: "logo",
-                },
-            ],
-        };
+            const mailConfig = {
+                from: process.env.EMAIL_NAME,
+                to: email,
+                subject: "Mille - Verifique seu Email!",
+                html: htmlToSend,
+                attachments: [
+                    {
+                        filename: "mille-logo-full.png",
+                        path: "./src/Routes/auth/email/mille-logo-full.png",
+                        cid: "logo",
+                    },
+                ],
+            };
 
-        transporter.sendMail(mailConfig, (err, _) => {
-            if (err) throw err;
+            transporter.sendMail(mailConfig, (err, _) => {
+                if (err) throw err;
+            });
+
+            return res.sendStatus(200);
         });
+    else
+        fs.readFile("./src/Routes/auth/email/changePass.html", { encoding: "utf-8" }, (err, data) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
 
-        return res.sendStatus(200);
-    });
+            conn.query(`SELECT * FROM user WHERE email = '${email}'`, (err, sql) => {
+                if (err) {
+                    console.log(err);
+                }
+
+                if (!sql.length) return res.sendStatus(404);
+
+                const template = handlebars.compile(data);
+                const htmlToSend = template({ TOKEN: token });
+
+                const mailConfig = {
+                    from: process.env.EMAIL_NAME,
+                    to: email,
+                    subject: "Mille - Troque sua Senha!",
+                    html: htmlToSend,
+                    attachments: [
+                        {
+                            filename: "mille-logo-full.png",
+                            path: "./src/Routes/auth/email/mille-logo-full.png",
+                            cid: "logo",
+                        },
+                    ],
+                };
+
+                transporter.sendMail(mailConfig, (err, _) => {
+                    if (err) throw err;
+                });
+
+                return res.sendStatus(200);
+            });
+        });
 });
 
 router.post("/", async (req, res) => {
@@ -67,14 +106,19 @@ router.post("/", async (req, res) => {
         return res.sendStatus(401);
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, _) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, data: any) => {
         if (err) {
             return res.sendStatus(403);
         }
 
-        console.log(_);
+        conn.query(`UPDATE user SET active = 1 WHERE username = '${data.username}'`, (err) => {
+            if (err) {
+                console.log(err);
+                return res.sendStatus(404);
+            }
 
-        return res.sendStatus(200);
+            return res.sendStatus(200);
+        });
     });
 });
 

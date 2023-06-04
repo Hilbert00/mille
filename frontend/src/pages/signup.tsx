@@ -35,9 +35,6 @@ export default function Home() {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
 
-            let object = {} as any;
-            formData.forEach((value, key) => (object[key] = value));
-
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/signup", {
                 body: payload,
                 method: "post",
@@ -45,17 +42,20 @@ export default function Home() {
             })
                 .then((res) => {
                     if (res.ok) {
-                        router.push("/");
-                        return;
-                    }
-
-                    swal.fire({
-                        title: "Oops",
-                        text: "Nome de usuário e/ou email em uso por outro usuário!",
-                        icon: "error",
-                        background: "#1E1E1E80",
-                        color: "#fff",
-                    });
+                        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/verify/send", {
+                            body: payload,
+                            method: "post",
+                        }).then(() => {
+                            router.push("/verify");
+                        });
+                    } else
+                        swal.fire({
+                            title: "Oops",
+                            text: "Nome de usuário e/ou email em uso por outro usuário!",
+                            icon: "error",
+                            background: "#1E1E1E80",
+                            color: "#fff",
+                        });
                 })
                 .catch((err) => console.log(err));
         } else {

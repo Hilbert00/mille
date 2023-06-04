@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 
 interface UserData {
     username: string;
+    email: string;
     user_level: number;
     user_coins: number;
     user_behavior: number;
     user_sequence: number;
     challenge_matches: number;
     challenge_wins: number;
+    active: number;
 }
 
 export function getUserData(userPath?: string) {
@@ -37,6 +39,11 @@ export function getUserData(userPath?: string) {
 
                 if (!Object.keys(data).length) {
                     throw new Error();
+                }
+
+                if (!data.active && !calledPush && router.pathname !== "/verify") {
+                    router.push("/verify");
+                    setCalledPush(true);
                 }
 
                 setData(data);

@@ -14,20 +14,8 @@ router.post("/", async (req, res) => {
     let data = ["username", "email", "password", username, email, password];
 
     conn.query(query, data, (_err) => {
-        query = "SELECT * FROM user WHERE ?? = ?";
-        data = ["username", username];
-
-        conn.query(query, data, (err, result) => {
-            if (err) {
-                console.error(err);
-            }
-
-            result = JSON.parse(JSON.stringify(result))[0];
-
-            const cookie = CookieHelper.generateUserCookie(result);
-
-            return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
-        });
+        if (_err) return res.sendStatus(404);
+        return res.sendStatus(200);
     });
 });
 

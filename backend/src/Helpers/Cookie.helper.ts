@@ -10,6 +10,7 @@ function generateUserCookie(userData: {
     user_sequence: number;
     challenge_matches: number;
     challenge_wins: number;
+    active: number;
 }) {
     const token = TokenHelper.signToken({
         username: userData.username,
@@ -20,6 +21,7 @@ function generateUserCookie(userData: {
         user_sequence: userData.user_sequence,
         challenge_matches: userData.challenge_matches,
         challenge_wins: userData.challenge_wins,
+        active: userData.active,
     });
 
     const serialized = serialize("AuthJWT", token, {
