@@ -30,7 +30,7 @@
                 seu email:
             </span>
 
-            <form action="http://localhost:3000/verify" style="width: 100%; margin: 80px auto">
+            <form action="{{URL}}/verify" style="width: 100%; margin: 80px auto">
                 <input type="hidden" name="token" value="{{TOKEN}}" />
 
                 <input
@@ -48,16 +48,10 @@
                 />
             </form>
         </div>
-        <footer
-            style="
-                position: relative;
-                bottom: 0;
-                height: 2rem;
-                width: 100%;
-                background: #191919;
-            "
-        >
-            <p style="font-weight: 500; color: #f5f5f5; line-height: 2rem; text-align: center;">© Nicolas A. Hilbert · 2023</p>
+        <footer style="position: relative; bottom: 0; height: 2rem; width: 100%; background: #191919">
+            <p style="font-weight: 500; color: #f5f5f5; line-height: 2rem; text-align: center">
+                © Nicolas A. Hilbert · 2023
+            </p>
         </footer>
     </body>
 </html>
