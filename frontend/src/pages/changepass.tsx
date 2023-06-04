@@ -13,13 +13,25 @@ export default function Home() {
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [password2, setPassword2] = useState<string>("");
 
     const router = useRouter();
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        if (username.length && email.length && password.length) {
+        if (email.length && password.length && password2.length) {
+            if (password !== password2) {
+                swal.fire({
+                    title: "Oops",
+                    text: "As senhas não correspondem!",
+                    icon: "error",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                });
+                return;
+            }
+
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
 
@@ -78,19 +90,6 @@ export default function Home() {
                 <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                        name="username"
-                        type="text"
-                        placeholder={"Nome de Usuário"}
-                        value={username}
-                        onChange={(e) => {
-                            checkEmpty(e);
-                            setUsername(e.target.value);
-                        }}
-                        onBlur={checkEmpty}
-                    />
-
-                    <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="email"
                         type="email"
                         placeholder={"Email"}
@@ -114,6 +113,20 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
+
+                    <input
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        name="password2"
+                        type="password"
+                        placeholder={"Repita a senha"}
+                        value={password2}
+                        onChange={(e) => {
+                            checkEmpty(e);
+                            setPassword2(e.target.value);
+                        }}
+                        onBlur={checkEmpty}
+                    />
+
                     <Button type="submit" className="w-3/4">
                         {"Confirme a nova senha"}
                     </Button>

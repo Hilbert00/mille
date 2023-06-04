@@ -6,6 +6,7 @@ import DuelTimer from "./duelTimer";
 
 import { useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
+import { clearInterval, setInterval } from 'worker-timers';
 
 const colors = ["#7106C5", "#1A66E5", "#00BB29", "#E5AC1A", "#D2042D"];
 

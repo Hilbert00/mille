@@ -63,28 +63,6 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
             .sort(() => 0.5 - Math.random())
             .slice(0, questionQuantity);
 
-        // DELETE IN THE FUTURE
-        if (array.length < questionQuantity) {
-            const newArray = Array(questionQuantity)
-                .fill([...array])
-                .flat()
-                .slice(0, questionQuantity);
-
-            const qObjects = await Promise.all(
-                newArray.map(async (e) => {
-                    const questionData = {
-                        id: e,
-                        alternatives: await getAlternatives(e),
-                    };
-
-                    return questionData;
-                })
-            );
-
-            return qObjects;
-        }
-        // END OF DELETE AREA
-
         const qObjects = await Promise.all(
             array.map(async (e) => {
                 const questionData = {

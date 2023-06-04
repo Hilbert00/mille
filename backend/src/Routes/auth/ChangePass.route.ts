@@ -6,10 +6,10 @@ import conn from "../../Config/Database.config.js";
 const router = express.Router();
 
 router.put("/", (req, res) => {
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
-    let query = "SELECT * FROM user WHERE ?? = ? AND ?? = ?";
-    let data = ["username", username, "email", email];
+    let query = "SELECT * FROM user WHERE ?? = ?";
+    let data = ["email", email];
 
     conn.query(query, data, async (err, result) => {
         if (err) {
@@ -25,7 +25,7 @@ router.put("/", (req, res) => {
         const newPass = await HashHelper.getHash(password);
 
         query = "UPDATE user SET ?? = ? WHERE ?? = ?";
-        data = ["password", newPass, "username", username];
+        data = ["password", newPass, "email", email];
 
         conn.query(query, data, (err) => {
             if (err) {

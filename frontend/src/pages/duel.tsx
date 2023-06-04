@@ -36,6 +36,8 @@ export default function Duel() {
     );
 
     useEffect(() => {
+        if (!router.isReady) return;
+
         router.events.on("routeChangeStart", (url) => {
             const newPath = url.split("?")[0];
 

@@ -15,15 +15,24 @@ export default function User() {
 
     useEffect(() => {
         if (!router.isReady) return;
-        if (!router.query.name) router.push("/");
-        return;
+
+        if (!router.query.name) {
+            router.push("/");
+            return;
+        }
     }, [router.isReady]);
 
-    if (!user)
+    if (!Object.keys(user).length)
         return (
             <>
+                <Head>
+                    <title>Mille</title>
+                </Head>
+
                 <Topbar type="default" />
+
                 <Loading />
+
                 <Menubar active={2}></Menubar>
             </>
         );

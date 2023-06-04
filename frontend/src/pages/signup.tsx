@@ -13,13 +13,25 @@ export default function Home() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [password2, setPassword2] = useState("");
 
     const router = useRouter();
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        if (username.length && email.length && password.length) {
+        if (username.length && email.length && password.length && password2.length) {
+            if (password !== password2) {
+                swal.fire({
+                    title: "Oops",
+                    text: "As senhas não correspondem!",
+                    icon: "error",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                });
+                return;
+            }
+
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
 
@@ -114,12 +126,26 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
+
+                    <input
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        name="password2"
+                        type="password"
+                        placeholder={"Repita a senha"}
+                        value={password2}
+                        onChange={(e) => {
+                            checkEmpty(e);
+                            setPassword2(e.target.value);
+                        }}
+                        onBlur={checkEmpty}
+                    />
+
                     <Button type="submit" className="w-3/4">
                         {"Cadastrar-se"}
                     </Button>
                 </form>
 
-                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E] sm:bottom-16">
                     <p>
                         Já tem uma conta?{" "}
                         <Link href={"/login"} className="text-[#1A66E5]">

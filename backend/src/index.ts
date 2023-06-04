@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL,
+        origin: [process.env.FRONTEND_URL, "http://127.0.0.1:5500"],
         credentials: true,
         preflightContinue: true,
     })
@@ -33,6 +33,8 @@ import user from "./Routes/User.route.js";
 import quiz from "./Routes/Quiz.route.js";
 import world from "./Routes/solo/World.route.js";
 
+import addQuestions from "./Routes/AddQuestions.route.js";
+
 app.use("/api/auth/signup", signUp);
 app.use("/api/auth/login", auth);
 app.use("/api/auth/changepass", changePass);
@@ -40,6 +42,8 @@ app.use("/api/auth/changepass", changePass);
 app.use("/api/user", user);
 app.use("/api/quiz", quiz);
 app.use("/api/world", world);
+
+app.use("/api/questions", addQuestions);
 
 const server = http.createServer(app);
 const io = new Server(server, {
