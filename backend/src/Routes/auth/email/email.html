@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR" style="height: 600px; width: 500px">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mille</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body style="background: #1e1e1e; height: 600px; width: 500px">
+        <div style="width: 80%; margin: 0 auto; height: calc(600px - 2rem)">
+            <div style="display: block; width: 200px; margin: 0 auto">
+                <!-- ./mille-logo-full.png -->
+                <img src="cid:logo" alt="logo" style="width: 100%" />
+            </div>
+
+            <h1 style="text-align: center; color: #f5f5f5; font-family: 'Poppins'; margin: 40px 0 80px 0">
+                Bem vindo!
+            </h1>
+
+            <span style="color: #f5f5f5; font-family: 'Poppins'; font-size: large">
+                Obrigado por criar sua conta no Mille. Para poder utilizá-la, clique no botão abaixo para confirmar o
+                seu email:
+            </span>
+
+            <form action="http://localhost:3000/verify" style="width: 100%; margin: 80px auto">
+                <input type="hidden" name="token" value="{{TOKEN}}" />
+
+                <input
+                    type="submit"
+                    value="Confirmar email"
+                    style="
+                        background-color: #1a66e5;
+                        border: none;
+                        color: #f5f5f5;
+                        padding: 1rem;
+                        border-radius: 12px;
+                        font-size: large;
+                        width: 100%;
+                    "
+                />
+            </form>
+        </div>
+        <footer
+            style="
+                position: relative;
+                bottom: 0;
+                height: 2rem;
+                width: 100%;
+                background: #191919;
+            "
+        >
+            <p style="font-weight: 500; color: #f5f5f5; line-height: 2rem; text-align: center;">© Nicolas A. Hilbert · 2023</p>
+        </footer>
+    </body>
+</html>
