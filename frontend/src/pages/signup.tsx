@@ -118,6 +118,7 @@ export default function Home() {
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="password"
                         type="password"
+                        minLength={8}
                         placeholder={"Senha"}
                         value={password}
                         onChange={(e) => {
@@ -131,6 +132,7 @@ export default function Home() {
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="password2"
                         type="password"
+                        minLength={8}
                         placeholder={"Repita a senha"}
                         value={password2}
                         onChange={(e) => {
