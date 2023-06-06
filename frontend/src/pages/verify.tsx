@@ -15,7 +15,7 @@ export default function Home() {
     const router = useRouter();
     const [isOk, setIsOk] = useState(false);
     const calledApi = useRef(false);
-
+    
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [password2, setPassword2] = useState<string>("");
@@ -25,7 +25,7 @@ export default function Home() {
         e.preventDefault();
         setDisabled(true);
 
-        if (email.length && password.length && password2.length) {
+        if (password.length && password2.length) {
             if (password !== password2) {
                 swal.fire({
                     title: "Oops",
@@ -40,11 +40,29 @@ export default function Home() {
                 return;
             }
 
+            if (password.length < 8) {
+                swal.fire({
+                    title: "Oops",
+                    text: "A senha precisa ter no mínimo 8 caracteres!",
+                    icon: "error",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                });
+
+                setDisabled(false);
+                return;
+            }
+
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
+            const sendData = Object.fromEntries(payload);
 
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/changepass", {
-                body: payload,
+                body: JSON.stringify({ ...sendData, email }),
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
                 method: "PUT",
                 credentials: "include",
             })
@@ -110,7 +128,10 @@ export default function Home() {
                                 router.push("/login");
                             }, 5000);
                     }
+
+                    return res.json();
                 })
+                .then((json) => setEmail(json.email))
                 .catch((err) => console.log(err));
         }
     }, [router.isReady, isOk]);
@@ -202,19 +223,6 @@ export default function Home() {
 
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
-                    <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                        name="email"
-                        type="email"
-                        placeholder={"Email"}
-                        value={email}
-                        onChange={(e) => {
-                            checkEmpty(e);
-                            setEmail(e.target.value);
-                        }}
-                        onBlur={checkEmpty}
-                    />
-
                     <input
                         className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="password"

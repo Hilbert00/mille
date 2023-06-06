@@ -32,7 +32,7 @@ interface WorldDataProps {
 
 router.get("/:subject", verifysubject, async (req, res) => {
     const q = await queryPromise(
-        `SELECT t.id_type AS type_id, t.name AS type_name, t.description AS type_description, a.id_area as area_id, a.name AS area_name FROM type AS t JOIN area AS a ON t.id_type = a.type WHERE a.id_subject = ${req.params.subject}`
+        `SELECT t.id_type AS type_id, t.name AS type_name, t.description AS type_description, a.id_area as area_id, a.name AS area_name FROM type AS t JOIN area AS a ON t.id_type = a.type WHERE a.id_subject = ${req.params.subject} ORDER BY t.id_type`
     );
 
     const quizTypes = q as WorldDataProps[];

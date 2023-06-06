@@ -24,7 +24,7 @@ router.post("/send", async (req, res) => {
     const token = TokenHelper.signToken(
         {
             username,
-            changePass,
+            email,
         },
         changePass ? process.env.JWT_EXPIRE_EMAIL : "0"
     );
@@ -117,7 +117,7 @@ router.post("/", async (req, res) => {
                 return res.sendStatus(404);
             }
 
-            return res.sendStatus(200);
+            return res.json({ ...data }).status(200).send();
         });
     });
 });
