@@ -12,11 +12,13 @@ import swal from "sweetalert2";
 export default function Home() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [disabled, setDisabled] = useState(false);
 
     const router = useRouter();
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
+        setDisabled(true);
 
         if (username.length && password.length) {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
@@ -40,6 +42,8 @@ export default function Home() {
                         background: "#1E1E1E80",
                         color: "#fff",
                     });
+
+                    setDisabled(false);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -52,6 +56,8 @@ export default function Home() {
                 background: "#1E1E1E80",
                 color: "#fff",
             });
+
+            setDisabled(false);
         }
     }
 
@@ -99,7 +105,7 @@ export default function Home() {
                         }}
                         onBlur={checkEmpty}
                     />
-                    <Button type="submit" className="w-3/4">
+                    <Button type="submit" disable={disabled} className="w-3/4">
                         {"Login"}
                     </Button>
                 </form>

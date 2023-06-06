@@ -19,9 +19,11 @@ export default function Home() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [password2, setPassword2] = useState<string>("");
+    const [disabled, setDisabled] = useState(false);
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
+        setDisabled(true);
 
         if (email.length && password.length && password2.length) {
             if (password !== password2) {
@@ -32,14 +34,14 @@ export default function Home() {
                     background: "#1E1E1E80",
                     color: "#fff",
                 });
+
+                setDisabled(false);
+
                 return;
             }
 
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
-
-            let object = {} as any;
-            formData.forEach((value, key) => (object[key] = value));
 
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/changepass", {
                 body: payload,
@@ -59,6 +61,8 @@ export default function Home() {
                         background: "#1E1E1E80",
                         color: "#fff",
                     });
+
+                    setDisabled(false);
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -69,6 +73,8 @@ export default function Home() {
                 background: "#1E1E1E80",
                 color: "#fff",
             });
+
+            setDisabled(false);
         }
     }
 
@@ -235,7 +241,7 @@ export default function Home() {
                         onBlur={checkEmpty}
                     />
 
-                    <Button type="submit" className="w-3/4">
+                    <Button type="submit" disable={disabled} className="w-3/4">
                         {"Confirme a nova senha"}
                     </Button>
                 </form>

@@ -14,11 +14,13 @@ export default function Home() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
+    const [disabled, setDisabled] = useState(false);
 
     const router = useRouter();
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
+        setDisabled(true);
 
         if (username.length && email.length && password.length && password2.length) {
             if (password !== password2) {
@@ -29,6 +31,8 @@ export default function Home() {
                     background: "#1E1E1E80",
                     color: "#fff",
                 });
+
+                setDisabled(false);
                 return;
             }
 
@@ -40,6 +44,8 @@ export default function Home() {
                     background: "#1E1E1E80",
                     color: "#fff",
                 });
+
+                setDisabled(false);
                 return;
             }
 
@@ -59,7 +65,7 @@ export default function Home() {
                         }).then(() => {
                             router.push("/verify");
                         });
-                    } else
+                    } else {
                         swal.fire({
                             title: "Oops",
                             text: "Nome de usuário e/ou email em uso por outro usuário!",
@@ -67,6 +73,9 @@ export default function Home() {
                             background: "#1E1E1E80",
                             color: "#fff",
                         });
+
+                        setDisabled(false);
+                    }
                 })
                 .catch((err) => console.log(err));
         } else {
@@ -77,6 +86,8 @@ export default function Home() {
                 background: "#1E1E1E80",
                 color: "#fff",
             });
+
+            setDisabled(false);
         }
     }
 
@@ -153,7 +164,7 @@ export default function Home() {
                         onBlur={checkEmpty}
                     />
 
-                    <Button type="submit" className="w-3/4">
+                    <Button type="submit" disable={disabled} className="w-3/4">
                         {"Cadastrar-se"}
                     </Button>
                 </form>
