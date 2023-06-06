@@ -74,7 +74,7 @@ router.post("/send", async (req, res) => {
                 if (!sql.length) return res.sendStatus(404);
 
                 const template = handlebars.compile(data);
-                const htmlToSend = template({ TOKEN: token });
+                const htmlToSend = template({ TOKEN: token, URL: process.env.FRONTEND_URL });
 
                 const mailConfig = {
                     from: process.env.EMAIL_NAME,

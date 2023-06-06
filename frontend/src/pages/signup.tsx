@@ -32,6 +32,17 @@ export default function Home() {
                 return;
             }
 
+            if (password.length < 8) {
+                swal.fire({
+                    title: "Oops",
+                    text: "A senha precisa ter no mínimo 8 caracteres!",
+                    icon: "error",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                });
+                return;
+            }
+
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const payload = new URLSearchParams(formData as any);
 
