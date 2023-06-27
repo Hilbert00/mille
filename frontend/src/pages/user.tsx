@@ -33,7 +33,7 @@ export default function User() {
 
                 <Loading />
 
-                <Menubar active={2}></Menubar>
+                <Menubar active={0}></Menubar>
             </>
         );
 
