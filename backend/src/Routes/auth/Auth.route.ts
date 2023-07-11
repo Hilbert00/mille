@@ -1,39 +1,64 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import jwt from "jsonwebtoken";
 import * as express from "express";
 import * as HashHelper from "../../Helpers/Hash.helper.js";
 import * as CookieHelper from "../../Helpers/Cookie.helper.js";
 import conn from "../../Config/Database.config.js";
 
+const { JWT_SECRET } = process.env;
+
 const router = express.Router();
 
 router.post("/", (req, res) => {
+    const token: string = req.cookies.AuthJWT;
     const { username, password } = req.body;
 
-    const query = "SELECT * FROM user WHERE ?? = ?";
-    const data = ["username", username];
+    if (token)
+        jwt.verify(token, JWT_SECRET as string, (err, user) => {
+            if (err) console.log(err);
+
+            req.user = user;
+        });
+
+    let query = "SELECT * FROM user WHERE ?? = ?";
+    let data = ["username", username];
 
     conn.query(query, data, async (err, result) => {
-        if (err) {
-            console.error(err);
-        }
-
         result = JSON.parse(JSON.stringify(result))[0];
 
-        if (!result) {
-            return res.sendStatus(404);
-        }
+        if (!result) return res.sendStatus(404);
 
         const auth = await HashHelper.verifyHash(result.password, password);
 
-        if (!auth) {
-            return res.sendStatus(401);
-        }
+        if (!auth) return res.sendStatus(401);
 
         const cookie = CookieHelper.generateUserCookie(result);
 
-        return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
+        query = "UPDATE user SET ?? = ? WHERE ?? = ?";
+        data = ["online", 1, "username", username];
+
+        conn.query(query, data, async (err, result) => {
+            if (err) console.error(err);
+
+            if (!result) return res.sendStatus(404);
+            if (!result.changedRows && username !== req?.user?.username) {
+                return res.sendStatus(409);
+            }
+
+            if (req?.user?.username && username !== req?.user?.username) {
+                data = ["online", 0, "username", req.user.username];
+
+                conn.query(query, data, async (err, result) => {
+                    if (err) console.error(err);
+
+                    if (!result) return res.sendStatus(404);
+
+                    return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
+                });
+            } else return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
+        });
     });
 });
 

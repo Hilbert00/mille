@@ -28,6 +28,7 @@ app.use(
 import signUp from "./Routes/auth/SignUp.route.js";
 import auth from "./Routes/auth/Auth.route.js";
 import changePass from "./Routes/auth/ChangePass.route.js";
+import exit from "./Routes/auth/Exit.route.js";
 import emailVerification from "./Routes/auth/EmailVerification.route.js";
 
 import user from "./Routes/User.route.js";
@@ -39,6 +40,7 @@ import addQuestions from "./Routes/AddQuestions.route.js";
 app.use("/api/auth/signup", signUp);
 app.use("/api/auth/login", auth);
 app.use("/api/auth/changepass", changePass);
+app.use("/api/auth/exit", exit);
 app.use("/api/auth/verify", emailVerification);
 
 app.use("/api/user", user);

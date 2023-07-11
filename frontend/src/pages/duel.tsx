@@ -14,7 +14,7 @@ import { getUserData } from "hooks/getUserData";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 
 export default function Duel() {
-    const [user] = getUserData();
+    const [user] = getUserData(false);
     const router = useRouter();
 
     const [state, setState] = useState({} as any);

@@ -13,8 +13,8 @@ router.post("/", async (req, res) => {
     let query = `INSERT INTO user (??, ??, ??) VALUES (?, ?, ?)`;
     let data = ["username", "email", "password", username, email, password];
 
-    conn.query(query, data, (_err) => {
-        if (_err) return res.sendStatus(404);
+    conn.query(query, data, (err) => {
+        if (err) return res.sendStatus(404);
         return res.sendStatus(200);
     });
 });

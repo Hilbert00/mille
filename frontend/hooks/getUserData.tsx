@@ -11,9 +11,10 @@ interface UserData {
     challenge_matches: number;
     challenge_wins: number;
     active: number;
+    isUser?: boolean;
 }
 
-export function getUserData(userPath?: string) {
+export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: string) {
     const [data, setData] = useState({} as UserData);
     const [calledPush, setCalledPush] = useState(false);
 
@@ -41,7 +42,7 @@ export function getUserData(userPath?: string) {
                     throw new Error();
                 }
 
-                if (!data.active && !calledPush && router.pathname !== "/verify") {
+                if (!data.active && !calledPush && router.pathname !== "/verify" && isLogin) {
                     router.push("/verify");
                     setCalledPush(true);
                 }
@@ -52,11 +53,13 @@ export function getUserData(userPath?: string) {
                     return;
                 }
 
-                router.push("/login");
+                if (isLogin) router.push("/login");
+                else router.push("/");
                 setCalledPush(true);
             }
         })();
-    }, [data]);
+    }, [data.username, userPath]);
 
+    if (isProfile && !userPath) return [{} as UserData];
     return [data];
 }

@@ -7,7 +7,7 @@ interface TopbarProps {
 }
 
 export default function DuelTopbar(props: TopbarProps) {
-    getUserData();
+    getUserData(false);
     const percentageOne = ((Number(props.barValues[0]) * 100) / Number(props.barMaxValue)).toFixed();
     const percentageTwo = ((Number(props.barValues[1]) * 100) / Number(props.barMaxValue)).toFixed();
 

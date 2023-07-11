@@ -25,13 +25,13 @@ router.get("/:user", verifyToken, (req, res) => {
             return res.json({ ...result[0] });
         });
     } else {
-        return res.json(userToken);
+        return res.json({ ...userToken, isUser: true });
     }
 });
 
 router.get("/", verifyToken, (req, res) => {
     const userToken = req.user;
-    return res.json(userToken);
+    return res.json({ ...userToken, isUser: true });
 });
 
 router.put("/update", verifyToken, (req, res) => {
@@ -86,10 +86,7 @@ router.put("/update", verifyToken, (req, res) => {
     const data = [...updateDataArray, "username", userToken.username];
 
     conn.query(query, data, (err) => {
-        if (err) {
-            console.error(err);
-            return res.sendStatus(404).json({ message: "user not found" });
-        }
+        if (err) return res.sendStatus(404);
 
         delete userToken.iat;
         delete userToken.exp;

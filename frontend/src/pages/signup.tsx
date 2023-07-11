@@ -54,14 +54,14 @@ export default function Home() {
 
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/signup", {
                 body: payload,
-                method: "post",
+                method: "POST",
                 credentials: "include",
             })
                 .then((res) => {
                     if (res.ok) {
                         fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/verify/send", {
                             body: payload,
-                            method: "post",
+                            method: "POST",
                         }).then(() => {
                             router.push("/verify");
                         });

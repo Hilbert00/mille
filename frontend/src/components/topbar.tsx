@@ -11,7 +11,7 @@ interface TopbarProps {
 }
 
 export default function Topbar(props: TopbarProps) {
-    const [user] = getUserData();
+    const [user] = getUserData(true);
     const percentage = ((Number(props.barValue) * 100) / Number(props.barMaxValue)).toFixed();
 
     const userCoins = (

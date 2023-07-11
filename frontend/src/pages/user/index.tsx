@@ -1,26 +1,56 @@
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import Loading from "@/components/loading";
 
+import swal from "sweetalert2";
 import { getUserData } from "hooks/getUserData";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { TbEdit, TbDoorExit } from "react-icons/tb";
 
 export default function User() {
     const router = useRouter();
-    const [user] = getUserData(router.query.name ? String(router.query.name) : "");
+    const [username, setUsername] = useState("");
+    const [user] = getUserData(false, true, username);
+
+    function logoff() {
+        const url = process.env.NEXT_PUBLIC_API_URL + "/api/auth/exit";
+
+        fetch(url, {
+            method: "PUT",
+            credentials: "include",
+            body: JSON.stringify({ username: user.username }),
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        }).then((res) => {
+            if (res.ok) return router.push("/login");
+            swal.fire({
+                title: "Oops",
+                text: "Ocorreu um erro inesperado!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            }).then(() => {
+                return router.push("/");
+            });
+        });
+    }
 
     useEffect(() => {
         if (!router.isReady) return;
+        if (router.query.name) setUsername(String(router.query.name));
 
         if (!router.query.name) {
             router.push("/");
             return;
         }
-    }, [router.isReady]);
+    }, [router.isReady, router.query.name]);
 
     if (!Object.keys(user).length)
         return (
@@ -49,6 +79,16 @@ export default function User() {
                     <div className="flex w-full flex-col items-center sm:w-[45%]">
                         <div className="w-full">
                             <div className="relative mx-auto h-32 w-32 sm:h-56 sm:w-56">
+                                {user.isUser && (
+                                    <>
+                                        <Link href={"/user/edit"} className="absolute top-0 -left-12 h-10 w-10">
+                                            <TbEdit className="h-10 w-10" />
+                                        </Link>
+                                        <button className="absolute bottom-0 -left-12 h-10 w-10" onClick={logoff}>
+                                            <TbDoorExit className="h-10 w-10 text-[#D2042D]" />
+                                        </button>
+                                    </>
+                                )}
                                 <div className="absolute top-0 -right-12 flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#02A726] bg-[#00BB29]">
                                     <span className="font-semibold text-primary-white">{user.user_behavior}</span>
                                 </div>

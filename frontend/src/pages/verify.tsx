@@ -15,7 +15,7 @@ export default function Home() {
     const router = useRouter();
     const [isOk, setIsOk] = useState(false);
     const calledApi = useRef(false);
-    
+
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [password2, setPassword2] = useState<string>("");
@@ -117,17 +117,15 @@ export default function Home() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ token: token }),
-                method: "post",
+                method: "POST",
             })
                 .then((res) => {
-                    if (res.ok) {
-                        setIsOk(true);
+                    if (res.ok) setIsOk(true);
 
-                        if (!changePass)
-                            setTimeout(() => {
-                                router.push("/login");
-                            }, 5000);
-                    }
+                    if (!changePass)
+                        setTimeout(() => {
+                            router.push("/login");
+                        }, 5000);
 
                     return res.json();
                 })

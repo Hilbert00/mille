@@ -15,6 +15,7 @@ export default function verifyToken(req: Request, res: Response, next: NextFunct
 
     jwt.verify(token, JWT_SECRET as string, (err, user) => {
         if (err) {
+            console.log(err);
             return res.sendStatus(403);
         }
         req.user = user;

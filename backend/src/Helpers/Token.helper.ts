@@ -13,4 +13,8 @@ function signToken(data: object, expire?: string): string {
     return jwt.sign(data, JWT_SECRET as string, { expiresIn: expireTime });
 }
 
-export { signToken };
+function parseToken(token: string) {
+    return jwt.verify(token, JWT_SECRET);
+}
+
+export { signToken, parseToken };

@@ -18,7 +18,7 @@ export default function LockWall(props: LockWallProps) {
 
     return (
         <button
-            className="mx-auto mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 transition-all hover:scale-105 active:scale-100 sm:grid sm:w-3/4 sm:gap-8 sm:p-10"
+            className="mx-auto mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 text-primary-white transition-all hover:scale-105 active:scale-100 sm:grid sm:w-3/4 sm:gap-8 sm:p-10"
             onClick={() => {
                 setApiCalled(true);
 

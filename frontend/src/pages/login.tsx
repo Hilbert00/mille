@@ -25,7 +25,7 @@ export default function Home() {
             const payload = new URLSearchParams(formData as any);
 
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/login", {
-                method: "post",
+                method: "POST",
                 body: payload,
                 credentials: "include",
             })
@@ -35,13 +35,22 @@ export default function Home() {
                         return;
                     }
 
-                    swal.fire({
-                        title: "Oops",
-                        text: "Nome de usuário e/ou senha incorreto(s)!",
-                        icon: "error",
-                        background: "#1E1E1E80",
-                        color: "#fff",
-                    });
+                    if (res.status === 409)
+                        swal.fire({
+                            title: "Oops",
+                            text: "Este usuário já está em uso!",
+                            icon: "error",
+                            background: "#1E1E1E80",
+                            color: "#fff",
+                        });
+                    else
+                        swal.fire({
+                            title: "Oops",
+                            text: "Nome de usuário e/ou senha incorreto(s)!",
+                            icon: "error",
+                            background: "#1E1E1E80",
+                            color: "#fff",
+                        });
 
                     setDisabled(false);
                 })
@@ -81,7 +90,7 @@ export default function Home() {
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className="min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         name="username"
                         type="text"
                         placeholder={"Nome de Usuário"}

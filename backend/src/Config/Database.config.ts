@@ -12,9 +12,9 @@ const conn = mysql.createConnection({
 });
 
 setInterval(() => {
-    conn.query("SELECT 1", (err, _res) => {
+    conn.query("UPDATE user SET online = 0 WHERE updated_at + INTERVAL 1 HOUR <= NOW()", (err, _res) => {
         if (err) console.log(err);
     });
-}, 5000);
+}, 10000);
 
 export default conn;
