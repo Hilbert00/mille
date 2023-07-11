@@ -17,7 +17,7 @@ router.put("/", (req, res) => {
 
         if (!result) return res.sendStatus(404);
 
-        return res.clearCookie("AuthJWT").json({ message: "success" }).end();
+        return res.clearCookie("AuthJWT", { sameSite: "none", secure: true }).json({ message: "success" }).end();
     });
 });
 
