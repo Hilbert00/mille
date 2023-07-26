@@ -86,7 +86,7 @@ export default function User() {
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <h1 className="mb-5 text-center text-4xl font-bold">Edição do Pefil</h1>
                 <form method="post" className="flex flex-col gap-5" onSubmit={updateProfile}>
-                    <div className="flex items-center sm:gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <label htmlFor="username" className="font-medium sm:text-xl">
                             Nome de usuário:
                         </label>
@@ -99,14 +99,14 @@ export default function User() {
                         />
                     </div>
 
-                    <div className="flex items-center sm:gap-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                         <label htmlFor="title" className="font-medium sm:text-xl">
                             Título:
                         </label>
                         <select name="title" disabled></select>
                     </div>
 
-                    <div className="flex items-center sm:gap-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                         <label htmlFor="picture" className="font-medium sm:text-xl">
                             Foto do perfil:
                         </label>
