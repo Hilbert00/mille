@@ -70,7 +70,7 @@ export default function User() {
     return (
         <>
             <Head>
-                <title>{`Mille - @${user.username}`}</title>
+                <title>{`@${user.username} - Mille`}</title>
             </Head>
 
             <Topbar type="default" />
@@ -135,7 +135,9 @@ export default function User() {
                     <hr className="my-5 w-full border-y-2 border-[#D8D8D8] dark:border-[#191919] sm:my-0 sm:h-96 sm:w-1 sm:border-x-2 sm:border-t-0" />
                     <div className="w-full sm:mb-0 sm:w-[45%]">
                         <h2 className="mb-3 text-xl font-bold">Medalhas:</h2>
-                        <div className="flex h-40 w-full flex-col items-center rounded-xl bg-primary-white dark:bg-[#282828] sm:h-96"></div>
+                        <div className="flex h-40 w-full flex-col items-center justify-center rounded-xl bg-primary-white dark:bg-[#282828] sm:h-96">
+                            <span className="text-4xl font-semibold">EM BREVE</span>
+                        </div>
                     </div>
                 </div>
             </main>

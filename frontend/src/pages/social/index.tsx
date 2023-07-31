@@ -21,7 +21,14 @@ export default function Social({ cardData }: any) {
                     <Card
                         key={e.id_subject}
                         title={e.name}
-                        linksTo={"social/" + String(e.name).toLowerCase().substring(0, 3)}
+                        linksTo={
+                            "social/" +
+                            String(e.name)
+                                .normalize("NFD")
+                                .replace(/[\u0300-\u036f]/g, "")
+                                .substring(0, 3)
+                                .toLowerCase()
+                        }
                         color={cardColors[i]}
                     ></Card>
                 );
@@ -34,8 +41,8 @@ export default function Social({ cardData }: any) {
     if (!data.length) {
         return (
             <>
-                <Topbar type="default" />
-                <Menubar active={2}></Menubar>
+                <Topbar type="social" />
+                <Menubar active={0}></Menubar>
             </>
         );
     }
@@ -43,10 +50,10 @@ export default function Social({ cardData }: any) {
     return (
         <>
             <Head>
-                <title>Mille - Solo</title>
+                <title>Comunidade - Mille</title>
             </Head>
 
-            <Topbar type="default" />
+            <Topbar type="social" />
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-wrap justify-between gap-10">{data}</div>

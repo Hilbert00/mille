@@ -167,7 +167,7 @@ export default function Duel() {
         return (
             <>
                 <Head>
-                    <title>Mille - Duelo</title>
+                    <title>Duelo - Mille</title>
                 </Head>
 
                 <Topbar type="default" />
@@ -182,7 +182,7 @@ export default function Duel() {
         return (
             <>
                 <Head>
-                    <title>Mille - Duelo</title>
+                    <title>Duelo - Mille</title>
                 </Head>
 
                 <Topbar type="default" />
@@ -214,7 +214,7 @@ export default function Duel() {
         return (
             <>
                 <Head>
-                    <title>Mille - Duelo</title>
+                    <title>Duelo - Mille</title>
                 </Head>
 
                 <Topbar type="default" />
@@ -253,7 +253,7 @@ export default function Duel() {
         return (
             <>
                 <Head>
-                    <title>Mille - Duelo</title>
+                    <title>Duelo - Mille</title>
                 </Head>
 
                 <Topbar type="default" />
@@ -270,7 +270,7 @@ export default function Duel() {
     return (
         <>
             <Head>
-                <title>Mille - Duelo Concluído</title>
+                <title>Duelo Concluído - Mille</title>
             </Head>
 
             <Topbar type="default" />

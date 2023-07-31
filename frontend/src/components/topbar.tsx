@@ -5,7 +5,7 @@ import { getUserData } from "hooks/getUserData";
 import { useEffect, useState } from "react";
 
 interface TopbarProps {
-    type: "default" | "solo";
+    type: "default" | "solo" | "social";
     barValue?: number;
     barMaxValue?: number;
 }
@@ -41,15 +41,57 @@ export default function Topbar(props: TopbarProps) {
         </div>
     );
 
-    const [extraInfo, setExtraInfo] = useState(null as any);
+    if (props.type === "social")
+        return (
+            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
+                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full border-4 border-[#02A726] bg-[#00BB29]">
+                        <span className="font-semibold text-primary-white">{user.user_behavior}</span>
+                    </div>
 
-    useEffect(() => {
-        if (props.type === "solo") {
-            setExtraInfo(progressbar);
-        } else {
-            setExtraInfo(userCoins);
-        }
-    }, [user.user_coins, props.barValue, props.barMaxValue]);
+                    {userCoins}
+
+                    <div className="h-11 w-11">
+                        <Link href={`/user?name=${user.username}`}>
+                            <Image
+                                src={"/images/usericons/default.png"}
+                                width={100}
+                                height={100}
+                                alt={"User Icon"}
+                                priority
+                            ></Image>
+                        </Link>
+                    </div>
+                </nav>
+            </header>
+        );
+
+    if (props.type === "solo")
+        return (
+            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
+                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
+                    <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
+                        <span className="absolute right-0 left-0 top-3 text-center text-xl font-extrabold tracking-wide text-primary-white">
+                            {user.user_sequence ?? 0}
+                        </span>
+                    </div>
+
+                    {progressbar}
+
+                    <div className="h-11 w-11">
+                        <Link href={`/user?name=${user.username}`}>
+                            <Image
+                                src={"/images/usericons/default.png"}
+                                width={100}
+                                height={100}
+                                alt={"User Icon"}
+                                priority
+                            ></Image>
+                        </Link>
+                    </div>
+                </nav>
+            </header>
+        );
 
     return (
         <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
@@ -59,8 +101,6 @@ export default function Topbar(props: TopbarProps) {
                         {user.user_sequence ?? 0}
                     </span>
                 </div>
-
-                {extraInfo}
 
                 <div className="h-11 w-11">
                     <Link href={`/user?name=${user.username}`}>

@@ -181,7 +181,7 @@ export default function DuelQuiz(props: DuelProps) {
         return (
             <>
                 <Head>
-                    <title>{`Mille - Duelo ${currentQuestion + 1}/${questionQuantity.current}`}</title>
+                    <title>{`Duelo ${currentQuestion + 1}/${questionQuantity.current} - Mille`}</title>
                 </Head>
 
                 <DuelTopbar
@@ -201,7 +201,7 @@ export default function DuelQuiz(props: DuelProps) {
     return (
         <>
             <Head>
-                <title>{`Mille - Duelo ${currentQuestion + 1}/${questionQuantity.current}`}</title>
+                <title>{`Duelo ${currentQuestion + 1}/${questionQuantity.current} - Mille`}</title>
             </Head>
 
             <DuelTopbar
