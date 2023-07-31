@@ -109,7 +109,7 @@ export default function Solo(props: Props) {
         return (
             <>
                 <Head>
-                    <title>{`Mille - ${props.title}`}</title>
+                    <title>{`${props.title} - Mille`}</title>
                 </Head>
                 <Topbar type="solo" barValue={0} barMaxValue={1} />
                 <Loading />
@@ -121,7 +121,7 @@ export default function Solo(props: Props) {
     return (
         <>
             <Head>
-                <title>{`Mille - ${props.title}`}</title>
+                <title>{`${props.title} - Mille`}</title>
             </Head>
 
             <Topbar type="solo" barValue={doneCount} barMaxValue={37 * 5} />
