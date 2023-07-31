@@ -24,7 +24,17 @@ export default function Card(props: CardProps) {
 
     return (
         <Link href={props.linksTo ? props.linksTo : ""} className="w-full sm:w-[45%]">
-            <div className="relative h-44 w-full rounded-xl bg-[#e7e7e7] dark:bg-primary">
+            <div
+                className="relative h-44 w-full rounded-xl transition-all duration-500 hover:scale-105"
+                style={{
+                    background: `url(/images/subject/${String(props.title)
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "")
+                        .substring(0, 3)
+                        .toLowerCase()}.png)`,
+                    backgroundSize: "cover",
+                }}
+            >
                 <div className="p-3">
                     <p className="mb-3 font-semibold">
                         {props.main} {props.mainData}

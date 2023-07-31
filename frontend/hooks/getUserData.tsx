@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 
 interface UserData {
+    id: number;
     username: string;
     email: string;
     user_level: number;

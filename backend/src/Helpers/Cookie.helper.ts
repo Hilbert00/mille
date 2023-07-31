@@ -2,6 +2,7 @@ import * as TokenHelper from "./Token.helper.js";
 import { serialize } from "cookie";
 
 function generateUserCookie(userData: {
+    id: number;
     username: string;
     user_level: number;
     user_EXP: number;
@@ -13,6 +14,7 @@ function generateUserCookie(userData: {
     active: number;
 }) {
     const token = TokenHelper.signToken({
+        id: userData.id,
         username: userData.username,
         user_level: userData.user_level,
         user_EXP: userData.user_EXP,

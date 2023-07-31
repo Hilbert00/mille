@@ -63,7 +63,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Mille - Plataforma de Estudos para o ENEM</title>
+                <title>Plataforma de Estudos para o ENEM - Mille</title>
             </Head>
 
             <header className="flex h-28 items-center justify-center">

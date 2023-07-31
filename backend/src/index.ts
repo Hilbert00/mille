@@ -35,6 +35,9 @@ import user from "./Routes/User.route.js";
 import quiz from "./Routes/Quiz.route.js";
 import world from "./Routes/solo/World.route.js";
 
+import posts from "./Routes/social/Posts.route.js";
+import answer from "./Routes/social/Answer.route.js";
+
 import addQuestions from "./Routes/AddQuestions.route.js";
 
 app.use("/api/auth/signup", signUp);
@@ -46,6 +49,9 @@ app.use("/api/auth/verify", emailVerification);
 app.use("/api/user", user);
 app.use("/api/quiz", quiz);
 app.use("/api/world", world);
+
+app.use("/api/social", posts);
+app.use("/api/social/post", answer);
 
 app.use("/api/questions", addQuestions);
 

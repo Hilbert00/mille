@@ -21,7 +21,11 @@ export default function Home({ cardData }: any) {
                     <Card
                         key={e.id_subject}
                         title={e.name}
-                        linksTo={String(e.name).toLowerCase().substring(0, 3)}
+                        linksTo={String(e.name)
+                            .normalize("NFD")
+                            .replace(/[\u0300-\u036f]/g, "")
+                            .substring(0, 3)
+                            .toLowerCase()}
                         color={cardColors[i]}
                     ></Card>
                 );
@@ -35,7 +39,7 @@ export default function Home({ cardData }: any) {
         return (
             <>
                 <Topbar type="default" />
-                <Menubar active={2}></Menubar>
+                <Menubar active={1}></Menubar>
             </>
         );
     }
@@ -43,7 +47,7 @@ export default function Home({ cardData }: any) {
     return (
         <>
             <Head>
-                <title>Mille - Solo</title>
+                <title>Solo - Mille</title>
             </Head>
 
             <Topbar type="default" />

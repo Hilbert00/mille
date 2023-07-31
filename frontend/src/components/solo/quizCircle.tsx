@@ -113,6 +113,7 @@ export default function QuizCircle(props: Props) {
 
     const [ping, setPing] = useState(null as any);
     const [locked, setLocked] = useState(true);
+    const [testLoading, setTestLoading] = useState(false);
 
     useEffect(() => {
         if (typeof props?.data?.done !== "undefined") {
@@ -141,6 +142,9 @@ export default function QuizCircle(props: Props) {
             className="relative flex items-center justify-center rounded-full"
             style={{ ...props.style, opacity: locked ? "0.3" : "1.0" }}
             onClick={async () => {
+                if (testLoading) return;
+                setTestLoading(true);
+                
                 try {
                     const test = await fetch(
                         process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${props.type}?num=${props.linksTo}`,
@@ -155,6 +159,8 @@ export default function QuizCircle(props: Props) {
                         `${props.subject}/quiz?quizType=${props.type}&quizArea=${props.area}&quizID=${props.linksTo}`
                     );
                 } catch {
+                    setTestLoading(false);
+
                     swal.fire({
                         title: "Oops",
                         text: "Este quiz ainda não foi desbloqueado!",

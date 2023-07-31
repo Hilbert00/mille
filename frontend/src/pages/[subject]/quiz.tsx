@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import Topbar from "@/components/topbar";
 import Button from "@/components/button";
+import Loading from "@/components/loading";
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
@@ -189,10 +190,12 @@ export default function Quiz() {
         return (
             <>
                 <Head>
-                    <title>{`Mille - Quiz ${currentQuestion + 1}/5`}</title>
+                    <title>{`Quiz ${currentQuestion + 1}/5 - Mille`}</title>
                 </Head>
 
                 <Topbar type="solo" barValue={currentQuestion} barMaxValue={questionQuantity} />
+
+                <Loading />
             </>
         );
     }
@@ -201,7 +204,7 @@ export default function Quiz() {
         return (
             <>
                 <Head>
-                    <title>{`Mille - Quiz Concluído!`}</title>
+                    <title>{`Quiz Concluído! - Mille`}</title>
                 </Head>
 
                 <Topbar type="solo" barValue={currentQuestion} barMaxValue={questionQuantity} />
@@ -372,7 +375,7 @@ export default function Quiz() {
     return (
         <>
             <Head>
-                <title>{`Mille - Quiz ${currentQuestion + 1}/5`}</title>
+                <title>{`Quiz ${currentQuestion + 1}/5 - Mille`}</title>
             </Head>
 
             <Topbar type="solo" barValue={currentQuestion} barMaxValue={questionQuantity} />
