@@ -6,7 +6,7 @@ import DuelTimer from "./duelTimer";
 
 import { useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
-import { clearInterval, setInterval } from 'worker-timers';
+import { clearInterval, setInterval } from "worker-timers";
 
 const colors = ["#7106C5", "#1A66E5", "#00BB29", "#E5AC1A", "#D2042D"];
 
@@ -19,7 +19,7 @@ interface DuelProps {
 export default function DuelQuiz(props: DuelProps) {
     const callApi = useRef(true);
     const socket = useRef(props.socket);
-    const timeLeft = useRef(Number(props.data.timer));
+    const [timeLeft, setTimeLeft] = useState(Number(props.data.timer));
     const questionQuantity = useRef(Number(props.data.questionQuantity));
 
     const [answers, setAnswers] = useState([] as any);
@@ -160,22 +160,25 @@ export default function DuelQuiz(props: DuelProps) {
         }
 
         const timer = setInterval(() => {
-            if (timeLeft.current - 0.01 <= 0) {
+            if (timeLeft - 0.01 <= 0) {
                 nextQuestion(false);
                 return;
             }
 
-            timeLeft.current -=
-                0.01 *
-                (props.data.players[props.playerNumber - 1 === 1 ? 0 : 1].questions.length === questionQuantity.current
-                    ? 2
-                    : 1);
+            setTimeLeft(
+                timeLeft -
+                    0.01 *
+                        (props.data.players[props.playerNumber - 1 === 1 ? 0 : 1].questions.length ===
+                        questionQuantity.current
+                            ? 2
+                            : 1)
+            );
         }, 10);
 
         return () => {
             clearInterval(timer);
         };
-    }, [timeLeft.current]);
+    }, [timeLeft]);
 
     if (!quizData?.questions?.length) {
         return (
@@ -214,7 +217,7 @@ export default function DuelQuiz(props: DuelProps) {
             ></DuelTopbar>
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
-                <DuelTimer currentValue={timeLeft.current} maxValue={props.data.timer} />
+                <DuelTimer currentValue={timeLeft} maxValue={props.data.timer} />
                 <h1 className="text-4xl font-bold">{`Pergunta Nº ${currentQuestion + 1}`}</h1>
                 <div className="my-6 flex flex-col items-center">
                     {quizImage}
@@ -229,12 +232,12 @@ export default function DuelQuiz(props: DuelProps) {
         let points: number;
 
         if (isRight) {
-            points = Math.ceil((Math.ceil(timeLeft.current) * 100) / props.data.timer);
+            points = Math.ceil((Math.ceil(timeLeft) * 100) / props.data.timer);
         } else {
-            points = Math.min(-Math.ceil((Math.ceil(timeLeft.current) * 100) / props.data.timer / 2), -20);
+            points = Math.min(-Math.ceil((Math.ceil(timeLeft) * 100) / props.data.timer / 2), -20);
         }
 
-        timeLeft.current = props.data.timer;
+        setTimeLeft(props.data.timer);
         setCurrentQuestion(currentQuestion + 1);
         socket.current.emit("nextQuestion", isRight, points);
     }
