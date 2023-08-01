@@ -75,26 +75,26 @@ export default function Social({ data }: any) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ postID, value, all: true }),
             method: "POST",
-        }).then(() => {
-            const updatedPosts = posts.map((e) => {
-                if (e.id_post === postID) {
-                    e.votes =
-                        value !== 0
-                            ? e.user_vote === 0
-                                ? e.votes + value
-                                : e.votes + 2 * value
-                            : e.user_vote === 1
-                            ? e.votes - 1
-                            : e.votes + 1;
-
-                    e.user_vote = value;
-                }
-
-                return e;
-            });
-
-            setPosts(updatedPosts);
         });
+
+        const updatedPosts = posts.map((e) => {
+            if (e.id_post === postID) {
+                e.votes =
+                    value !== 0
+                        ? e.user_vote === 0
+                            ? e.votes + value
+                            : e.votes + 2 * value
+                        : e.user_vote === 1
+                        ? e.votes - 1
+                        : e.votes + 1;
+
+                e.user_vote = value;
+            }
+
+            return e;
+        });
+
+        setPosts(updatedPosts);
     }
 
     function handleSearch(event: ChangeEvent<HTMLInputElement>) {
@@ -244,7 +244,7 @@ export default function Social({ data }: any) {
             return (
                 <div
                     key={e.id_post as any}
-                    className="flex w-full select-none flex-col gap-3 rounded-xl bg-primary p-3"
+                    className="flex w-full select-none flex-col gap-3 rounded-xl bg-primary-white p-3 dark:bg-primary"
                 >
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">

@@ -114,59 +114,59 @@ export default function Publish() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ postID, answerID, value }),
             method: "POST",
-        }).then(() => {
-            if (type === "post")
-                setData({
-                    ...data,
-                    votes:
-                        value !== 0
-                            ? data.user_vote === 0
-                                ? data.votes + value
-                                : data.votes + 2 * value
-                            : data.user_vote === 1
-                            ? data.votes - 1
-                            : data.votes + 1,
-                    user_vote: value,
-                });
-            else {
-                const updatedAnswers = answers.map((e) => {
-                    if (replyTo) {
-                        if (e.id_answer === replyTo) {
-                            e.replies?.map((e2) => {
-                                if (e2.id_answer === answerID) {
-                                    e2.votes =
-                                        value !== 0
-                                            ? e2.user_vote === 0
-                                                ? e2.votes + value
-                                                : e2.votes + 2 * value
-                                            : e2.user_vote === 1
-                                            ? e2.votes - 1
-                                            : e2.votes + 1;
-
-                                    e2.user_vote = value;
-                                }
-                            });
-                        }
-                    } else if (e.id_answer === answerID) {
-                        e.votes =
-                            value !== 0
-                                ? e.user_vote === 0
-                                    ? e.votes + value
-                                    : e.votes + 2 * value
-                                : e.user_vote === 1
-                                ? e.votes - 1
-                                : e.votes + 1;
-
-                        e.user_vote = value;
-                    }
-
-                    return e;
-                });
-
-                setAnswers(updatedAnswers);
-                makeAnswerDivs(updatedAnswers);
-            }
         });
+
+        if (type === "post")
+            setData({
+                ...data,
+                votes:
+                    value !== 0
+                        ? data.user_vote === 0
+                            ? data.votes + value
+                            : data.votes + 2 * value
+                        : data.user_vote === 1
+                        ? data.votes - 1
+                        : data.votes + 1,
+                user_vote: value,
+            });
+        else {
+            const updatedAnswers = answers.map((e) => {
+                if (replyTo) {
+                    if (e.id_answer === replyTo) {
+                        e.replies?.map((e2) => {
+                            if (e2.id_answer === answerID) {
+                                e2.votes =
+                                    value !== 0
+                                        ? e2.user_vote === 0
+                                            ? e2.votes + value
+                                            : e2.votes + 2 * value
+                                        : e2.user_vote === 1
+                                        ? e2.votes - 1
+                                        : e2.votes + 1;
+
+                                e2.user_vote = value;
+                            }
+                        });
+                    }
+                } else if (e.id_answer === answerID) {
+                    e.votes =
+                        value !== 0
+                            ? e.user_vote === 0
+                                ? e.votes + value
+                                : e.votes + 2 * value
+                            : e.user_vote === 1
+                            ? e.votes - 1
+                            : e.votes + 1;
+
+                    e.user_vote = value;
+                }
+
+                return e;
+            });
+
+            setAnswers(updatedAnswers);
+            makeAnswerDivs(updatedAnswers);
+        }
     }
 
     function handleBest(value: boolean, postID: number, answerID: number) {
@@ -316,7 +316,7 @@ export default function Publish() {
             return (
                 <div
                     key={e.id_answer as any}
-                    className="relative flex w-full flex-col gap-3 rounded-xl bg-primary p-3"
+                    className="relative flex w-full flex-col gap-3 rounded-xl bg-primary-white p-3 dark:bg-primary"
                     style={{ outline: e.is_best ? "1px solid #00BB29" : "none" }}
                 >
                     <div className="flex justify-between">
@@ -464,13 +464,13 @@ export default function Publish() {
 
                     {e.show_replies && (
                         <>
-                            <hr className="text-[#282828]" />
+                            <hr className="text-[#acacac] dark:text-[#282828]" />
                             <ul className="flex flex-col gap-2">
                                 {e.replies?.map((e2) => {
                                     return (
                                         <li className="pl-4 sm:pl-8" key={e2.id_answer as any}>
                                             <div
-                                                className="relative flex w-full select-none flex-col gap-3 rounded-xl bg-primary"
+                                                className="relative flex w-full select-none flex-col gap-3 rounded-xl bg-primary-white p-3 dark:bg-primary"
                                                 style={{ border: e2.is_best ? "1px solid #00BB29" : "none" }}
                                             >
                                                 <div className="flex items-center gap-2">

@@ -144,14 +144,14 @@ export default function Publish() {
                             bgColor="#C81652"
                             disable={canceled}
                             action={() => {
-                                const route = `/social/${router.query.subject}`;
+                                const route = `/social`;
                                 router.push(route);
                                 setCanceled(true);
                             }}
                         >
                             Cancelar
                         </Button>
-                        <Button type="submit" className="mx-0 w-2/5 sm:w-40">
+                        <Button type="submit" className="mx-0 w-2/5 sm:w-40" disable={!content || !title}>
                             Publicar
                         </Button>
                     </div>
