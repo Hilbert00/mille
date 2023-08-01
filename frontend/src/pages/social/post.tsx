@@ -175,17 +175,17 @@ export default function Publish() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ postID, answerID, value }),
             method: "PUT",
-        }).then(() => {
-            const updatedAnswers = answers.map((e) => {
-                if (e.id_answer === answerID) e.is_best = value;
-                else if (value) e.is_best = false;
-
-                return e;
-            });
-
-            setAnswers(updatedAnswers);
-            makeAnswerDivs(updatedAnswers);
         });
+
+        const updatedAnswers = answers.map((e) => {
+            if (e.id_answer === answerID) e.is_best = value;
+            else if (value) e.is_best = false;
+
+            return e;
+        });
+
+        setAnswers(updatedAnswers);
+        makeAnswerDivs(updatedAnswers);
     }
 
     function handleAnswer(postID: number, replyID?: number) {
@@ -339,7 +339,7 @@ export default function Publish() {
                     </div>
 
                     <div>
-                        <p className="line-clamp-2 sm:line-clamp-3">{e.content}</p>
+                        <p className="whitespace-pre-line">{e.content}</p>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -447,18 +447,20 @@ export default function Publish() {
                                 }}
                             />
 
-                            <Button
-                                type="button"
-                                className="mx-0 w-28"
-                                bgColor="#C81652"
-                                action={() => viewReplies(e.id_answer, "input")}
-                            >
-                                Cancelar
-                            </Button>
+                            <div className="flex gap-3">
+                                <Button
+                                    type="button"
+                                    className="mx-0 flex-1 sm:w-28"
+                                    bgColor="#C81652"
+                                    action={() => viewReplies(e.id_answer, "input")}
+                                >
+                                    Cancelar
+                                </Button>
 
-                            <Button type="submit" className="mx-0 w-28" disable={!reply}>
-                                Responder
-                            </Button>
+                                <Button type="submit" className="mx-0 flex-1 sm:w-28" disable={!reply}>
+                                    Responder
+                                </Button>
+                            </div>
                         </form>
                     )}
 
@@ -617,7 +619,7 @@ export default function Publish() {
 
                     <div>
                         <h1 className="text-2xl font-semibold sm:text-3xl">{data.title}</h1>
-                        <p>{data.description}</p>
+                        <p className="whitespace-pre-line">{data.description}</p>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -654,22 +656,22 @@ export default function Publish() {
 
                     <div>
                         <form
-                            className="flex flex-col gap-3 sm:flex-row"
+                            className="flex flex-col gap-3"
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 handleAnswer(data.id_post);
                             }}
                         >
-                            <input
+                            <textarea
                                 name="answer"
-                                type="text"
-                                value={answer}
-                                className="h-11 flex-1 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                rows={3}
                                 placeholder="Digite sua resposta..."
+                                className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                value={answer}
                                 onChange={(e) => setAnswer(e.target.value)}
-                            />
+                            ></textarea>
 
-                            <Button type="submit" className="mx-0 sm:w-40" disable={!answer}>
+                            <Button type="submit" className="mx-0 h-12 sm:w-40" disable={!answer}>
                                 Responder
                             </Button>
                         </form>

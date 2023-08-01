@@ -3,7 +3,7 @@ import Head from "next/head";
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import Button from "@/components/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 
 import swal from "sweetalert2";
@@ -14,8 +14,6 @@ export default function Publish() {
     const [content, setContent] = useState("");
     const [area, setArea] = useState(1);
     const [canceled, setCanceled] = useState(false);
-
-    useEffect(() => {}, [router.isReady]);
 
     function handleSubmit() {
         if (!area || !content || !title)
