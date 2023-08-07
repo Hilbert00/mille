@@ -139,7 +139,7 @@ export default function Solo(props: Props) {
                                 subject={props.subject}
                                 unlocks={i + 2}
                                 currentValue={doneCount}
-                                necessaryValue={35 * (i + 1)}
+                                necessaryValue={35 * quizData.filter((e: any) => e.length).length}
                                 updateData={setQuizData}
                                 currentData={quizData}
                             ></LockWall>

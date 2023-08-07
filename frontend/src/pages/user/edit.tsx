@@ -99,14 +99,14 @@ export default function User() {
                         />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <label htmlFor="title" className="font-medium sm:text-xl">
                             Título:
                         </label>
                         <select name="title" disabled></select>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <label htmlFor="picture" className="font-medium sm:text-xl">
                             Foto do perfil:
                         </label>

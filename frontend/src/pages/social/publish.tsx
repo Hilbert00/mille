@@ -28,7 +28,7 @@ export default function Publish() {
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post`, {
             credentials: "include",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, content, area }),
+            body: JSON.stringify({ title: title.trim(), content: content.trim(), area }),
             method: "POST",
         }).then(() =>
             swal
@@ -75,6 +75,7 @@ export default function Publish() {
                                 className="h-11 flex-1 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
                                 placeholder="Digite aqui o título da pergunta..."
                                 onChange={(e) => setTitle(e.target.value)}
+                                maxLength={100}
                             />
                         </div>
 
@@ -149,7 +150,11 @@ export default function Publish() {
                         >
                             Cancelar
                         </Button>
-                        <Button type="submit" className="mx-0 w-2/5 sm:w-40" disable={!content || !title}>
+                        <Button
+                            type="submit"
+                            className="mx-0 w-2/5 sm:w-40"
+                            disable={!content.replace(" ", "").length || !title.replace(" ", "").length}
+                        >
                             Publicar
                         </Button>
                     </div>

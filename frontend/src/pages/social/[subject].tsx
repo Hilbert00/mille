@@ -15,6 +15,7 @@ dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 import { TbX } from "react-icons/tb";
+import { TbSearch } from "react-icons/tb";
 import { TbCheck } from "react-icons/tb";
 import { TbArrowBigUp } from "react-icons/tb";
 import { TbArrowBigUpFilled } from "react-icons/tb";
@@ -272,26 +273,6 @@ export default function Social({ data }: any) {
                                 )}
                             </div>
                         </div>
-
-                        <div className="flex items-center gap-3">
-                            <button type="button" onClick={() => handleVote(e.user_vote === 1 ? 0 : 1, e.id_post)}>
-                                {e.user_vote === 1 ? (
-                                    <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
-                                ) : (
-                                    <TbArrowBigUp className="text-2xl text-[#00BB29]" />
-                                )}
-                            </button>
-                            <span className="flex w-10 justify-center">
-                                {Intl.NumberFormat("en", { notation: "compact" }).format(e.votes)}
-                            </span>
-                            <button type="button" onClick={() => handleVote(e.user_vote === -1 ? 0 : -1, e.id_post)}>
-                                {e.user_vote === -1 ? (
-                                    <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
-                                ) : (
-                                    <TbArrowBigDown className="text-2xl text-[#C81652]" />
-                                )}
-                            </button>
-                        </div>
                     </div>
 
                     <div
@@ -305,6 +286,26 @@ export default function Social({ data }: any) {
                     >
                         <h1 className="truncate text-xl font-semibold sm:text-2xl">{e.title}</h1>
                         <p className="line-clamp-2 sm:line-clamp-3">{e.description}</p>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <button type="button" onClick={() => handleVote(e.user_vote === 1 ? 0 : 1, e.id_post)}>
+                            {e.user_vote === 1 ? (
+                                <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
+                            ) : (
+                                <TbArrowBigUp className="text-2xl text-[#00BB29]" />
+                            )}
+                        </button>
+                        <span className="flex w-10 justify-center">
+                            {Intl.NumberFormat("en", { notation: "compact" }).format(e.votes)}
+                        </span>
+                        <button type="button" onClick={() => handleVote(e.user_vote === -1 ? 0 : -1, e.id_post)}>
+                            {e.user_vote === -1 ? (
+                                <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
+                            ) : (
+                                <TbArrowBigDown className="text-2xl text-[#C81652]" />
+                            )}
+                        </button>
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -346,20 +347,13 @@ export default function Social({ data }: any) {
                         Fazer uma Pergunta
                     </Button>
 
-                    <form className="flex gap-5">
-                        <input
-                            className="mx-auto h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                            name="username"
-                            type="text"
-                            placeholder={"Pesquise por perguntas..."}
-                            value={search.text}
-                            onChange={handleSearch}
-                        />
-
-                        <Button type="button" className="sm:w-40" action={handleFilters}>
-                            Filtros
-                        </Button>
-                    </form>
+                    <input
+                        className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828] sm:max-w-none"
+                        type="text"
+                        placeholder="Pesquisar..."
+                        value={search.text}
+                        onChange={handleSearch}
+                    />
 
                     {postDivs.length ? (
                         postDivs
