@@ -5,6 +5,7 @@ import Menubar from "@/components/menubar";
 import Button from "@/components/button";
 import Loading from "@/components/loading";
 
+import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -61,7 +62,7 @@ interface answer {
     votes: number;
 }
 
-export default function Publish() {
+export default function Post() {
     const router = useRouter();
     const [data, setData] = useState({} as post);
     const [answer, setAnswer] = useState("");
@@ -330,12 +331,16 @@ export default function Publish() {
                                 ></Image>
                             </div>
                             <div className="flex flex-col">
-                                <span className="w-24 font-medium sm:w-auto">@{e.username}</span>
+                                <Link href={"/user?name=" + e.username} className="w-24 font-medium sm:w-auto">
+                                    @{e.username}
+                                </Link>
                                 <span className="text-sm font-light">{dayjs(e.create_time).fromNow()}</span>
                             </div>
                         </div>
 
-                        {e.is_best && <span className="items-center justify-center text-[#00BB29]">Resolvido</span>}
+                        {Boolean(e.is_best) && (
+                            <span className="items-center justify-center text-[#00BB29]">Resolvido</span>
+                        )}
                     </div>
 
                     <div>
@@ -485,9 +490,12 @@ export default function Publish() {
                                                         ></Image>
                                                     </div>
                                                     <div className="flex flex-col">
-                                                        <span className="w-24 font-medium sm:w-auto">
+                                                        <Link
+                                                            href={"/user?name=" + e2.username}
+                                                            className="w-24 font-medium sm:w-auto"
+                                                        >
                                                             @{e2.username}
-                                                        </span>
+                                                        </Link>
                                                         <span className="text-sm font-light">
                                                             {dayjs(e2.create_time).fromNow()}
                                                         </span>
@@ -599,7 +607,9 @@ export default function Publish() {
                                 ></Image>
                             </div>
                             <div className="flex flex-col">
-                                <span className="w-24 font-medium sm:w-auto">@{data.username}</span>
+                                <Link href={"/user?name=" + data.username} className="w-24 font-medium sm:w-auto">
+                                    @{data.username}
+                                </Link>
                                 <span className="text-sm font-light">{dayjs(data.create_time).fromNow()}</span>
                             </div>
                         </div>

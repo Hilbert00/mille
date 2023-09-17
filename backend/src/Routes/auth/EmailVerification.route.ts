@@ -21,13 +21,7 @@ router.post("/send", async (req, res) => {
         },
     });
 
-    const token = TokenHelper.signToken(
-        {
-            username,
-            email,
-        },
-        changePass ? process.env.JWT_EXPIRE_EMAIL : "0"
-    );
+    const token = TokenHelper.signToken({ username, email }, changePass ? process.env.JWT_EXPIRE_EMAIL : "0");
 
     if (!changePass)
         fs.readFile("./src/Routes/auth/email/email.html", { encoding: "utf-8" }, (err, data) => {
@@ -102,12 +96,13 @@ router.post("/send", async (req, res) => {
 router.post("/", async (req, res) => {
     const token: string = String(req.body.token);
 
-    if (token == null) {
+    if (!req.body.token) {
         return res.sendStatus(401);
     }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, data: any) => {
         if (err) {
+            console.log(err);
             return res.sendStatus(403);
         }
 
@@ -117,7 +112,10 @@ router.post("/", async (req, res) => {
                 return res.sendStatus(404);
             }
 
-            return res.json({ ...data }).status(200).send();
+            return res
+                .json({ ...data })
+                .status(200)
+                .send();
         });
     });
 });

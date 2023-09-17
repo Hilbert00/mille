@@ -12,6 +12,8 @@ interface UserData {
     challenge_matches: number;
     challenge_wins: number;
     active: number;
+    type: 0 | 1 | 2;
+    banned: 0 | 1;
     isUser?: boolean;
 }
 
@@ -30,7 +32,6 @@ export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: st
         if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
         const data = await response.json();
-
         return data;
     }
 

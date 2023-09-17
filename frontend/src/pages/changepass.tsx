@@ -38,8 +38,18 @@ export default function Home() {
                         router.push("/verify");
                         return;
                     }
+
+                    swal.fire({
+                        title: "Oops",
+                        text: "Nenhuma conta está cadastrada neste email!",
+                        icon: "error",
+                        background: "#1E1E1E80",
+                        color: "#fff",
+                    });
+
+                    setDisabled(false);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => console.error(err));
         } else {
             swal.fire({
                 title: "Oops",

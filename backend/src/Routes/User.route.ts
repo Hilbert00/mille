@@ -11,27 +11,36 @@ router.get("/:user", verifyToken, (req, res) => {
     const userToken = req.user;
     const userParams = req.params.user;
 
-    if (userToken.username !== userParams) {
-        const query =
-            "SELECT username, user_level, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM user WHERE ?? = ?";
-        const data = ["username", userParams];
+    const query =
+        "SELECT username, user_level, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id WHERE ?? = ?";
+    const data = ["username", userParams];
 
-        conn.query(query, data, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.sendStatus(404).json({ message: "user not found" });
-            }
+    conn.query(query, data, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.sendStatus(404).json({ message: "user not found" });
+        }
 
-            return res.json({ ...result[0] });
-        });
-    } else {
-        return res.json({ ...userToken, isUser: true });
-    }
+        if (userToken.username === userParams) return res.json({ ...result[0], isUser: true });
+        return res.json({ ...result[0] });
+    });
 });
 
 router.get("/", verifyToken, (req, res) => {
-    const userToken = req.user;
-    return res.json({ ...userToken, isUser: true });
+    const username = req.user.username;
+
+    const query =
+        "SELECT u.id, username, user_level, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins, active FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id WHERE ?? = ?";
+    const data = ["username", username];
+
+    conn.query(query, data, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.sendStatus(404);
+        }
+
+        return res.json({ ...result[0], isUser: true });
+    });
 });
 
 router.put("/update", verifyToken, (req, res) => {

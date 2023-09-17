@@ -47,7 +47,7 @@ export default function UserDuel(props: UserProps) {
 
                 <div className="mt-3 inline-block">
                     <h1 className="text-center text-2xl font-semibold sm:text-3xl">{props.username}</h1>
-                    <p className="text-center text-xl font-semibold">{props.title}</p>
+                    {/* <p className="text-center text-xl font-semibold">{props.title}</p> */}
                 </div>
 
                 <ul className="my-2 flex gap-2">{answers}</ul>
@@ -70,7 +70,7 @@ export default function UserDuel(props: UserProps) {
 
             <div className="mt-3 inline-block">
                 <h1 className="text-center text-2xl font-semibold sm:text-3xl">{props.username}</h1>
-                <p className="text-center text-xl font-semibold">{props.title}</p>
+                {/* <p className="text-center text-xl font-semibold">{props.title}</p> */}
             </div>
         </div>
     );

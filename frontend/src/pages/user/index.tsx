@@ -5,6 +5,7 @@ import Link from "next/link";
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import Loading from "@/components/loading";
+import Behavior from "@/components/social/behavior";
 
 import swal from "sweetalert2";
 import { getUserData } from "hooks/getUserData";
@@ -89,10 +90,8 @@ export default function User() {
                                         </button>
                                     </>
                                 )}
-                                <div className="absolute top-0 -right-12 flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#02A726] bg-[#00BB29]">
-                                    <span className="font-semibold text-primary-white">{user.user_behavior}</span>
-                                </div>
-                                <div className="absolute bottom-0 -right-12 flex h-10 w-10 items-center justify-center rounded-full border-4 border-[#0F52C2] bg-[#1A66E5]">
+                                <Behavior classname="absolute -right-12">{user.user_behavior}</Behavior>
+                                <div className="absolute bottom-0 -right-12 flex h-11 w-11 items-center justify-center rounded-full border-4 border-[#0F52C2] bg-[#1A66E5]">
                                     <span className="font-semibold text-primary-white">{user.user_level}</span>
                                 </div>
                                 <Image
@@ -105,7 +104,7 @@ export default function User() {
                             </div>
                             <div className="mt-3">
                                 <h1 className="text-center text-3xl font-semibold">@{user.username}</h1>
-                                <p className="mt-2 text-center text-xl font-semibold">título</p>
+                                {/* <p className="mt-2 text-center text-xl font-semibold">título</p> */}
                             </div>
                         </div>
                         <div className="mt-6 flex w-full justify-between">

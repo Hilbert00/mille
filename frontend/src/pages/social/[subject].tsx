@@ -4,9 +4,10 @@ import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import Button from "@/components/button";
 
+import Link from "next/link";
+import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -15,12 +16,13 @@ dayjs.locale("pt-br");
 dayjs.extend(relativeTime);
 
 import { TbX } from "react-icons/tb";
-import { TbSearch } from "react-icons/tb";
 import { TbCheck } from "react-icons/tb";
 import { TbArrowBigUp } from "react-icons/tb";
 import { TbArrowBigUpFilled } from "react-icons/tb";
 import { TbArrowBigDown } from "react-icons/tb";
 import { TbArrowBigDownFilled } from "react-icons/tb";
+
+import { getUserData } from "hooks/getUserData";
 
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -41,13 +43,14 @@ interface post {
     votes: number;
 }
 
-export default function Social({ data }: any) {
+export default function Community({ data }: any) {
     const [search, setSearch] = useState({ text: "", timer: null as null | NodeJS.Timeout });
     const [posts, setPosts] = useState([] as post[]);
     const [searchPosts, setSearchPosts] = useState(null as post[] | null);
     const [postDivs, setPostDivs] = useState([] as any);
     const [redirecting, setRedirecting] = useState(false);
     const [loaded, setLoaded] = useState(false);
+    const [user] = getUserData(false);
 
     const router = useRouter();
 
@@ -169,7 +172,7 @@ export default function Social({ data }: any) {
                         <label htmlFor="area">Área:</label>
                         <select
                             name="area"
-                            className=" resize-none appearance-none rounded-xl border-none bg-[#F5F5F5] p-1 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-[#F5F5F5] p-1 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
                         >
                             <option value="0" className="text-base">
                                 Todas
@@ -311,7 +314,7 @@ export default function Social({ data }: any) {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Image src={"/images/usericons/default.png"} alt={"User"} width={25} height={25}></Image>
-                            <p>@{e.username}</p>
+                            <Link href={"/user?name=" + e.username}>@{e.username}</Link>
                         </div>
                         <p>{dayjs(e.create_time).fromNow()}</p>
                     </div>
@@ -334,26 +337,34 @@ export default function Social({ data }: any) {
                 <div className="flex w-full flex-col flex-wrap justify-between gap-5">
                     <h1 className="text-center text-3xl font-semibold">{data.name}</h1>
 
-                    <Button
-                        type="button"
-                        className="w-full"
-                        disable={redirecting}
-                        action={() => {
-                            const route = "publish";
-                            router.push(route);
-                            setRedirecting(true);
-                        }}
-                    >
-                        Fazer uma Pergunta
-                    </Button>
+                    {!user.banned && user.user_behavior >= 50 ? (
+                        <Button
+                            type="button"
+                            className="w-full"
+                            disable={redirecting}
+                            action={() => {
+                                const route = "publish";
+                                router.push(route);
+                                setRedirecting(true);
+                            }}
+                        >
+                            Fazer uma Pergunta
+                        </Button>
+                    ) : null}
 
-                    <input
-                        className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828] sm:max-w-none"
-                        type="text"
-                        placeholder="Pesquisar..."
-                        value={search.text}
-                        onChange={handleSearch}
-                    />
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                        <input
+                            className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828] sm:max-w-none"
+                            type="text"
+                            placeholder="Pesquisar..."
+                            value={search.text}
+                            onChange={handleSearch}
+                        />
+
+                        <Button type="button" className="w-full sm:w-40" action={handleFilters}>
+                            Filtros
+                        </Button>
+                    </div>
 
                     {postDivs.length ? (
                         postDivs

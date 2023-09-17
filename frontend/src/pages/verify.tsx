@@ -68,17 +68,9 @@ export default function Home() {
             })
                 .then((res) => {
                     if (res.ok) {
-                        router.push("/");
+                        router.push("/login");
                         return;
                     }
-
-                    swal.fire({
-                        title: "Oops",
-                        text: "Nome de usuário ou email incorreto(s)!",
-                        icon: "error",
-                        background: "#1E1E1E80",
-                        color: "#fff",
-                    });
 
                     setDisabled(false);
                 })
@@ -109,20 +101,20 @@ export default function Home() {
         const token = String(router.query.token);
         const changePass = String(router.query.changePass) === "true";
 
-        if (token && !calledApi.current) {
+        if (router.query.token && !calledApi.current) {
             calledApi.current = true;
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/verify", {
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ token: token }),
+                body: JSON.stringify({ token }),
                 method: "POST",
             })
                 .then((res) => {
                     if (res.ok) setIsOk(true);
 
-                    if (!changePass)
+                    if (!changePass || !res.ok)
                         setTimeout(() => {
                             router.push("/login");
                         }, 5000);

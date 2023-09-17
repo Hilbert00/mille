@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { getUserData } from "hooks/getUserData";
-import { useEffect, useState } from "react";
+
+import Behavior from "./social/behavior";
 
 interface TopbarProps {
     type: "default" | "solo" | "social";
@@ -45,9 +46,7 @@ export default function Topbar(props: TopbarProps) {
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
                 <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full border-4 border-[#02A726] bg-[#00BB29]">
-                        <span className="font-semibold text-primary-white">{user.user_behavior}</span>
-                    </div>
+                    <Behavior>{user.user_behavior}</Behavior>
 
                     {userCoins}
 

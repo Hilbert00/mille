@@ -23,7 +23,7 @@ const router = Router();
 router.get("/answers", verifyToken, (req, res) => {
     if (!req.query.id) return res.sendStatus(404);
 
-    const query = `SELECT a.id_answer, u.id AS id_user, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`;
+    const query = `SELECT a.id_answer, u.id AS id_user, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE NOT EXISTS (SELECT ar.id_report FROM answer_report AS ar WHERE (a.id_answer = ar.id_answer OR a.reply_to = ar.id_answer) AND ar.status = 1) AND a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`;
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);
@@ -122,10 +122,9 @@ router.put("/answer/best", verifyToken, (req, res) => {
     if (req.body.answerID === undefined || req.body.postID === undefined || req.body.value === undefined)
         return res.sendStatus(404);
 
-    const query =
-        req.body.value !== 0
-            ? `UPDATE answer SET is_best = CASE WHEN id_answer = ${req.body.answerID} THEN 1 ELSE 0 END WHERE id_post = ${req.body.postID};`
-            : `UPDATE answer SET is_best = 0 WHERE id_answer = ${req.body.answerID};`;
+    const query = req.body.value
+        ? `UPDATE answer SET is_best = CASE WHEN id_answer = ${req.body.answerID} THEN 1 ELSE 0 END WHERE id_post = ${req.body.postID};`
+        : `UPDATE answer SET is_best = 0 WHERE id_answer = ${req.body.answerID};`;
 
     conn.query(query, (err, _result) => {
         if (err) console.error(err);

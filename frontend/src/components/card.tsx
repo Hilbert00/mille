@@ -25,7 +25,7 @@ export default function Card(props: CardProps) {
     return (
         <Link href={props.linksTo ? props.linksTo : ""} className="w-full sm:w-[45%]">
             <div
-                className="relative h-44 w-full rounded-xl transition-all duration-500 hover:scale-105"
+                className="relative h-44 w-full rounded-xl transition-all duration-500 sm:hover:scale-105"
                 style={{
                     background: `url(/images/subject/${String(props.title)
                         .normalize("NFD")

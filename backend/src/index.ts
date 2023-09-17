@@ -18,7 +18,7 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: [process.env.FRONTEND_URL, "http://127.0.0.1:5500"],
+        origin: process.env.FRONTEND_URL,
         credentials: true,
         preflightContinue: true,
     })
@@ -36,7 +36,10 @@ import quiz from "./Routes/Quiz.route.js";
 import world from "./Routes/solo/World.route.js";
 
 import posts from "./Routes/social/Posts.route.js";
-import answer from "./Routes/social/Answer.route.js";
+import answers from "./Routes/social/Answer.route.js";
+import reports from "./Routes/social/Reports.route.js";
+import requests from "./Routes/social/Requests.route.js";
+import roles from "./Routes/social/Roles.route.js";
 
 import addQuestions from "./Routes/AddQuestions.route.js";
 
@@ -51,16 +54,15 @@ app.use("/api/quiz", quiz);
 app.use("/api/world", world);
 
 app.use("/api/social", posts);
-app.use("/api/social/post", answer);
+app.use("/api/social", reports);
+app.use("/api/social", requests);
+app.use("/api/social", roles);
+app.use("/api/social/post", answers);
 
 app.use("/api/questions", addQuestions);
 
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-    },
-});
+const io = new Server(server, { cors: { origin: process.env.FRONTEND_URL } });
 
 server.listen(PORT, () => console.log(`Rodando na porta: ${PORT}`));
 
@@ -100,7 +102,7 @@ io.on("connection", (socket) => {
 
         state[result].players[0].name = user.username;
         state[result].players[0].level = user.user_level;
-        state[result].players[0].title = "titulo";
+        state[result].players[0].title = "título";
 
         socket.join(result);
 
@@ -119,7 +121,7 @@ io.on("connection", (socket) => {
 
             state[room].players[1].name = user.username;
             state[room].players[1].level = user.user_level;
-            state[room].players[1].title = "titulo";
+            state[room].players[1].title = "título";
 
             socket.join(room);
             io.to(room).emit("joinedRoom", JSON.stringify(state[room]));

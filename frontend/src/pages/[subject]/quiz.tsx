@@ -220,7 +220,7 @@ export default function Quiz() {
                             return (
                                 <div
                                     key={e.id}
-                                    className="mb-8 w-full rounded-md p-2 transition-all hover:scale-110"
+                                    className="mb-8 w-full rounded-md p-2 transition-all sm:hover:scale-110"
                                     style={{ background: `${answers[i].isRight ? colors[2] : "#D2042D"}` }}
                                 >
                                     <h2 className="mb-4 text-xl font-bold">{`Pergunta Nº ${i + 1}:`}</h2>

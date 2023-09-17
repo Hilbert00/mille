@@ -8,9 +8,9 @@ interface FeatureProps {
 
 export default function FeatureDisplay(props: FeatureProps) {
     return (
-        <div className="mb-12 flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
             <div className="w-[60%] sm:w-[70%]">
-                <h2 className="mb-3 text-base font-medium sm:text-3xl">{props.title}</h2>
+                <h2 className="mb-1 text-base font-medium sm:mb-3 sm:text-3xl">{props.title}</h2>
                 <p className="text-sm font-light sm:text-2xl">{props.children}</p>
             </div>
             <div className="w-[30%] sm:w-[20%]">
