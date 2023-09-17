@@ -409,13 +409,16 @@ export default function Post() {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <button
-                            className="flex items-center gap-2"
-                            onClick={() => viewReplies(e.id_answer, e.reply_input ? "input" : "input")}
-                        >
-                            <BsFillReplyFill className="text-2xl text-[#1A66E5]" />
-                            <span>Responder</span>
-                        </button>
+                        {!user.banned && user.user_behavior >= 20 ? (
+                            <button
+                                className="flex items-center gap-2"
+                                onClick={() => viewReplies(e.id_answer, e.reply_input ? "input" : "input")}
+                            >
+                                <BsFillReplyFill className="text-2xl text-[#1A66E5]" />
+                                <span>Responder</span>
+                            </button>
+                        ) : null}
+                        
                         {Boolean(e.replies?.length) && (
                             <>
                                 <span>·</span>
@@ -665,26 +668,28 @@ export default function Post() {
                     </div>
 
                     <div>
-                        <form
-                            className="flex flex-col gap-3"
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleAnswer(data.id_post);
-                            }}
-                        >
-                            <textarea
-                                name="answer"
-                                rows={3}
-                                placeholder="Digite sua resposta..."
-                                className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
-                                value={answer}
-                                onChange={(e) => setAnswer(e.target.value)}
-                            ></textarea>
+                        {!user.banned && user.user_behavior >= 20 ? (
+                            <form
+                                className="flex flex-col gap-3"
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    handleAnswer(data.id_post);
+                                }}
+                            >
+                                <textarea
+                                    name="answer"
+                                    rows={3}
+                                    placeholder="Digite sua resposta..."
+                                    className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                    value={answer}
+                                    onChange={(e) => setAnswer(e.target.value)}
+                                ></textarea>
 
-                            <Button type="submit" className="mx-0 h-12 sm:w-40" disable={!answer}>
-                                Responder
-                            </Button>
-                        </form>
+                                <Button type="submit" className="mx-0 h-12 sm:w-40" disable={!answer}>
+                                    Responder
+                                </Button>
+                            </form>
+                        ) : null}
 
                         <div className="mt-5 flex flex-col gap-3">
                             {ansDivs.length ? (

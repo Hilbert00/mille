@@ -3,17 +3,25 @@ import Head from "next/head";
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
 import Button from "@/components/button";
-import { useState } from "react";
+import Loading from "@/components/loading";
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import swal from "sweetalert2";
+import { getUserData } from "hooks/getUserData";
 
 export default function Publish() {
     const router = useRouter();
+    const [user] = getUserData(false);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [area, setArea] = useState(1);
     const [canceled, setCanceled] = useState(false);
+
+    useEffect(() => {
+        if (user.banned || user.user_behavior < 50) router.push("/social");
+    }, [JSON.stringify(user)]);
 
     function handleSubmit() {
         if (!area || !content || !title)
@@ -44,6 +52,21 @@ export default function Publish() {
                 })
         );
     }
+
+    if (!Object.keys(user).length || user.banned || user.user_behavior < 50)
+        return (
+            <>
+                <Head>
+                    <title>Criar Post - Mille</title>
+                </Head>
+
+                <Topbar type="social" />
+
+                <Loading />
+
+                <Menubar active={0}></Menubar>
+            </>
+        );
 
     return (
         <>
