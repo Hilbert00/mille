@@ -46,7 +46,7 @@ export default function Quiz() {
             }
 
             setCalledPush(true);
-            router.push(`/${quizSettings.current.subject}`);
+            router.push("/");
             return;
         }
         const data = await response.json();
