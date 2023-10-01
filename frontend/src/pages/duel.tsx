@@ -154,12 +154,21 @@ export default function Duel() {
             setState(JSON.parse(state));
         });
 
-        socket.current.on("exitedRoom", (state) => {
+        socket.current.on("exitedRoom", (newState) => {
             if (playerNumber.current === 2) {
                 playerNumber.current = 1;
             }
 
-            setState(JSON.parse(state));
+            if (state.active)
+                swal.fire({
+                    title: "Oops",
+                    text: "O outro usuário deixou o duelo!",
+                    icon: "error",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                });
+
+            setState(JSON.parse(newState));
         });
     }, [state, Object.keys(user).length, router.query]);
 
