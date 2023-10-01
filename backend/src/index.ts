@@ -147,6 +147,12 @@ io.on("connection", (socket) => {
                     const remainingPlayer = clientData.find((e) => e.room === room && e.id !== socket.id);
                     if (remainingPlayer) remainingPlayer.playerNumber = 1;
                 }
+                
+                state[room].subject = "";
+                state[room].timer = 0;
+                state[room].questionQuantity = 0;
+                state[room].questions = [];
+                state[room].active = false;
                 state[room].players[1] = duelHandler.emptyPlayerSlot();
             } else {
                 delete state[room];
