@@ -15,7 +15,8 @@ export default function User() {
     const router = useRouter();
     const [user] = getUserData(false, false);
     const [username, setUsername] = useState("");
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState(-1);
+    const [available, setAvailable] = useState(null as null | { title_id: number; title: string }[]);
     const [picture, setPicture] = useState("");
 
     useEffect(() => {
@@ -24,17 +25,36 @@ export default function User() {
             router.push("/");
             return;
         }
+        if (available && available.length) {
+            if (title === -1) {
+                if (user.title.toLowerCase() === "novato") setTitle(0);
+                else setTitle(Number(available.find((e) => e.title === user.title)?.title_id));
+            }
+
+            return;
+        }
+
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/titles", {
+            credentials: "include",
+        })
+            .then((res) => res.json())
+            .then((json) => setAvailable(json));
 
         setUsername(user.username);
-    }, [Object.keys(user).length]);
+    }, [Object.keys(user).length, title, available]);
 
     function updateProfile(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!username) return;
 
-        const data = {} as { username?: string; title?: string; picture?: string };
-        if (username) data.username = username;
-        if (title) data.title = title;
+        const data = {} as { username?: string; active_title?: number; picture?: string };
+        if (username && username !== user.username) data.username = username;
+        if (
+            available?.find((e) => e.title_id === title)?.title !== user.title &&
+            title >= 0 &&
+            (title === 0 || available?.findIndex((e) => e.title_id === title) !== -1)
+        )
+            data.active_title = title;
         if (picture) data.picture = picture;
 
         if (Object.keys(data).length) {
@@ -48,7 +68,7 @@ export default function User() {
                     "Content-Type": "application/json",
                 },
             }).then((res) => {
-                if (res.ok) return router.push("/");
+                if (res.ok) return router.push(`/user?name=${username}`);
                 swal.fire({
                     title: "Oops",
                     text: "Alguns dados estão inválidos ou o nome de usuário já está sendo utilizado!",
@@ -57,10 +77,10 @@ export default function User() {
                     color: "#fff",
                 });
             });
-        }
+        } else return router.push(`/user?name=${user.username}`);
     }
 
-    if (!Object.keys(user).length)
+    if (!Object.keys(user).length || !available)
         return (
             <>
                 <Head>
@@ -92,9 +112,10 @@ export default function User() {
                         </label>
                         <input
                             name="username"
+                            id="username"
                             type="text"
                             value={username}
-                            className="h-11 flex-1 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="h-11 flex-1 rounded-xl border-none bg-neutral-100 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
@@ -103,14 +124,33 @@ export default function User() {
                         <label htmlFor="title" className="font-medium sm:text-xl">
                             Título:
                         </label>
-                        <select name="title" disabled></select>
+                        <select
+                            name="title"
+                            id="title"
+                            className="h-11 rounded-xl bg-neutral-100 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
+                            value={title}
+                            onChange={(e) => setTitle(Number(e.target.value))}
+                        >
+                            <option value="0">Novato</option>
+                            {available.map((e) => (
+                                <option key={e.title_id} value={e.title_id}>
+                                    {e.title}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                         <label htmlFor="picture" className="font-medium sm:text-xl">
                             Foto do perfil:
                         </label>
-                        <input name="picture" type="file" disabled />
+                        <input
+                            name="picture"
+                            id="picture"
+                            type="file"
+                            className="h-11 cursor-pointer rounded-xl bg-neutral-100 pr-3 text-neutral-400 file:mr-5 file:h-11 file:cursor-pointer file:border-none dark:bg-zinc-800 sm:w-2/3"
+                            disabled
+                        />
                     </div>
 
                     <Button type="submit" className="mt-5" disable={!username}>

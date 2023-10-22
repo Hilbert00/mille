@@ -109,13 +109,11 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
         return res.json({ message: "successs", data: quizData });
     }
 
-    const quizCreateQuery = "INSERT INTO quiz (id_user, quiz_type, quiz_number, data) VALUES (?, ?, ?, ?)";
+    const quizCreateQuery = "INSERT IGNORE INTO quiz (id_user, quiz_type, quiz_number, data) VALUES (?, ?, ?, ?);";
     const quizCreateData = [userID, quizType, quizNumber, JSON.stringify(quizData)];
 
     conn.query(quizCreateQuery, quizCreateData, (err) => {
-        if (err) {
-            return res.sendStatus(404);
-        }
+        if (err) return res.sendStatus(404);
 
         return res.json({ message: "success", data: quizData });
     });
@@ -136,7 +134,7 @@ router.get("/get/:type", verifyToken, async (req, res) => {
                 const data: { [data: string]: string }[] = JSON.parse(JSON.stringify(d));
                 const dataParsed: DataProps[] = data.map((e) => {
                     const jsonData = JSON.parse(e.data);
-                    return { id: Number(e.quiz_number), done: jsonData.done, questions: jsonData.questions };
+                    return { id: Number(jsonData.id), done: jsonData.done, questions: jsonData.questions };
                 });
 
                 return dataParsed;

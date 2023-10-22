@@ -65,7 +65,7 @@ export default function Reports() {
                         <label htmlFor="type">Tipo:</label>
                         <select
                             name="type"
-                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-[#F5F5F5] p-1 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-neutral-100 p-1 text-base text-neutral-400 outline-none dark:bg-zinc-800"
                         >
                             <option value="0" className="text-base">
                                 Tudo

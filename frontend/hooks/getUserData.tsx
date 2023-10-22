@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 interface UserData {
     id: number;
     username: string;
+    title: string;
     email: string;
     user_level: number;
     user_coins: number;

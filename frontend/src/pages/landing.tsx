@@ -37,7 +37,7 @@ export default function LandingPage() {
                 </section>
 
                 <section className="flex flex-col justify-between gap-6 py-6 sm:h-[calc(100vh-2rem)]">
-                    <div className="absolute left-0 right-0 -z-10 bg-[#1A66E5] sm:top-[100vh] sm:h-screen"></div>
+                    <div className="absolute left-0 right-0 -z-10 bg-blue-600 sm:top-[100vh] sm:h-screen"></div>
                     <FeatureDisplay title={"4 mundos únicos e mais por vir!"} type={"solo"}>
                         Quatro mundos disponíveis para as seguintes disciplinas: matemática, química, física e biologia.
                         E o número continuará aumentando no futuro!

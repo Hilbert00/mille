@@ -23,10 +23,10 @@ export default function UserDuel(props: UserProps) {
             setAnswers(
                 props.answers.map((e, i) => {
                     if (e) {
-                        return <li key={i} className="h-6 w-6 rounded-full bg-[#00BB29]"></li>;
+                        return <li key={i} className="h-6 w-6 rounded-full bg-green-600"></li>;
                     }
 
-                    return <li key={i} className="h-6 w-6 rounded-full bg-[#C81652]"></li>;
+                    return <li key={i} className="h-6 w-6 rounded-full bg-red-600"></li>;
                 })
             );
         }
@@ -37,7 +37,7 @@ export default function UserDuel(props: UserProps) {
             <div className="flex w-full flex-col items-center sm:mx-12 sm:w-56">
                 <div className="relative flex w-32 justify-center sm:w-56">
                     <div
-                        className={`absolute top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-[#0F52C2] bg-[#1A66E5] sm:h-10 sm:w-10`}
+                        className={`absolute top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600 sm:h-10 sm:w-10`}
                         style={side}
                     >
                         <span className="text-sm font-semibold text-primary-white sm:text-base">{props.lvl}</span>
@@ -47,7 +47,7 @@ export default function UserDuel(props: UserProps) {
 
                 <div className="mt-3 inline-block">
                     <h1 className="text-center text-2xl font-semibold sm:text-3xl">{props.username}</h1>
-                    {/* <p className="text-center text-xl font-semibold">{props.title}</p> */}
+                    <p className="text-center text-xl">{props.title}</p>
                 </div>
 
                 <ul className="my-2 flex gap-2">{answers}</ul>
@@ -60,7 +60,7 @@ export default function UserDuel(props: UserProps) {
         <div className={`flex w-20 flex-col items-center sm:mx-12 sm:w-56`}>
             <div className="relative flex w-32 justify-center sm:w-56">
                 <div
-                    className={`absolute top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-[#0F52C2] bg-[#1A66E5] sm:h-10 sm:w-10`}
+                    className={`absolute top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600 sm:h-10 sm:w-10`}
                     style={side}
                 >
                     <span className="text-sm font-semibold text-primary-white sm:text-base">{props.lvl}</span>
@@ -70,7 +70,7 @@ export default function UserDuel(props: UserProps) {
 
             <div className="mt-3 inline-block">
                 <h1 className="text-center text-2xl font-semibold sm:text-3xl">{props.username}</h1>
-                {/* <p className="text-center text-xl font-semibold">{props.title}</p> */}
+                <p className="text-center text-xl">{props.title}</p>
             </div>
         </div>
     );

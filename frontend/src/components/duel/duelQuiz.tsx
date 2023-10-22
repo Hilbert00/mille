@@ -176,12 +176,12 @@ export default function DuelQuiz(props: DuelProps) {
                                           nextQuestion(newAnswer.isRight);
                                       }}
                                   >
-                                      <div className="relative flex h-40 flex-grow items-center rounded-md border-[1px] border-[#CCCCCC] bg-primary-white p-2 dark:border-none dark:bg-primary">
+                                      <div className="relative flex h-40 flex-grow items-center rounded-md border-[1px] border-neutral-400 bg-primary-white p-2 dark:border-none dark:bg-primary">
                                           <div
                                               className="absolute top-0 left-0 flex h-14 w-14 items-center justify-center rounded-md rounded-tr-none rounded-bl-none"
                                               style={{ background: `${colors[i]}` }}
                                           >
-                                              <span className="text-3xl font-black text-[#FFF]">
+                                              <span className="text-3xl font-black text-white">
                                                   {["A", "B", "C", "D", "E"][i]}
                                               </span>
                                           </div>
@@ -220,7 +220,7 @@ export default function DuelQuiz(props: DuelProps) {
                                           className="flex h-10 min-w-[40px] items-center justify-center rounded-md"
                                           style={{ background: `${colors[i]}` }}
                                       >
-                                          <span className="text-3xl font-black text-[#FFF]">
+                                          <span className="text-3xl font-black text-white">
                                               {["A", "B", "C", "D", "E"][i]}
                                           </span>
                                       </div>

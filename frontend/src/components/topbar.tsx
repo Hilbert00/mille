@@ -17,7 +17,7 @@ export default function Topbar(props: TopbarProps) {
 
     const userCoins = (
         <div className="relative w-2/5">
-            <div className="flex h-8 w-full items-center rounded-xl bg-primary-white dark:bg-[#282828] sm:justify-center">
+            <div className="flex h-8 w-full items-center rounded-xl bg-primary-white dark:bg-zinc-800 sm:justify-center">
                 <div className="flex h-8 w-[calc(100%-2.75rem)] items-center justify-center sm:w-auto">
                     <span className="text-center font-semibold sm:text-xl">{user.user_coins ?? 0} / 50</span>
                 </div>
@@ -30,12 +30,12 @@ export default function Topbar(props: TopbarProps) {
 
     const progressbar = (
         <div className="relative w-2/5">
-            <div className="relative flex h-8 w-full items-center overflow-hidden rounded-xl bg-[#e6e6e6] dark:bg-[#3C3C3C]">
+            <div className="relative flex h-8 w-full items-center overflow-hidden rounded-xl bg-neutral-200 dark:bg-neutral-700">
                 <div
-                    className="flex h-8 items-center justify-center bg-[#00BB29] transition-all"
+                    className="flex h-8 items-center justify-center bg-green-600 transition-all"
                     style={{ width: `${percentage}%` }}
                 ></div>
-                <span className="absolute right-0 left-0 text-center font-semibold text-[#FFF] transition-all sm:text-xl">
+                <span className="absolute right-0 left-0 text-center font-semibold text-white transition-all sm:text-xl">
                     {`${percentage}%`}
                 </span>
             </div>
@@ -44,7 +44,7 @@ export default function Topbar(props: TopbarProps) {
 
     if (props.type === "social")
         return (
-            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
+            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
                 <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
                     <Behavior>{user.user_behavior}</Behavior>
 
@@ -67,7 +67,7 @@ export default function Topbar(props: TopbarProps) {
 
     if (props.type === "solo")
         return (
-            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
+            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
                 <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
                     <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
                         <span className="absolute right-0 left-0 top-3 text-center text-xl font-extrabold tracking-wide text-primary-white">
@@ -93,7 +93,7 @@ export default function Topbar(props: TopbarProps) {
         );
 
     return (
-        <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-[#fff] dark:border-primary dark:bg-bgBlack">
+        <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
             <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
                 <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
                     <span className="absolute right-0 left-0 top-3 text-center text-xl font-extrabold tracking-wide text-primary-white">

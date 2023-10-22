@@ -7,6 +7,7 @@ import LockWall from "@/components/solo/lockwall";
 
 import getDoneCount from "utils/getDoneCount";
 import getQuizData from "utils/getQuizData";
+import unlockTitle from "utils/unlockTitle";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -42,6 +43,9 @@ export default function Solo(props: Props) {
             router.push("/");
             return;
         }
+
+        if (doneCount === 37 * 5 && props.subject === "mat") unlockTitle(23);
+        if (doneCount === 37 * 5 && props.subject === "bio") unlockTitle(24);
 
         (async function () {
             switch (props.subject) {
@@ -134,7 +138,7 @@ export default function Solo(props: Props) {
                             <h2 className="text-center font-semibold">{e.type_description}</h2>
                             {sections[i]}
                         </div>
-                        {i !== props.data.length - 1 && (doneCount < 35 * (i + 1) || !quizData[i + 1]?.length) ? (
+                        {i !== props.data.length - 1 && !quizData[i + 1]?.length ? (
                             <LockWall
                                 subject={props.subject}
                                 unlocks={i + 2}

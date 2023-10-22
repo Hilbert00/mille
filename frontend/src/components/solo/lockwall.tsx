@@ -1,5 +1,6 @@
 import Image from "next/image";
 import getQuizData from "utils/getQuizData";
+import unlockTitle from "utils/unlockTitle";
 
 import { useState } from "react";
 import swal from "sweetalert2";
@@ -18,7 +19,7 @@ export default function LockWall(props: LockWallProps) {
 
     return (
         <button
-            className="mx-auto mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 text-primary-white transition-all active:scale-100 sm:grid sm:w-3/4 sm:gap-8 sm:p-10 sm:hover:scale-105"
+            className="mx-auto mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 text-primary-white transition-all active:scale-95 sm:grid sm:w-3/4 sm:gap-8 sm:p-10 sm:hover:scale-105 sm:active:scale-100"
             onClick={() => {
                 setApiCalled(true);
 
@@ -45,6 +46,8 @@ export default function LockWall(props: LockWallProps) {
                 };
 
                 if (props.currentValue >= props.necessaryValue && !apiCalled) {
+                    unlockTitle(22);
+
                     (async function () {
                         const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                             credentials: "include",

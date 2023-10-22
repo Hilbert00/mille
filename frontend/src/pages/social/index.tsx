@@ -17,10 +17,7 @@ export default function Social({ cardData }: any) {
 
     useEffect(() => {
         (async function () {
-            if (!cardData) {
-                setData([<Card key={0} soon={true}></Card>] as any);
-                return;
-            }
+            if (!cardData) return;
 
             const dataCards = cardData.map((e: any, i: number) => {
                 return (
@@ -65,7 +62,7 @@ export default function Social({ cardData }: any) {
                 <div className="relative flex w-full flex-wrap justify-between gap-10">{data}</div>
                 {Boolean(user.type) && (
                     <Link
-                        className="group absolute right-0 bottom-24 flex h-20 w-20 items-center justify-center rounded-full bg-[#ffc107] text-primary-white transition-all delay-200 duration-500 active:scale-90 sm:hover:w-44 sm:hover:delay-[0ms]"
+                        className="group absolute right-0 bottom-24 flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500 text-primary-white transition-all delay-200 duration-500 active:scale-90 sm:hover:w-44 sm:hover:delay-[0ms]"
                         href={"/social/adm"}
                     >
                         <TbLock className="min-h-[3rem] min-w-[3rem] text-5xl" />

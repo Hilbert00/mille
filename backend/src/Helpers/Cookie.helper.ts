@@ -4,6 +4,7 @@ import { serialize } from "cookie";
 function generateUserCookie(userData: {
     id: number;
     username: string;
+    active_title: string;
     user_level: number;
     user_EXP: number;
     user_coins: number;
@@ -13,10 +14,12 @@ function generateUserCookie(userData: {
     challenge_wins: number;
     active: number;
     type: 0 | 1 | 2;
+    banned: 0 | 1 | 2;
 }) {
     const token = TokenHelper.signToken({
         id: userData.id,
         username: userData.username,
+        active_title: userData.active_title,
         user_level: userData.user_level,
         user_EXP: userData.user_EXP,
         user_coins: userData.user_coins,
@@ -26,7 +29,7 @@ function generateUserCookie(userData: {
         challenge_wins: userData.challenge_wins,
         active: userData.active,
         type: userData.type,
-        banned: userData.type,
+        banned: userData.banned,
     });
 
     const serialized = serialize("AuthJWT", token, {

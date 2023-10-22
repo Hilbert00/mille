@@ -1,8 +1,8 @@
 export default function Loading() {
     return (
-        <div className="z-50 flex h-[calc(100vh-120px)] w-full items-center justify-center bg-[#FFF] dark:bg-bgBlack">
+        <div className="z-50 flex h-[calc(100vh-120px)] w-full items-center justify-center bg-white dark:bg-bgBlack">
             <svg
-                className="text-gray-200 dark:text-gray-600 mr-2 h-40 w-40 animate-spin fill-[#1A66E5]"
+                className="mr-2 h-40 w-40 animate-spin fill-blue-600 text-gray-200 dark:text-gray-600"
                 viewBox="0 0 100 101"
                 fill="none"
             >

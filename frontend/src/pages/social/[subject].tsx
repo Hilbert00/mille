@@ -172,7 +172,7 @@ export default function Community({ data }: any) {
                         <label htmlFor="area">Área:</label>
                         <select
                             name="area"
-                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-[#F5F5F5] p-1 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-neutral-100 p-1 text-base text-neutral-400 outline-none dark:bg-zinc-800"
                         >
                             <option value="0" className="text-base">
                                 Todas
@@ -270,9 +270,9 @@ export default function Community({ data }: any) {
                             <span>{`${e.answers} ${e.answers === 1 ? "resposta" : "respostas"}`}</span>
                             <div className="inline-block">
                                 {e.solved ? (
-                                    <TbCheck className="stroke-[3] text-3xl text-[#00BB29]" />
+                                    <TbCheck className="stroke-[3] text-3xl text-green-600" />
                                 ) : (
-                                    <TbX className="stroke-[3] text-3xl text-[#C81652]" />
+                                    <TbX className="stroke-[3] text-3xl text-red-600" />
                                 )}
                             </div>
                         </div>
@@ -294,9 +294,9 @@ export default function Community({ data }: any) {
                     <div className="flex items-center gap-3">
                         <button type="button" onClick={() => handleVote(e.user_vote === 1 ? 0 : 1, e.id_post)}>
                             {e.user_vote === 1 ? (
-                                <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
+                                <TbArrowBigUpFilled className="text-2xl text-green-600" />
                             ) : (
-                                <TbArrowBigUp className="text-2xl text-[#00BB29]" />
+                                <TbArrowBigUp className="text-2xl text-green-600" />
                             )}
                         </button>
                         <span className="flex w-10 justify-center">
@@ -304,9 +304,9 @@ export default function Community({ data }: any) {
                         </span>
                         <button type="button" onClick={() => handleVote(e.user_vote === -1 ? 0 : -1, e.id_post)}>
                             {e.user_vote === -1 ? (
-                                <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
+                                <TbArrowBigDownFilled className="text-2xl text-red-600" />
                             ) : (
-                                <TbArrowBigDown className="text-2xl text-[#C81652]" />
+                                <TbArrowBigDown className="text-2xl text-red-600" />
                             )}
                         </button>
                     </div>
@@ -354,7 +354,7 @@ export default function Community({ data }: any) {
 
                     <div className="flex flex-col gap-3 sm:flex-row">
                         <input
-                            className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828] sm:max-w-none"
+                            className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-neutral-400 outline-none dark:bg-zinc-800 sm:max-w-none"
                             type="text"
                             placeholder="Pesquisar..."
                             value={search.text}

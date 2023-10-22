@@ -2,69 +2,69 @@
 const defaultStatus = [
     <li
         key={1}
-        className="top dakr:bg-[#C5C5C5] absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-[#707070]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-neutral-500 dark:bg-stone-300"
     ></li>,
     <li
         key={2}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-[#707070]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-neutral-500 dark:bg-stone-300"
     ></li>,
     <li
         key={3}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-[#707070]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-neutral-500 dark:bg-stone-300"
     ></li>,
     <li
         key={4}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-[#707070]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-neutral-500 dark:bg-stone-300"
     ></li>,
     <li
         key={5}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-[#707070]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-neutral-500 dark:bg-stone-300"
     ></li>,
 ];
 
 const correctStatus = [
     <li
         key={1}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-[#00BB29]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-green-600"
     ></li>,
     <li
         key={2}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-[#00BB29]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-green-600"
     ></li>,
     <li
         key={3}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-[#00BB29]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-green-600"
     ></li>,
     <li
         key={4}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-[#00BB29]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-green-600"
     ></li>,
     <li
         key={5}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-[#00BB29]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-green-600"
     ></li>,
 ];
 
 const wrongStatus = [
     <li
         key={1}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-[#D2042D]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-0 skew-y-[-22deg] overflow-hidden bg-red-600"
     ></li>,
     <li
         key={2}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-[#D2042D]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[72deg] skew-y-[-22deg] overflow-hidden bg-red-600"
     ></li>,
     <li
         key={3}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-[#D2042D]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[144deg] skew-y-[-22deg] overflow-hidden bg-red-600"
     ></li>,
     <li
         key={4}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-[#D2042D]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[216deg] skew-y-[-22deg] overflow-hidden bg-red-600"
     ></li>,
     <li
         key={5}
-        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-[#D2042D]"
+        className="top absolute right-0 h-1/2 w-1/2 origin-bottom-left rotate-[288deg] skew-y-[-22deg] overflow-hidden bg-red-600"
     ></li>,
 ];
 
@@ -121,7 +121,7 @@ export default function QuizCircle(props: Props) {
             if (!props.data.done) {
                 setPing(
                     <div className="absolute flex h-[80px] w-[80px]">
-                        <span className="absolute h-full w-full animate-ping rounded-full bg-[#707070] opacity-75"></span>
+                        <span className="absolute h-full w-full animate-ping rounded-full bg-neutral-500 opacity-75 dark:bg-stone-300"></span>
                     </div>
                 );
             } else {
@@ -144,7 +144,7 @@ export default function QuizCircle(props: Props) {
             onClick={async () => {
                 if (testLoading) return;
                 setTestLoading(true);
-                
+
                 try {
                     const test = await fetch(
                         process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${props.type}?num=${props.linksTo}`,
@@ -172,7 +172,7 @@ export default function QuizCircle(props: Props) {
             }}
         >
             {ping}
-            <div className="absolute top-0 left-0 z-10 box-content flex h-[calc(100%-20px)] w-[calc(100%-20px)] items-center justify-center rounded-[inherit] bg-[#fff] bg-clip-content p-[10px] dark:bg-bgBlack">
+            <div className="absolute top-0 left-0 z-10 box-content flex h-[calc(100%-20px)] w-[calc(100%-20px)] items-center justify-center rounded-[inherit] bg-white bg-clip-content p-[10px] dark:bg-bgBlack">
                 <Image src={`/images/quiz/icons/math/${props.area}.png`} width={50} height={50} alt="quiz-icon"></Image>
             </div>
             <ul className={`relative h-[100px] w-[100px] list-none overflow-hidden rounded-[inherit] p-0`}>

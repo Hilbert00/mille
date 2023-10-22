@@ -5,6 +5,8 @@ import Logo from "@/components/logo";
 import Button from "@/components/button";
 import Footer from "@/components/footer";
 
+import unlockTitle from "utils/unlockTitle";
+
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import swal from "sweetalert2";
@@ -31,8 +33,11 @@ export default function Home() {
             })
                 .then((res) => {
                     if (res.ok) {
-                        router.push("/");
-                        return;
+                        const date = new Date().getFullYear();
+
+                        if (date === 2023) return unlockTitle(26).then(() => router.push("/"));
+
+                        return router.push("/");
                     }
 
                     if (res.status === 409)
@@ -90,7 +95,7 @@ export default function Home() {
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className="min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-primary-white p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         name="username"
                         type="text"
                         placeholder={"Nome de Usuário"}
@@ -103,7 +108,7 @@ export default function Home() {
                     />
 
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         name="password"
                         type="password"
                         placeholder={"Senha"}
@@ -119,16 +124,16 @@ export default function Home() {
                     </Button>
                 </form>
 
-                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-neutral-400">
                     <p>
                         Ainda não tem uma conta?{" "}
-                        <Link href={"/signup"} className="text-[#1A66E5]">
+                        <Link href={"/signup"} className="text-blue-600">
                             <span>Cadastre-se</span>
                         </Link>
                     </p>
 
                     <p>
-                        <Link href={"/changepass"} className="text-[#1A66E5]">
+                        <Link href={"/changepass"} className="text-blue-600">
                             Esqueci minha senha
                         </Link>
                     </p>

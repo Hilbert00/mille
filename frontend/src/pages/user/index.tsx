@@ -24,11 +24,6 @@ export default function User() {
         fetch(url, {
             method: "PUT",
             credentials: "include",
-            body: JSON.stringify({ username: user.username }),
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
         }).then((res) => {
             if (res.ok) return router.push("/login");
             swal.fire({
@@ -51,16 +46,17 @@ export default function User() {
             router.push("/");
             return;
         }
-    }, [router.isReady, router.query.name]);
+    }, [router.isReady, router.query.name, username]);
 
-    if (!Object.keys(user).length)
+    if (
+        !Object.keys(user).length ||
+        String(router.query.name).toLocaleLowerCase() !== user.username.toLocaleLowerCase()
+    )
         return (
             <>
                 <Head>
                     <title>Mille</title>
                 </Head>
-
-                <Topbar type="default" />
 
                 <Loading />
 
@@ -86,12 +82,12 @@ export default function User() {
                                             <TbEdit className="h-10 w-10" />
                                         </Link>
                                         <button className="absolute bottom-0 -left-12 h-10 w-10" onClick={logoff}>
-                                            <TbDoorExit className="h-10 w-10 text-[#D2042D]" />
+                                            <TbDoorExit className="h-10 w-10 text-red-600" />
                                         </button>
                                     </>
                                 )}
                                 <Behavior classname="absolute -right-12">{user.user_behavior}</Behavior>
-                                <div className="absolute bottom-0 -right-12 flex h-11 w-11 items-center justify-center rounded-full border-4 border-[#0F52C2] bg-[#1A66E5]">
+                                <div className="absolute bottom-0 -right-12 flex h-11 w-11 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600">
                                     <span className="font-semibold text-primary-white">{user.user_level}</span>
                                 </div>
                                 <Image
@@ -104,7 +100,7 @@ export default function User() {
                             </div>
                             <div className="mt-3">
                                 <h1 className="text-center text-3xl font-semibold">@{user.username}</h1>
-                                {/* <p className="mt-2 text-center text-xl font-semibold">título</p> */}
+                                <p className="text-center text-xl">{user.title}</p>
                             </div>
                         </div>
                         <div className="mt-6 flex w-full justify-between">
@@ -131,10 +127,10 @@ export default function User() {
                             </div>
                         </div>
                     </div>
-                    <hr className="my-5 w-full border-y-2 border-[#D8D8D8] dark:border-[#191919] sm:my-0 sm:h-96 sm:w-1 sm:border-x-2 sm:border-t-0" />
+                    <hr className="my-5 w-full border-y-2 border-zinc-300 dark:border-zinc-900 sm:my-0 sm:h-96 sm:w-1 sm:border-x-2 sm:border-t-0" />
                     <div className="w-full sm:mb-0 sm:w-[45%]">
                         <h2 className="mb-3 text-xl font-bold">Medalhas:</h2>
-                        <div className="flex h-40 w-full flex-col items-center justify-center rounded-xl bg-primary-white dark:bg-[#282828] sm:h-96">
+                        <div className="flex h-40 w-full flex-col items-center justify-center rounded-xl bg-primary-white dark:bg-zinc-800 sm:h-96">
                             <span className="text-4xl font-semibold">EM BREVE</span>
                         </div>
                     </div>

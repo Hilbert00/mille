@@ -7,10 +7,11 @@ export function createState() {
     return {
         players: [emptyPlayerSlot(), emptyPlayerSlot()],
         subject: "",
+        area: "",
         timer: 0,
         questionQuantity: 0,
         questions: [],
-        active: false,
+        status: 0 as 0 | 1 | 2,
     };
 }
 
@@ -18,8 +19,7 @@ export function emptyPlayerSlot() {
     return {
         name: "",
         level: 0,
-        title: "título",
-        timer: 0,
+        title: "",
         points: 0,
         questions: [],
     };

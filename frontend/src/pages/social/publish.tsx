@@ -5,6 +5,8 @@ import Menubar from "@/components/menubar";
 import Button from "@/components/button";
 import Loading from "@/components/loading";
 
+import unlockTitle from "utils/unlockTitle";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -38,19 +40,31 @@ export default function Publish() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title: title.trim(), content: content.trim(), area }),
             method: "POST",
-        }).then(() =>
-            swal
-                .fire({
-                    title: "Sucesso!",
-                    text: "A sua pergunta foi publicada!",
-                    icon: "success",
-                    background: "#1E1E1E80",
-                    color: "#fff",
-                })
-                .then(() => {
-                    router.push("/social");
-                })
-        );
+        }).then(() => {
+            fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/posts`, {
+                credentials: "include",
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    swal.fire({
+                        title: "Sucesso!",
+                        text: "A sua pergunta foi publicada!",
+                        icon: "success",
+                        background: "#1E1E1E80",
+                        color: "#fff",
+                    }).then(() => {
+                        if (!data.length) return router.push("/social");
+
+                        const titles = [13];
+
+                        if (data.length >= 10) titles.push(14);
+                        if (data.length >= 20) titles.push(15);
+                        if (data.length >= 50) titles.push(16);
+
+                        unlockTitle(titles).then(() => router.push("/social"));
+                    });
+                });
+        });
     }
 
     if (!Object.keys(user).length || user.banned || user.user_behavior < 50)
@@ -95,7 +109,7 @@ export default function Publish() {
                                 name="title"
                                 type="text"
                                 value={title}
-                                className="h-11 flex-1 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                className="h-11 flex-1 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                                 placeholder="Digite aqui o título da pergunta..."
                                 onChange={(e) => setTitle(e.target.value)}
                                 maxLength={100}
@@ -109,7 +123,7 @@ export default function Publish() {
                             <select
                                 name="area"
                                 value={area}
-                                className="flex-1 grow resize-none appearance-none rounded-xl border-none bg-[#F5F5F5] p-3 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                className="flex-1 grow resize-none appearance-none rounded-xl border-none bg-neutral-100 p-3 text-base text-neutral-400 outline-none dark:bg-zinc-800"
                                 onChange={(e) => setArea(Number(e.target.value))}
                             >
                                 <optgroup label="Matemática">
@@ -155,7 +169,7 @@ export default function Publish() {
                             rows={10}
                             placeholder="Digite aqui a sua pergunta..."
                             onChange={(e) => setContent(e.target.value)}
-                            className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="flex-1 resize-none rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         ></textarea>
                     </div>
 

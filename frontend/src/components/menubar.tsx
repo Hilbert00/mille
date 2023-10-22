@@ -24,7 +24,7 @@ export default function Menubar(props: { active: number }) {
     }, []);
 
     return (
-        <nav className="fixed bottom-0 z-20 w-full border-t border-[#b9b9b9] bg-primary-white py-1 dark:border-[#000] dark:bg-primary">
+        <nav className="fixed bottom-0 z-20 w-full border-t border-neutral-400 bg-primary-white py-1 dark:border-zinc-900 dark:bg-primary">
             <ul className="mx-auto flex w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
                 {menus.map((menu, i) => {
                     return (

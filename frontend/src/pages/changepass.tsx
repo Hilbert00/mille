@@ -83,7 +83,7 @@ export default function Home() {
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         name="email"
                         type="email"
                         placeholder={"Email"}
@@ -100,10 +100,10 @@ export default function Home() {
                     </Button>
                 </form>
 
-                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-[#8E8E8E]">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-neutral-400">
                     <p>
                         Lembrou sua senha?{" "}
-                        <Link href={"/login"} className="text-[#1A66E5]">
+                        <Link href={"/login"} className="text-blue-600">
                             <span>Login</span>
                         </Link>
                     </p>

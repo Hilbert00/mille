@@ -11,7 +11,7 @@ export default function DuelTimer(props: TimerProps) {
                 style={{ background: "linear-gradient(90deg, #C81652 5%, #E5AC1A 30%, #00BB29 100%)" }}
             >
                 <div
-                    className="ml-auto h-full rounded-r-[inherit] bg-[#282828]"
+                    className="ml-auto h-full rounded-r-[inherit] bg-zinc-800"
                     style={{ width: `${100 - (props.currentValue * 100) / props.maxValue}%` }}
                 />
             </div>

@@ -32,6 +32,7 @@ import exit from "./Routes/auth/Exit.route.js";
 import emailVerification from "./Routes/auth/EmailVerification.route.js";
 
 import user from "./Routes/User.route.js";
+import titles from "./Routes/Titles.route.js";
 import quiz from "./Routes/Quiz.route.js";
 import world from "./Routes/solo/World.route.js";
 
@@ -50,6 +51,7 @@ app.use("/api/auth/exit", exit);
 app.use("/api/auth/verify", emailVerification);
 
 app.use("/api/user", user);
+app.use("/api/titles", titles);
 app.use("/api/quiz", quiz);
 app.use("/api/world", world);
 
@@ -74,15 +76,15 @@ const state: {
             name: string;
             level: number;
             title: string;
-            timer: number;
             points: number;
             questions: {}[];
         }[];
         subject: string;
+        area: string;
         timer: number;
         questionQuantity: number;
         questions: {}[];
-        active: boolean;
+        status: 0 | 1 | 2;
     };
 } = {};
 const clientData: { id: string; room: string; playerNumber: 1 | 2 }[] = [];
@@ -102,7 +104,7 @@ io.on("connection", (socket) => {
 
         state[result].players[0].name = user.username;
         state[result].players[0].level = user.user_level;
-        state[result].players[0].title = "título";
+        state[result].players[0].title = user.title;
 
         socket.join(result);
 
@@ -121,7 +123,7 @@ io.on("connection", (socket) => {
 
             state[room].players[1].name = user.username;
             state[room].players[1].level = user.user_level;
-            state[room].players[1].title = "título";
+            state[room].players[1].title = user.title;
 
             socket.join(room);
             io.to(room).emit("joinedRoom", JSON.stringify(state[room]));
@@ -129,7 +131,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("gameStart", (roomState, room) => {
-        state[room] = { ...JSON.parse(roomState), active: true };
+        state[room] = { ...JSON.parse(roomState), status: 1 };
         io.to(room).emit("gameInit", JSON.stringify(state[room]));
     });
 
@@ -147,12 +149,15 @@ io.on("connection", (socket) => {
                     const remainingPlayer = clientData.find((e) => e.room === room && e.id !== socket.id);
                     if (remainingPlayer) remainingPlayer.playerNumber = 1;
                 }
-                
+
                 state[room].subject = "";
+                state[room].area = "";
                 state[room].timer = 0;
                 state[room].questionQuantity = 0;
                 state[room].questions = [];
-                state[room].active = false;
+                state[room].status = 0;
+                state[room].players[0].points = 0;
+                state[room].players[0].questions.length = 0;
                 state[room].players[1] = duelHandler.emptyPlayerSlot();
             } else {
                 delete state[room];
@@ -177,7 +182,7 @@ io.on("connection", (socket) => {
                 state[room].players[0].questions.length === state[room].questionQuantity &&
                 state[room].players[1].questions.length === state[room].questionQuantity
             )
-                state[room].active = false;
+                state[room].status = 2;
 
             io.to(room).emit("duelUpdate", JSON.stringify(state[room]));
         }

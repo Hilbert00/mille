@@ -11,6 +11,7 @@ import swal from "sweetalert2";
 import { io } from "socket.io-client";
 import { useRouter } from "next/router";
 import { getUserData } from "hooks/getUserData";
+import unlockTitle from "utils/unlockTitle";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 
 export default function Duel() {
@@ -51,11 +52,35 @@ export default function Duel() {
             const enemyPoints = state.players[playerNumber.current - 1 === 1 ? 0 : 1].points;
 
             if (
-                !state.active &&
+                state.status === 2 &&
                 !matchResult[0] &&
                 state.questionQuantity &&
                 state.players[playerNumber.current - 1].questions.length === state.questionQuantity
             ) {
+                const titles = [];
+                const wins = user.challenge_wins + (playerPoints > enemyPoints ? 1 : 0);
+                const rightAnswers = state.players[playerNumber.current - 1].questions.filter((e: boolean) => e).length;
+                const matches = user.challenge_matches + 1;
+
+                if (matches >= 1) titles.push(1);
+                if (matches >= 5) titles.push(2);
+                if (matches >= 10) titles.push(3);
+                if (matches >= 20) titles.push(4);
+                if (matches >= 50) titles.push(5);
+                if (matches >= 100) titles.push(6);
+
+                if (wins >= 1) titles.push(7);
+                if (wins >= 5) titles.push(8);
+                if (wins >= 10) titles.push(9);
+                if (wins >= 20) titles.push(10);
+                if (wins >= 50) titles.push(11);
+                if (wins >= 100) titles.push(12);
+
+                if (rightAnswers === state.questionQuantity) titles.push(31);
+                if (!rightAnswers) titles.push(32);
+
+                if (titles.length) unlockTitle(titles);
+
                 if (playerPoints > enemyPoints) {
                     setMatchResult(["#00BB29", "Vitória"]);
 
@@ -159,18 +184,17 @@ export default function Duel() {
                 playerNumber.current = 1;
             }
 
-            if (state.active)
-                swal.fire({
-                    title: "Oops",
-                    text: "O outro usuário deixou o duelo!",
-                    icon: "error",
-                    background: "#1E1E1E80",
-                    color: "#fff",
-                });
+            swal.fire({
+                title: "Oops",
+                text: "O outro usuário deixou o duelo!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            });
 
             setState(JSON.parse(newState));
         });
-    }, [state, Object.keys(user).length, router.query]);
+    }, [JSON.stringify(state), Object.keys(user).length, router.query]);
 
     if (!user.username || !Object.keys(state).length)
         return (
@@ -179,15 +203,13 @@ export default function Duel() {
                     <title>Duelo - Mille</title>
                 </Head>
 
-                <Topbar type="default" />
-
                 <Loading />
 
                 <Menubar active={2}></Menubar>
             </>
         );
 
-    if (!state.active && !state.players[1].name)
+    if (state.status === 0 && !state.players[1].name)
         return (
             <>
                 <Head>
@@ -204,7 +226,7 @@ export default function Duel() {
                             username={`@${state.players[0].name}`}
                             title={state.players[0].title}
                         />
-                        <h1 className="inline select-none text-7xl font-semibold text-[red] sm:text-9xl">&times;</h1>
+                        <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                         <div className={`flex w-20 flex-col items-center sm:mx-12 sm:w-56`}>
                             <div className="mt-3 inline-block">
                                 <Button type={"button"} action={getInviteLink} className="text-xl">
@@ -219,7 +241,7 @@ export default function Duel() {
             </>
         );
 
-    if (!state.active && !state.questionQuantity)
+    if (state.status === 0 && !state.questionQuantity)
         return (
             <>
                 <Head>
@@ -236,7 +258,7 @@ export default function Duel() {
                             username={`@${state.players[0].name}`}
                             title={state.players[0].title}
                         />
-                        <h1 className="inline select-none text-7xl font-semibold text-[red] sm:text-9xl">&times;</h1>
+                        <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                         <User
                             side="right"
                             lvl={state.players[1].level}
@@ -251,14 +273,14 @@ export default function Duel() {
             </>
         );
 
-    if (state.active && state.players[playerNumber.current - 1].questions.length !== state.questionQuantity)
+    if (state.status === 1 && state.players[playerNumber.current - 1].questions.length !== state.questionQuantity)
         return (
             <>
                 <DuelQuiz data={state} socket={socket.current} playerNumber={playerNumber.current} />
             </>
         );
 
-    if (state.active)
+    if (state.status === 1)
         return (
             <>
                 <Head>
@@ -302,7 +324,7 @@ export default function Duel() {
                         points={state.players[0].points}
                         answers={state.players[0].questions}
                     />
-                    <h1 className="inline select-none text-7xl font-semibold text-[red] sm:text-9xl">&times;</h1>
+                    <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                     <User
                         side="right"
                         lvl={state.players[1].level}
@@ -321,9 +343,9 @@ export default function Duel() {
     function getInviteLink() {
         swal.fire({
             title: "Convite de Duelo",
-            text: `Copie este link e envie para seu amigo: ${
+            html: `<p>Copie este link e envie para seu amigo: <a class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" href="${
                 window.location.origin + "/duel?roomID=" + roomID.current
-            }`,
+            }">${window.location.origin + "/duel?roomID=" + roomID.current}</a></p>`,
             background: "#1E1E1E80",
             color: "#fff",
         });
@@ -334,7 +356,7 @@ export default function Duel() {
             return (
                 <form
                     onSubmit={(e) => e.preventDefault()}
-                    className="mx-auto mt-8 flex flex-col gap-3 rounded-xl bg-primary-white p-3 dark:bg-[#282828] sm:w-3/4"
+                    className="mx-auto mt-8 flex flex-col gap-3 rounded-xl bg-primary-white p-3 dark:bg-zinc-800 sm:w-3/4"
                 >
                     <div className="flex items-center gap-3">
                         <label htmlFor="subject" className="font-semibold sm:text-2xl">

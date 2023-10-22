@@ -77,7 +77,7 @@ export default function BanRequests() {
                                 </Link>
                                 <select
                                     name="type"
-                                    className="resize-none appearance-none truncate rounded-md border-none bg-[#F5F5F5] px-2 text-sm text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                    className="resize-none appearance-none truncate rounded-md border-none bg-neutral-100 px-2 text-sm text-neutral-400 outline-none dark:bg-zinc-800"
                                     value={e.type}
                                     onChange={(ev) => {
                                         handleChange(e.id, Number(ev.currentTarget.value));
@@ -158,7 +158,7 @@ export default function BanRequests() {
                         <label htmlFor="type">Tipo:</label>
                         <select
                             name="type"
-                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-[#F5F5F5] p-1 text-base text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                            className="w-48 resize-none appearance-none truncate rounded-xl border-none bg-neutral-100 p-1 text-base text-neutral-400 outline-none dark:bg-zinc-800"
                         >
                             <option value="0" className="text-base">
                                 Todos
@@ -217,7 +217,7 @@ export default function BanRequests() {
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                     <input
-                        className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-[#8E8E8E] outline-none dark:bg-[#282828] sm:max-w-none"
+                        className="h-11 flex-1 rounded-xl border-none bg-primary-white p-3 text-neutral-400 outline-none dark:bg-zinc-800 sm:max-w-none"
                         type="text"
                         placeholder="Pesquisar..."
                         value={search}
@@ -294,7 +294,7 @@ export default function BanRequests() {
                     }).length
                 ) && (
                     <button
-                        className="group fixed right-20 bottom-24 flex h-20 w-20 items-center justify-center rounded-full bg-[#00BB29] text-primary-white transition-all delay-200 duration-500 active:scale-90 sm:hover:w-44 sm:hover:delay-[0ms]"
+                        className="group fixed right-20 bottom-24 flex h-20 w-20 items-center justify-center rounded-full bg-green-600 text-primary-white transition-all delay-200 duration-500 active:scale-90 sm:hover:w-44 sm:hover:delay-[0ms]"
                         onClick={saveChanges}
                     >
                         <TbCheck className="stroke-[3] text-5xl" />

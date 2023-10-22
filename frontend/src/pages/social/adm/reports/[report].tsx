@@ -261,7 +261,7 @@ export default function Report() {
                             <span>Aplicar Punição</span>
                             <select
                                 name="penalty"
-                                className="z-10 w-16 appearance-none rounded-md bg-[#AD1548] text-center"
+                                className="z-10 w-16 appearance-none rounded-md bg-red-600 text-center"
                                 onChange={(e) => setPenalty(Number(e.target.value))}
                             >
                                 <option value="20">20</option>

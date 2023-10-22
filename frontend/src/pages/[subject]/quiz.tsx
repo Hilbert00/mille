@@ -5,6 +5,8 @@ import Topbar from "@/components/topbar";
 import Button from "@/components/button";
 import Loading from "@/components/loading";
 
+import unlockTitle from "utils/unlockTitle";
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 
@@ -33,11 +35,11 @@ export default function Quiz() {
     const [quizImage, setQuizImage] = useState([] as any);
     const [quizAlternatives, setQuizAlternatives] = useState([]);
 
-    const url =
-        process.env.NEXT_PUBLIC_API_URL +
-        `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}`;
-
     async function getData() {
+        const url =
+            process.env.NEXT_PUBLIC_API_URL +
+            `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}`;
+
         const response = await fetch(url, { credentials: "include" });
 
         if (response.status === 204) {
@@ -95,12 +97,12 @@ export default function Quiz() {
                                     setCurrentQuestion(currentQuestion + 1);
                                 }}
                             >
-                                <div className="relative flex h-40 flex-grow items-center rounded-md border-[1px] border-[#CCCCCC] bg-primary-white p-2 dark:border-none dark:bg-primary">
+                                <div className="relative flex h-40 flex-grow items-center rounded-md border-[1px] border-stone-300 bg-primary-white p-2 dark:border-none dark:bg-primary">
                                     <div
                                         className="absolute top-0 left-0 flex h-14 w-14 items-center justify-center rounded-md rounded-tr-none rounded-bl-none"
                                         style={{ background: `${colors[i]}` }}
                                     >
-                                        <span className="text-3xl font-black text-[#FFF]">
+                                        <span className="text-3xl font-black text-white">
                                             {["A", "B", "C", "D", "E"][i]}
                                         </span>
                                     </div>
@@ -146,7 +148,7 @@ export default function Quiz() {
                                     className="flex h-10 min-w-[40px] items-center justify-center rounded-md"
                                     style={{ background: `${colors[i]}` }}
                                 >
-                                    <span className="text-3xl font-black text-[#FFF]">
+                                    <span className="text-3xl font-black text-white">
                                         {["A", "B", "C", "D", "E"][i]}
                                     </span>
                                 </div>
@@ -266,104 +268,7 @@ export default function Quiz() {
                         })}
                     </div>
                     <div>
-                        <Button
-                            type="button"
-                            className="w-60"
-                            action={async () => {
-                                const correctQuantity = answers.filter((e: any) => e.isRight).length;
-
-                                const oldD = await fetch(
-                                    process.env.NEXT_PUBLIC_API_URL +
-                                        `/api/quiz/get/${quizSettings.current.quizType}?num=${
-                                            quizSettings.current.quizID
-                                        }&parsed=${false}`,
-                                    { credentials: "include" }
-                                );
-
-                                const oldData = await oldD.json();
-
-                                if (correctQuantity >= 3) {
-                                    switch (quizSettings.current.subject) {
-                                        case "mat":
-                                            switch (quizSettings.current.quizType) {
-                                                case "1":
-                                                    if (quizSettings.current.quizID == 1) {
-                                                        createNewQuiz("mat", false, "ari", "1", "2");
-                                                        createNewQuiz("mat", false, "raz", "1", "7");
-                                                    } else if (
-                                                        quizSettings.current.quizID != 6 &&
-                                                        quizSettings.current.quizID != 11
-                                                    ) {
-                                                        createNewQuiz("mat", true);
-                                                    }
-                                                    break;
-                                                case "2":
-                                                    if (quizSettings.current.quizID == 5) {
-                                                        createNewQuiz("mat", false, "est", "2", "6");
-                                                        createNewQuiz("mat", false, "gra", "2", "9");
-                                                    } else if (
-                                                        quizSettings.current.quizID != 8 &&
-                                                        quizSettings.current.quizID != 11
-                                                    ) {
-                                                        createNewQuiz("mat", true);
-                                                    }
-                                                    break;
-                                                case "3":
-                                                    if (quizSettings.current.quizID != 5) {
-                                                        createNewQuiz("mat", true);
-                                                    }
-                                                    break;
-                                                case "4":
-                                                    if (quizSettings.current.quizID == 4) {
-                                                        createNewQuiz("mat", false, "tri", "4", "5");
-                                                        createNewQuiz("mat", false, "pri", "4", "8");
-                                                    } else if (
-                                                        quizSettings.current.quizID != 7 &&
-                                                        quizSettings.current.quizID != 10
-                                                    ) {
-                                                        createNewQuiz("mat", true);
-                                                    }
-                                                    break;
-                                            }
-                                    }
-                                }
-
-                                const newData = { ...oldData, done: 1 };
-                                newData.questions.map((e: any, i: number) => {
-                                    e.alternatives.answered = answers[i].answered;
-                                });
-
-                                try {
-                                    const bodyData = {
-                                        data: JSON.stringify(newData),
-                                        quizType: quizSettings.current.quizType,
-                                        quizNumber: quizSettings.current.quizID,
-                                    };
-
-                                    const updateResponse = await fetch(
-                                        process.env.NEXT_PUBLIC_API_URL + "/api/quiz/update",
-                                        {
-                                            credentials: "include",
-                                            method: "PUT",
-                                            headers: { "Content-Type": "application/json" },
-                                            body: JSON.stringify(bodyData),
-                                        }
-                                    );
-
-                                    if (!updateResponse.ok)
-                                        throw `${updateResponse.status}: ${updateResponse.statusText}`;
-                                } catch (err) {
-                                    console.log(err);
-                                } finally {
-                                    if (calledPush) {
-                                        return;
-                                    }
-
-                                    setCalledPush(true);
-                                    router.push(`/${quizSettings.current.subject}`);
-                                }
-                            }}
-                        >
+                        <Button type="button" className="w-60" action={handleQuizEnd}>
                             Encerrar Quiz
                         </Button>
                     </div>
@@ -390,6 +295,88 @@ export default function Quiz() {
             </main>
         </>
     );
+
+    async function handleQuizEnd() {
+        const correctQuantity = answers.filter((e: any) => e.isRight).length;
+
+        const oldD = await fetch(
+            process.env.NEXT_PUBLIC_API_URL +
+                `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}&parsed=${false}`,
+            { credentials: "include" }
+        );
+
+        const oldData = await oldD.json();
+
+        if (correctQuantity === quizSettings.current.quantity) unlockTitle(21);
+
+        if (correctQuantity >= 3) {
+            switch (quizSettings.current.subject) {
+                case "mat":
+                    switch (quizSettings.current.quizType) {
+                        case "1":
+                            if (quizSettings.current.quizID == 1) {
+                                createNewQuiz("mat", false, "ari", "1", "2");
+                                createNewQuiz("mat", false, "raz", "1", "7");
+                            } else if (quizSettings.current.quizID != 6 && quizSettings.current.quizID != 11) {
+                                createNewQuiz("mat", true);
+                            }
+                            break;
+                        case "2":
+                            if (quizSettings.current.quizID == 5) {
+                                createNewQuiz("mat", false, "est", "2", "6");
+                                createNewQuiz("mat", false, "gra", "2", "9");
+                            } else if (quizSettings.current.quizID != 8 && quizSettings.current.quizID != 11) {
+                                createNewQuiz("mat", true);
+                            }
+                            break;
+                        case "3":
+                            if (quizSettings.current.quizID != 5) {
+                                createNewQuiz("mat", true);
+                            }
+                            break;
+                        case "4":
+                            if (quizSettings.current.quizID == 4) {
+                                createNewQuiz("mat", false, "tri", "4", "5");
+                                createNewQuiz("mat", false, "pri", "4", "8");
+                            } else if (quizSettings.current.quizID != 7 && quizSettings.current.quizID != 10) {
+                                createNewQuiz("mat", true);
+                            }
+                            break;
+                    }
+            }
+        }
+
+        const newData = { ...oldData, done: 1 };
+        newData.questions.map((e: any, i: number) => {
+            e.alternatives.answered = answers[i].answered;
+        });
+
+        try {
+            const bodyData = {
+                data: JSON.stringify(newData),
+                quizType: quizSettings.current.quizType,
+                quizNumber: quizSettings.current.quizID,
+            };
+
+            const updateResponse = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/update", {
+                credentials: "include",
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(bodyData),
+            });
+
+            if (!updateResponse.ok) throw `${updateResponse.status}: ${updateResponse.statusText}`;
+        } catch (err) {
+            console.log(err);
+        } finally {
+            if (calledPush) {
+                return;
+            }
+
+            setCalledPush(true);
+            router.push(`/${quizSettings.current.subject}`);
+        }
+    }
 
     async function createNewQuiz(
         subject: string,

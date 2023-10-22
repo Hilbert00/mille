@@ -8,20 +8,9 @@ interface CardProps {
     extraData?: string;
     color?: string;
     linksTo?: string;
-    soon?: boolean;
 }
 
 export default function Card(props: CardProps) {
-    if (props.soon) {
-        return (
-            <div className="relative h-44 w-full rounded-xl bg-[url(/images/soon.png)] bg-cover sm:w-[45%]">
-                <div className="absolute bottom-0 flex h-12 w-full items-center rounded-b-xl bg-[#8D8D8DCC] p-3">
-                    <h1 className="text-xl text-primary-white">Em breve...</h1>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <Link href={props.linksTo ? props.linksTo : ""} className="w-full sm:w-[45%]">
             <div

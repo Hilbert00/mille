@@ -214,7 +214,7 @@ export default function Home() {
             <main className="mx-auto max-w-[calc(100vw-40px)] md:max-w-3xl">
                 <form className=" min-h-[calc(100vh-9rem)]" method="post" onSubmit={handleSubmit}>
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         name="password"
                         type="password"
                         placeholder={"Nova senha"}
@@ -227,7 +227,7 @@ export default function Home() {
                     />
 
                     <input
-                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="mx-auto mb-12 block h-11 w-3/4 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                         name="password2"
                         type="password"
                         placeholder={"Repita a senha"}

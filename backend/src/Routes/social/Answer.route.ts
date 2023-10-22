@@ -21,9 +21,9 @@ interface answer {
 const router = Router();
 
 router.get("/answers", verifyToken, (req, res) => {
-    if (!req.query.id) return res.sendStatus(404);
-
-    const query = `SELECT a.id_answer, u.id AS id_user, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE NOT EXISTS (SELECT ar.id_report FROM answer_report AS ar WHERE (a.id_answer = ar.id_answer OR a.reply_to = ar.id_answer) AND ar.status = 1) AND a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`;
+    const query = req.query.id
+        ? `SELECT a.id_answer, u.id AS id_user, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE NOT EXISTS (SELECT ar.id_report FROM answer_report AS ar WHERE (a.id_answer = ar.id_answer OR a.reply_to = ar.id_answer) AND ar.status = 1) AND a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`
+        : `SELECT a.id_answer, u.id AS id_user, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE u.id = ${req.user.id} AND a.reply_to IS NULL GROUP BY a.id_answer;`;
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);

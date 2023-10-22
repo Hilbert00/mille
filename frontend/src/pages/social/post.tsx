@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { getUserData } from "hooks/getUserData";
+import unlockTitle from "utils/unlockTitle";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -214,21 +215,36 @@ export default function Post() {
             method: "POST",
         })
             .then((result) => result.json())
-            .then((json) =>
-                swal
-                    .fire({
-                        title: "Sucesso!",
-                        text: `${replyID ? "O seu comentário foi publicado" : "A sua pergunta foi publicada"}!`,
-                        icon: "success",
-                        background: "#1E1E1E80",
-                        color: "#fff",
-                    })
-                    .then(() => {
-                        if (replyID) setReply("");
-                        else setAnswer("");
-                        setAnswers(json);
-                    })
-            );
+            .then((json) => {
+                swal.fire({
+                    title: "Sucesso!",
+                    text: `${replyID ? "O seu comentário foi publicado" : "A sua pergunta foi publicada"}!`,
+                    icon: "success",
+                    background: "#1E1E1E80",
+                    color: "#fff",
+                }).then(() => {
+                    if (replyID) setReply("");
+                    else {
+                        setAnswer("");
+                        fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/answers`, {
+                            credentials: "include",
+                        })
+                            .then((res) => res.json())
+                            .then((data) => {
+                                if (!data.length) return;
+
+                                const titles = [17];
+
+                                if (data.length >= 20) titles.push(18);
+                                if (data.length >= 50) titles.push(19);
+                                if (data.length >= 100) titles.push(20);
+
+                                unlockTitle(titles);
+                            });
+                    }
+                    setAnswers(json);
+                });
+            });
     }
 
     function handleReport(type: "post" | "answer", id: number) {
@@ -245,7 +261,7 @@ export default function Post() {
                         name="description"
                         rows={10}
                         placeholder="Descreva aqui o problema..."
-                        className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                        className="flex-1 resize-none rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                     ></textarea>
                 </div>
             ),
@@ -339,7 +355,7 @@ export default function Post() {
                         </div>
 
                         {Boolean(e.is_best) && (
-                            <span className="items-center justify-center text-[#00BB29]">Resolvido</span>
+                            <span className="items-center justify-center text-green-600">Resolvido</span>
                         )}
                     </div>
 
@@ -361,9 +377,9 @@ export default function Post() {
                                 }
                             >
                                 {e.user_vote === 1 ? (
-                                    <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
+                                    <TbArrowBigUpFilled className="text-2xl text-green-600" />
                                 ) : (
-                                    <TbArrowBigUp className="text-2xl text-[#00BB29]" />
+                                    <TbArrowBigUp className="text-2xl text-green-600" />
                                 )}
                             </button>
                             <span className="flex w-10 justify-center font-medium sm:text-xl">
@@ -381,9 +397,9 @@ export default function Post() {
                                 }
                             >
                                 {e.user_vote === -1 ? (
-                                    <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
+                                    <TbArrowBigDownFilled className="text-2xl text-red-600" />
                                 ) : (
-                                    <TbArrowBigDown className="text-2xl text-[#C81652]" />
+                                    <TbArrowBigDown className="text-2xl text-red-600" />
                                 )}
                             </button>
 
@@ -395,16 +411,16 @@ export default function Post() {
                                     }
                                 >
                                     {e.is_best ? (
-                                        <TbCircleCheckFilled className="text-2xl text-[#00BB29]" />
+                                        <TbCircleCheckFilled className="text-2xl text-green-600" />
                                     ) : (
-                                        <TbCircleCheck className="text-2xl text-[#00BB29]" />
+                                        <TbCircleCheck className="text-2xl text-green-600" />
                                     )}
                                 </button>
                             )}
                         </div>
 
                         <button type="button" onClick={() => handleReport("answer", e.id_answer)}>
-                            <TbAlertTriangle className="text-2xl text-[#E5AC1A]" />
+                            <TbAlertTriangle className="text-2xl text-yellow-500" />
                         </button>
                     </div>
 
@@ -414,11 +430,11 @@ export default function Post() {
                                 className="flex items-center gap-2"
                                 onClick={() => viewReplies(e.id_answer, e.reply_input ? "input" : "input")}
                             >
-                                <BsFillReplyFill className="text-2xl text-[#1A66E5]" />
+                                <BsFillReplyFill className="text-2xl text-blue-600" />
                                 <span>Responder</span>
                             </button>
                         ) : null}
-                        
+
                         {Boolean(e.replies?.length) && (
                             <>
                                 <span>·</span>
@@ -448,7 +464,7 @@ export default function Post() {
                                 name="answer"
                                 type="text"
                                 value={reply}
-                                className="h-11 flex-1 rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                className="h-11 flex-1 rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                                 placeholder="Digite seu comentário..."
                                 onChange={(e) => {
                                     setReply(e.target.value);
@@ -474,7 +490,7 @@ export default function Post() {
 
                     {e.show_replies && (
                         <>
-                            <hr className="text-[#acacac] dark:text-[#282828]" />
+                            <hr className="text-neutral-400 dark:text-zinc-800" />
                             <ul className="flex flex-col gap-2">
                                 {e.replies?.map((e2) => {
                                     return (
@@ -524,9 +540,9 @@ export default function Post() {
                                                             }
                                                         >
                                                             {e2.user_vote === 1 ? (
-                                                                <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
+                                                                <TbArrowBigUpFilled className="text-2xl text-green-600" />
                                                             ) : (
-                                                                <TbArrowBigUp className="text-2xl text-[#00BB29]" />
+                                                                <TbArrowBigUp className="text-2xl text-green-600" />
                                                             )}
                                                         </button>
                                                         <span className="flex w-10 justify-center font-medium sm:text-xl">
@@ -547,9 +563,9 @@ export default function Post() {
                                                             }
                                                         >
                                                             {e2.user_vote === -1 ? (
-                                                                <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
+                                                                <TbArrowBigDownFilled className="text-2xl text-red-600" />
                                                             ) : (
-                                                                <TbArrowBigDown className="text-2xl text-[#C81652]" />
+                                                                <TbArrowBigDown className="text-2xl text-red-600" />
                                                             )}
                                                         </button>
                                                     </div>
@@ -558,7 +574,7 @@ export default function Post() {
                                                         type="button"
                                                         onClick={() => handleReport("answer", e2.id_answer)}
                                                     >
-                                                        <TbAlertTriangle className="text-2xl text-[#E5AC1A]" />
+                                                        <TbAlertTriangle className="text-2xl text-yellow-500" />
                                                     </button>
                                                 </div>
                                             </div>
@@ -642,9 +658,9 @@ export default function Post() {
                                 onClick={() => handleVote(data.user_vote === 1 ? 0 : 1, "post", data.id_post)}
                             >
                                 {data.user_vote === 1 ? (
-                                    <TbArrowBigUpFilled className="text-2xl text-[#00BB29]" />
+                                    <TbArrowBigUpFilled className="text-2xl text-green-600" />
                                 ) : (
-                                    <TbArrowBigUp className="text-2xl text-[#00BB29]" />
+                                    <TbArrowBigUp className="text-2xl text-green-600" />
                                 )}
                             </button>
                             <span className="flex w-10 justify-center font-medium sm:text-xl">
@@ -655,15 +671,15 @@ export default function Post() {
                                 onClick={() => handleVote(data.user_vote === -1 ? 0 : -1, "post", data.id_post)}
                             >
                                 {data.user_vote === -1 ? (
-                                    <TbArrowBigDownFilled className="text-2xl text-[#C81652]" />
+                                    <TbArrowBigDownFilled className="text-2xl text-red-600" />
                                 ) : (
-                                    <TbArrowBigDown className="text-2xl text-[#C81652]" />
+                                    <TbArrowBigDown className="text-2xl text-red-600" />
                                 )}
                             </button>
                         </div>
 
                         <button type="button" onClick={() => handleReport("post", data.id_post)}>
-                            <TbAlertTriangle className="text-2xl text-[#E5AC1A]" />
+                            <TbAlertTriangle className="text-2xl text-yellow-500" />
                         </button>
                     </div>
 
@@ -680,7 +696,7 @@ export default function Post() {
                                     name="answer"
                                     rows={3}
                                     placeholder="Digite sua resposta..."
-                                    className="flex-1 resize-none rounded-xl border-none bg-[#F5F5F5] p-3 text-[#8E8E8E] outline-none dark:bg-[#282828]"
+                                    className="flex-1 resize-none rounded-xl border-none bg-neutral-100 p-3 text-neutral-400 outline-none dark:bg-zinc-800"
                                     value={answer}
                                     onChange={(e) => setAnswer(e.target.value)}
                                 ></textarea>
