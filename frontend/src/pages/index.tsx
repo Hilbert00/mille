@@ -1,76 +1,59 @@
 import Head from "next/head";
+import Link from "next/link";
 
-import Topbar from "@/components/topbar";
-import Card from "@/components/card";
-import Menubar from "@/components/menubar";
-import { useEffect, useState } from "react";
+import Logo from "@/components/logo";
+import Button from "@/components/button";
+import FeatureDisplay from "@/components/landingPage/featureDisplay";
+import Footer from "@/components/footer";
 
-export default function Home({ cardData }: any) {
-    const [data, setData] = useState([]);
-    const cardColors = ["#1A66E5", "#00BB29", "#C81652", "#7106C5"];
-
-    useEffect(() => {
-        (async function () {
-            if (!cardData) {
-                setData([<Card key={0} soon={true}></Card>] as any);
-                return;
-            }
-
-            const dataCards = cardData.map((e: any, i: number) => {
-                return (
-                    <Card
-                        key={e.id_subject}
-                        title={e.name}
-                        linksTo={String(e.name)
-                            .normalize("NFD")
-                            .replace(/[\u0300-\u036f]/g, "")
-                            .substring(0, 3)
-                            .toLowerCase()}
-                        color={cardColors[i]}
-                    ></Card>
-                );
-            });
-
-            setData(dataCards);
-        })();
-    }, []);
-
-    if (!data.length) {
-        return (
-            <>
-                <Topbar type="default" />
-                <Menubar active={1}></Menubar>
-            </>
-        );
-    }
-
+export default function LandingPage() {
     return (
         <>
             <Head>
-                <title>Solo - Mille</title>
+                <title>Mille - Plataforma de Estudos para o ENEM</title>
             </Head>
 
-            <Topbar type="default" />
+            <header className="flex h-28 w-full items-center justify-center">
+                <Logo type={"full"} />
+            </header>
 
-            <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
-                <div className="flex w-full flex-wrap justify-between gap-10">{data}</div>
+            <main className="mx-auto min-h-[calc(100vh-9rem)] max-w-[calc(100vw-40px)] md:max-w-3xl">
+                <section className="mb-6 sm:mb-0 sm:flex sm:min-h-[calc(100vh-7rem)] sm:flex-col sm:justify-center">
+                    <div className="mb-6 sm:mb-14">
+                        <h1 className="mb-3 text-center text-2xl font-bold sm:mb-8 sm:text-7xl">
+                            Venha hoje estudar com a gente!
+                        </h1>
+                        <p className="font-light sm:text-center sm:text-2xl">
+                            Participe de comunidades de estudo sobre as áreas do conhecimento do ENEM enquanto estuda no
+                            modo solo e participa de duelos com seus amigos no modo desafio!
+                        </p>
+                    </div>
+
+                    <Link href={"/signup"}>
+                        <Button type="button" className="w-full font-semibold sm:w-3/4 sm:text-2xl">
+                            {"Crie sua conta agora!"}
+                        </Button>
+                    </Link>
+                </section>
+
+                <section className="flex flex-col justify-between gap-6 py-6 sm:h-[calc(100vh-2rem)]">
+                    <div className="absolute left-0 right-0 -z-10 bg-blue-600 sm:top-[100vh] sm:h-screen"></div>
+                    <FeatureDisplay title={"4 mundos únicos e mais por vir!"} type={"solo"}>
+                        Quatro mundos disponíveis para as seguintes disciplinas: matemática, química, física e biologia.
+                        E o número continuará aumentando no futuro!
+                    </FeatureDisplay>
+
+                    <FeatureDisplay title={"Desafie seus amigos!"} type={"challenge"}>
+                        Participe de duelos com seus amigos e adquira prêmios enquanto estuda!
+                    </FeatureDisplay>
+
+                    <FeatureDisplay title={"Interaja na comunidade!"} type={"community"}>
+                        Publique suas perguntas, responda as de outros usuários, e participe de eventos na comunidade!
+                    </FeatureDisplay>
+                </section>
             </main>
 
-            <Menubar active={1}></Menubar>
+            <Footer />
         </>
     );
-}
-
-export async function getStaticProps() {
-    const url = process.env.NEXT_PUBLIC_API_URL + "/api/world";
-
-    const response = await fetch(url);
-
-    const data = await response.json();
-
-    return {
-        props: {
-            cardData: data,
-        },
-    };
 }

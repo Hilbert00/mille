@@ -1,6 +1,6 @@
 import QuizCircle from "../quizCircle";
 
-export default function MathStatistics(props: { data: any[] }) {
+export default function MatStatistics(props: { data: any[] }) {
     return (
         <>
             <div className="mt-8 flex w-full [&>div]:mx-auto">

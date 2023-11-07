@@ -10,9 +10,11 @@ import DuelQuiz from "../components/duel/duelQuiz";
 import swal from "sweetalert2";
 import { io } from "socket.io-client";
 import { useRouter } from "next/router";
+import { useEffect, useState, useRef, ChangeEvent } from "react";
+
 import { getUserData } from "hooks/getUserData";
 import unlockTitle from "utils/unlockTitle";
-import { useEffect, useState, useRef, ChangeEvent } from "react";
+import getAllAreas from "utils/getAllAreas";
 
 export default function Duel() {
     const [user] = getUserData(false);
@@ -21,6 +23,7 @@ export default function Duel() {
     const [state, setState] = useState({} as any);
     const roomID = useRef("");
     const [matchResult, setMatchResult] = useState(["", ""]);
+    const [areas, setAreas] = useState({} as any);
 
     const playerNumber = useRef(0);
     const socket = useRef(
@@ -36,8 +39,28 @@ export default function Duel() {
         })
     );
 
+    function getName(title: String) {
+        if (title === "Eletroquímica") return "elq";
+
+        title = String(title)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+
+        if (title.split(" ")[0].substring(0, 3) !== "cie") return title.split(" ")[0].substring(0, 3);
+
+        const newTitle = title
+            .split(" ")
+            .find((e) => e !== "ciencias" && e.length > 2)
+            ?.substring(0, 3);
+
+        return newTitle;
+    }
+
     useEffect(() => {
         if (!router.isReady) return;
+
+        if (!areas.length) getAllAreas().then((res) => setAreas(res));
 
         router.events.on("routeChangeStart", (url) => {
             const newPath = url.split("?")[0];
@@ -368,35 +391,21 @@ export default function Duel() {
                             className="grow appearance-none rounded-xl border-none p-3 text-base dark:bg-bgBlack"
                             onChange={updateForm}
                         >
-                            <optgroup label="Matemática">
-                                <option value="mat ari" className="text-base">
-                                    Aritmética
-                                </option>
-                                <option value="mat raz" className="text-base">
-                                    Razões e Proporções
-                                </option>
-                                <option value="mat por" className="text-base">
-                                    Porcentagem
-                                </option>
-                                <option value="mat gra" className="text-base">
-                                    Gráficos
-                                </option>
-                                <option value="mat est" className="text-base">
-                                    Estatísticas e Probabilidades
-                                </option>
-                                <option value="mat geo" className="text-base">
-                                    Geometria
-                                </option>
-                                <option value="mat tri" className="text-base">
-                                    Trigonometria
-                                </option>
-                                <option value="mat pri" className="text-base">
-                                    Prismas
-                                </option>
-                                <option value="mat alg" className="text-base">
-                                    Álgebra
-                                </option>
-                            </optgroup>
+                            {Object.keys(areas).map((e, i) => {
+                                return (
+                                    <optgroup label={e} key={i}>
+                                        {areas[e].map((el: any) => (
+                                            <option
+                                                value={getName(e) + " " + getName(el.name)}
+                                                key={el.id}
+                                                className="text-base"
+                                            >
+                                                {el.name}
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                );
+                            })}
                         </select>
                     </div>
                     <div className="flex items-center gap-3">

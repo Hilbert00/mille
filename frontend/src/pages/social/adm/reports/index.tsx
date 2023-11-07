@@ -39,7 +39,7 @@ export default function Reports() {
     useEffect(() => {
         if (user?.type === undefined) return;
         if (!user.type) {
-            router.push("/");
+            router.push("/solo");
             return;
         }
 

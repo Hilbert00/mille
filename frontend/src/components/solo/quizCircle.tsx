@@ -139,7 +139,7 @@ export default function QuizCircle(props: Props) {
 
     return (
         <button
-            className="relative flex items-center justify-center rounded-full"
+            className="quiz-circle relative flex items-center justify-center rounded-full"
             style={{ ...props.style, opacity: locked ? "0.3" : "1.0" }}
             onClick={async () => {
                 if (testLoading) return;
@@ -156,7 +156,10 @@ export default function QuizCircle(props: Props) {
                     if (test.status === 204) throw new Error();
 
                     return router.push(
-                        `${props.subject}/quiz?quizType=${props.type}&quizArea=${props.area}&quizID=${props.linksTo}`
+                        `/solo/${props.subject}/quiz?quizType=${props.type}&quizArea=${props.area.substring(
+                            0,
+                            3
+                        )}&quizID=${props.linksTo}`
                     );
                 } catch {
                     setTestLoading(false);
@@ -173,7 +176,12 @@ export default function QuizCircle(props: Props) {
         >
             {ping}
             <div className="absolute top-0 left-0 z-10 box-content flex h-[calc(100%-20px)] w-[calc(100%-20px)] items-center justify-center rounded-[inherit] bg-white bg-clip-content p-[10px] dark:bg-bgBlack">
-                <Image src={`/images/quiz/icons/math/${props.area}.png`} width={50} height={50} alt="quiz-icon"></Image>
+                <Image
+                    src={`/images/quiz/icons/${props.subject}/${props.area}.png`}
+                    width={50}
+                    height={50}
+                    alt="quiz-icon"
+                ></Image>
             </div>
             <ul className={`relative h-[100px] w-[100px] list-none overflow-hidden rounded-[inherit] p-0`}>
                 {questionStatus}

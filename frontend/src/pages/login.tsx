@@ -35,9 +35,9 @@ export default function Home() {
                     if (res.ok) {
                         const date = new Date().getFullYear();
 
-                        if (date === 2023) return unlockTitle(26).then(() => router.push("/"));
+                        if (date === 2023) return unlockTitle(26).then(() => router.push("/solo"));
 
-                        return router.push("/");
+                        return router.push("/solo");
                     }
 
                     if (res.status === 409)

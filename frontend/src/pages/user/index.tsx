@@ -33,7 +33,7 @@ export default function User() {
                 background: "#1E1E1E80",
                 color: "#fff",
             }).then(() => {
-                return router.push("/");
+                return router.push("/solo");
             });
         });
     }
@@ -43,7 +43,7 @@ export default function User() {
         if (router.query.name) setUsername(String(router.query.name));
 
         if (!router.query.name) {
-            router.push("/");
+            router.push("/solo");
             return;
         }
     }, [router.isReady, router.query.name, username]);

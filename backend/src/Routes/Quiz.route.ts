@@ -97,6 +97,7 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
 
     const quizData: { [key: string]: any } = {};
 
+    quizData.id = quizNumber;
     quizData.done = 0;
     quizData.questions = resultQuestions.map((e, i) => {
         return {
@@ -113,7 +114,10 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
     const quizCreateData = [userID, quizType, quizNumber, JSON.stringify(quizData)];
 
     conn.query(quizCreateQuery, quizCreateData, (err) => {
-        if (err) return res.sendStatus(404);
+        if (err) {
+            console.log(err);
+            return res.sendStatus(404);
+        }
 
         return res.json({ message: "success", data: quizData });
     });

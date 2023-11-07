@@ -22,7 +22,7 @@ export default function User() {
     useEffect(() => {
         if (!Object.keys(user).length) return;
         if (!user.isUser) {
-            router.push("/");
+            router.push("/solo");
             return;
         }
         if (available && available.length) {

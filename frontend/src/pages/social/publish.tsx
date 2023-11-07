@@ -11,7 +11,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import swal from "sweetalert2";
+
 import { getUserData } from "hooks/getUserData";
+import getAllAreas from "utils/getAllAreas";
 
 export default function Publish() {
     const router = useRouter();
@@ -19,10 +21,16 @@ export default function Publish() {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [area, setArea] = useState(1);
+    const [areas, setAreas] = useState({} as any);
     const [canceled, setCanceled] = useState(false);
 
     useEffect(() => {
-        if (user.banned || user.user_behavior < 50) router.push("/social");
+        if (user.banned || user.user_behavior < 50) {
+            router.push("/social");
+            return;
+        }
+
+        getAllAreas().then((res) => setAreas(res));
     }, [JSON.stringify(user)]);
 
     function handleSubmit() {
@@ -67,7 +75,7 @@ export default function Publish() {
         });
     }
 
-    if (!Object.keys(user).length || user.banned || user.user_behavior < 50)
+    if (!Object.keys(user).length || !Object.keys(areas).length || user.banned || user.user_behavior < 50)
         return (
             <>
                 <Head>
@@ -126,35 +134,17 @@ export default function Publish() {
                                 className="flex-1 grow resize-none appearance-none rounded-xl border-none bg-neutral-100 p-3 text-base text-neutral-400 outline-none dark:bg-zinc-800"
                                 onChange={(e) => setArea(Number(e.target.value))}
                             >
-                                <optgroup label="Matemática">
-                                    <option value="1" className="text-base">
-                                        Aritmética
-                                    </option>
-                                    <option value="2" className="text-base">
-                                        Razões e Proporções
-                                    </option>
-                                    <option value="3" className="text-base">
-                                        Porcentagem
-                                    </option>
-                                    <option value="4" className="text-base">
-                                        Gráficos
-                                    </option>
-                                    <option value="5" className="text-base">
-                                        Estatísticas e Probabilidades
-                                    </option>
-                                    <option value="6" className="text-base">
-                                        Geometria
-                                    </option>
-                                    <option value="7" className="text-base">
-                                        Trigonometria
-                                    </option>
-                                    <option value="8" className="text-base">
-                                        Prismas
-                                    </option>
-                                    <option value="9" className="text-base">
-                                        Álgebra
-                                    </option>
-                                </optgroup>
+                                {Object.keys(areas).map((e, i) => {
+                                    return (
+                                        <optgroup label={e} key={i}>
+                                            {areas[e].map((e: any) => (
+                                                <option value={e.id} key={e.id} className="text-base">
+                                                    {e.name}
+                                                </option>
+                                            ))}
+                                        </optgroup>
+                                    );
+                                })}
                             </select>
                         </div>
                     </div>
@@ -180,8 +170,7 @@ export default function Publish() {
                             bgColor="#C81652"
                             disable={canceled}
                             action={() => {
-                                const route = `/social`;
-                                router.push(route);
+                                router.push("/social");
                                 setCanceled(true);
                             }}
                         >

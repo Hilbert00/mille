@@ -1,25 +1,11 @@
 import { Router } from "express";
 
 import queryPromise from "../../Helpers/QueryPromise.helper.js";
-import * as UserHelper from "../../Helpers/UserID.helper.js";
 
 // MIDDLEWARES
 import verifysubject from "../../Middlewares/Subject.middleware.js";
-import verifyToken from "../../Middlewares/Auth.middleware.js";
 
 const router = Router();
-
-interface DataProps {
-    questions: {
-        id: number;
-        alternatives: {
-            available: number[];
-            correct: number;
-            answered: 0;
-        };
-    }[];
-    done: number;
-}
 
 interface WorldDataProps {
     area_id: number | number[];

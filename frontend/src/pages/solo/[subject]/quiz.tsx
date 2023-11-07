@@ -48,7 +48,7 @@ export default function Quiz() {
             }
 
             setCalledPush(true);
-            router.push("/");
+            router.push("/solo");
             return;
         }
         const data = await response.json();
@@ -183,7 +183,7 @@ export default function Quiz() {
                 }
 
                 setCalledPush(true);
-                router.push(`/${quizSettings.current.subject}`);
+                router.push(`/solo/${quizSettings.current.subject}`);
             }
         }
     }, [currentQuestion]);
@@ -343,6 +343,49 @@ export default function Quiz() {
                             }
                             break;
                     }
+
+                case "nat":
+                    switch (quizSettings.current.quizType) {
+                        case "5":
+                            if (quizSettings.current.quizID == 3) {
+                                createNewQuiz("nat", false, "evo", "5", "4");
+                                createNewQuiz("nat", false, "gen", "5", "7");
+                            } else if (quizSettings.current.quizID == 5) {
+                                createNewQuiz("nat", false, "fis", "5", "6");
+                            } else if (quizSettings.current.quizID == 8) {
+                                createNewQuiz("nat", false, "fis", "5", "9");
+                            } else if (quizSettings.current.quizID != 6 && quizSettings.current.quizID != 9) {
+                                createNewQuiz("nat", true);
+                            }
+
+                            break;
+                        case "6":
+                            if (quizSettings.current.quizID == 3) {
+                                createNewQuiz("nat", false, "ter", "6", "4");
+                                createNewQuiz("nat", false, "din", "6", "7");
+                            } else if (quizSettings.current.quizID == 5) {
+                                createNewQuiz("nat", false, "cin", "6", "6");
+                            } else if (quizSettings.current.quizID == 8) {
+                                createNewQuiz("nat", false, "cin", "6", "9");
+                            } else if (quizSettings.current.quizID != 6 && quizSettings.current.quizID != 9) {
+                                createNewQuiz("nat", true);
+                            }
+
+                            break;
+                        case "7":
+                            if (quizSettings.current.quizID == 3) {
+                                createNewQuiz("nat", false, "org", "7", "4");
+                                createNewQuiz("nat", false, "ino", "7", "7");
+                            } else if (quizSettings.current.quizID == 5) {
+                                createNewQuiz("nat", false, "elq", "7", "6");
+                            } else if (quizSettings.current.quizID == 8) {
+                                createNewQuiz("nat", false, "elq", "7", "9");
+                            } else if (quizSettings.current.quizID != 6 && quizSettings.current.quizID != 9) {
+                                createNewQuiz("nat", true);
+                            }
+
+                            break;
+                    }
             }
         }
 
@@ -374,7 +417,7 @@ export default function Quiz() {
             }
 
             setCalledPush(true);
-            router.push(`/${quizSettings.current.subject}`);
+            router.push(`/solo/${quizSettings.current.subject}`);
         }
     }
 

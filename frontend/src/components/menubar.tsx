@@ -8,7 +8,7 @@ import { TbSwords } from "react-icons/tb";
 export default function Menubar(props: { active: number }) {
     const [menus, setMenus] = useState([
         { name: "Social", color: "#00A6ED", icon: <TbUsers className="inline-block" />, page: "/social" },
-        { name: "Solo", color: "#F6511D", icon: <TbPentagon className="inline-block" />, page: "/" },
+        { name: "Solo", color: "#F6511D", icon: <TbPentagon className="inline-block" />, page: "/solo" },
         { name: "Duelo", color: "#FFB400", icon: <TbSwords className="inline-block" />, page: "/duel" },
     ]);
 

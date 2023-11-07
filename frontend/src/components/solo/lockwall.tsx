@@ -12,6 +12,7 @@ interface LockWallProps {
     subject: string;
     updateData: any;
     currentData: any[];
+    type: number;
 }
 
 export default function LockWall(props: LockWallProps) {
@@ -19,7 +20,7 @@ export default function LockWall(props: LockWallProps) {
 
     return (
         <button
-            className="mx-auto mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 text-primary-white transition-all active:scale-95 sm:grid sm:w-3/4 sm:gap-8 sm:p-10 sm:hover:scale-105 sm:active:scale-100"
+            className="absolute z-10 mx-auto  mb-24 flex w-full cursor-pointer grid-cols-4 flex-col items-center gap-4 rounded-xl bg-primary p-5 text-primary-white transition-all active:scale-95 sm:grid sm:w-3/4 sm:gap-8 sm:p-10 sm:hover:scale-105 sm:active:scale-100"
             onClick={() => {
                 setApiCalled(true);
 
@@ -27,12 +28,22 @@ export default function LockWall(props: LockWallProps) {
                     switch (props.subject) {
                         case "mat":
                             switch (props.unlocks) {
-                                case 2:
+                                case 1:
                                     return "por";
-                                case 3:
+                                case 2:
                                     return "alg";
-                                case 4:
+                                case 3:
                                     return "geo";
+                            }
+
+                        case "nat":
+                            switch (props.unlocks) {
+                                case 0:
+                                    return "eco";
+                                case 1:
+                                    return "ele";
+                                case 2:
+                                    return "sol";
                             }
                     }
                     return "";
@@ -41,9 +52,10 @@ export default function LockWall(props: LockWallProps) {
                 const bodyData = {
                     subject: props.subject,
                     area: quizArea,
-                    quizType: props.unlocks,
+                    quizType: props.type,
                     quizNumber: 1,
                 };
+
 
                 if (props.currentValue >= props.necessaryValue && !apiCalled) {
                     unlockTitle(22);
@@ -64,10 +76,11 @@ export default function LockWall(props: LockWallProps) {
                                 background: "#1E1E1E80",
                                 color: "#fff",
                             });
-                            const data = Promise.all(
+
+                            const data = await Promise.all(
                                 props.currentData.map(async (e: any, i: number) => {
-                                    if (i === props.unlocks - 1) {
-                                        return await getQuizData(props.unlocks - 1);
+                                    if (i === props.unlocks) {
+                                        return getQuizData(props.type);
                                     }
 
                                     return e;

@@ -2,6 +2,22 @@ import { NextFunction, Request, Response } from "express";
 import queryPromise from "../Helpers/QueryPromise.helper.js";
 
 export default async function verifysubject(req: Request, res: Response, next: NextFunction) {
+    function getName(title: String) {
+        title = String(title)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+
+        if (title.split(" ")[0].substring(0, 3) !== "cie") return title.split(" ")[0].substring(0, 3);
+
+        const newTitle = title
+            .split(" ")
+            .find((e) => e !== "ciencias" && e.length > 2)
+            ?.substring(0, 3);
+
+        return newTitle;
+    }
+
     const availableSubjects = await (async function () {
         const subjects = JSON.parse(JSON.stringify(await queryPromise("SELECT id_subject, name FROM subject"))) as {
             [key: string]: string;
@@ -10,33 +26,32 @@ export default async function verifysubject(req: Request, res: Response, next: N
         const subjectsOrganized = await Promise.all(
             subjects.map(async (e, i) => {
                 const areas = JSON.parse(
-                    JSON.stringify(await queryPromise(`SELECT name FROM area where id_subject = ${e.id_subject}`))
+                    JSON.stringify(
+                        await queryPromise(`SELECT id_area, name FROM area where id_subject = ${e.id_subject}`)
+                    )
                 ) as {
                     [key: string]: string;
                 }[];
 
-                const areasString = areas.map((e) => e.name);
-
-                const areasOrganized = areasString.map((e, i) => {
+                const areasOrganized = areas.map((e, i) => {
                     return {
-                        id: i + 1,
-                        name: e,
-                        short: e
-                            .normalize("NFD")
-                            .replace(/[\u0300-\u036f]/g, "")
-                            .substring(0, 3)
-                            .toLowerCase(),
+                        id: e.id_area,
+                        name: e.name,
+                        short:
+                            e.name === "Eletroquímica"
+                                ? "elq"
+                                : e.name
+                                      .toLowerCase()
+                                      .normalize("NFD")
+                                      .replace(/[\u0300-\u036f]/g, "")
+                                      .substring(0, 3),
                     };
                 });
 
                 return {
                     id: i + 1,
                     name: e.name,
-                    short: String(e.name)
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                        .substring(0, 3)
-                        .toLowerCase(),
+                    short: getName(e.name),
                     areas: areasOrganized,
                 };
             })
@@ -60,6 +75,7 @@ export default async function verifysubject(req: Request, res: Response, next: N
             if (subject === subjectParam) {
                 if (area === areaParam) {
                     req.body.area = areaObject.id;
+
                     next();
                     return;
                 } else {

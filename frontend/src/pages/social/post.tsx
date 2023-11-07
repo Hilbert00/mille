@@ -82,9 +82,7 @@ export default function Post() {
         makeAnswerDivs(answers);
 
         if (!Object.keys(data).length)
-            fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post?id=${router.query.id}`, {
-                credentials: "include",
-            })
+            fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post?id=${router.query.id}`)
                 .then((res) => res.json())
                 .then((json) => {
                     setData(json);
@@ -615,8 +613,8 @@ export default function Post() {
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex flex-col gap-5">
-                    <div className="flex items-center justify-between sm:relative sm:justify-end sm:gap-8">
-                        <div className="flex items-center gap-2 sm:absolute sm:left-0">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
                                     src={"/images/usericons/default.png"}
@@ -632,18 +630,6 @@ export default function Post() {
                                 <span className="text-sm font-light">{dayjs(data.create_time).fromNow()}</span>
                             </div>
                         </div>
-
-                        <Image
-                            src={`/images/quiz/icons/math/${data.area_name
-                                .normalize("NFD")
-                                .replace(/[\u0300-\u036f]/g, "")
-                                .substring(0, 3)
-                                .toLowerCase()}.png`}
-                            width={50}
-                            height={50}
-                            alt="quiz-icon"
-                            title={data.area_name}
-                        />
                     </div>
 
                     <div>

@@ -57,7 +57,7 @@ export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: st
                 }
 
                 if (isLogin) router.push("/login");
-                else router.push("/");
+                else router.push("/solo");
                 setCalledPush(true);
             }
         })();

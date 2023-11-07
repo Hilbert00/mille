@@ -8,6 +8,7 @@ interface CardProps {
     extraData?: string;
     color?: string;
     linksTo?: string;
+    image?: string;
 }
 
 export default function Card(props: CardProps) {
@@ -16,11 +17,7 @@ export default function Card(props: CardProps) {
             <div
                 className="relative h-44 w-full rounded-xl transition-all duration-500 sm:hover:scale-105"
                 style={{
-                    background: `url(/images/subject/${String(props.title)
-                        .normalize("NFD")
-                        .replace(/[\u0300-\u036f]/g, "")
-                        .substring(0, 3)
-                        .toLowerCase()}.png)`,
+                    background: `url(/images/subject/${String(props.image)}.png)`,
                     backgroundSize: "cover",
                 }}
             >

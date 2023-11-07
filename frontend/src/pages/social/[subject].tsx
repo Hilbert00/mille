@@ -43,11 +43,12 @@ interface post {
     votes: number;
 }
 
-export default function Community({ data }: any) {
+export default function Community(props: any) {
     const [search, setSearch] = useState({ text: "", timer: null as null | NodeJS.Timeout });
     const [posts, setPosts] = useState([] as post[]);
     const [searchPosts, setSearchPosts] = useState(null as post[] | null);
     const [postDivs, setPostDivs] = useState([] as any);
+    const [areas, setAreas] = useState([] as any);
     const [redirecting, setRedirecting] = useState(false);
     const [loaded, setLoaded] = useState(false);
     const [user] = getUserData(false);
@@ -62,7 +63,30 @@ export default function Community({ data }: any) {
 
         if (loaded) return;
 
-        fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/posts?subject=${data.id_subject}`, {
+        fetch(process.env.NEXT_PUBLIC_API_URL + `/api/world/${props.simple}`, {
+            credentials: "include",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setAreas(
+                    data
+                        .map((e: any) => {
+                            try {
+                                const areas = e.area_name.map((el: any, i: number) => {
+                                    return { name: el, id: e.area_id[i] };
+                                });
+
+                                return areas;
+                            } catch {
+                                return { name: e.area_name, id: e.area_id };
+                            }
+                        })
+                        .flat()
+                );
+            })
+            .catch((err) => console.error(err));
+
+        fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/posts?subject=${props.id_subject}`, {
             credentials: "include",
         })
             .then((res) => res.json())
@@ -177,35 +201,12 @@ export default function Community({ data }: any) {
                             <option value="0" className="text-base">
                                 Todas
                             </option>
-                            <optgroup label="Matemática">
-                                <option value="1" className="text-base">
-                                    Aritmética
+
+                            {areas.map((e: any) => (
+                                <option value={e.id} className="text-base" key={e.id}>
+                                    {e.name}
                                 </option>
-                                <option value="2" className="text-base">
-                                    Razões e Proporções
-                                </option>
-                                <option value="3" className="text-base">
-                                    Porcentagem
-                                </option>
-                                <option value="4" className="text-base">
-                                    Gráficos
-                                </option>
-                                <option value="5" className="text-base">
-                                    Estatísticas e Probabilidades
-                                </option>
-                                <option value="6" className="text-base">
-                                    Geometria
-                                </option>
-                                <option value="7" className="text-base">
-                                    Trigonometria
-                                </option>
-                                <option value="8" className="text-base">
-                                    Prismas
-                                </option>
-                                <option value="9" className="text-base">
-                                    Álgebra
-                                </option>
-                            </optgroup>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -230,7 +231,7 @@ export default function Community({ data }: any) {
             const filter = result.value;
             fetch(
                 process.env.NEXT_PUBLIC_API_URL +
-                    `/api/social/posts?subject=${data.id_subject}&recent=${filter?.recent}&solved=${filter?.solved}&area=${filter?.area}`,
+                    `/api/social/posts?subject=${props.id_subject}&recent=${filter?.recent}&solved=${filter?.solved}&area=${filter?.area}`,
                 {
                     credentials: "include",
                 }
@@ -253,7 +254,7 @@ export default function Community({ data }: any) {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Image
-                                src={`/images/quiz/icons/math/${e.area_name
+                                src={`/images/quiz/icons/${props.simple}/${e.area_name
                                     .normalize("NFD")
                                     .replace(/[\u0300-\u036f]/g, "")
                                     .substring(0, 3)
@@ -328,14 +329,14 @@ export default function Community({ data }: any) {
     return (
         <>
             <Head>
-                <title>{`Comunidade ${data.name} - Mille`}</title>
+                <title>{`Comunidade ${props.name} - Mille`}</title>
             </Head>
 
             <Topbar type="social" />
 
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-col flex-wrap justify-between gap-5">
-                    <h1 className="text-center text-3xl font-semibold">{data.name}</h1>
+                    <h1 className="text-center text-3xl font-semibold">{props.name}</h1>
 
                     {!user.banned && user.user_behavior >= 50 ? (
                         <Button
@@ -343,8 +344,7 @@ export default function Community({ data }: any) {
                             className="w-full"
                             disable={redirecting}
                             action={() => {
-                                const route = "publish";
-                                router.push(route);
+                                router.push("publish");
                                 setRedirecting(true);
                             }}
                         >
@@ -380,6 +380,22 @@ export default function Community({ data }: any) {
 }
 
 export async function getStaticProps({ params }: any) {
+    function getName(title: String) {
+        title = String(title)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+
+        if (title.split(" ")[0].substring(0, 3) !== "cie") return title.split(" ")[0].substring(0, 3);
+
+        const newTitle = title
+            .split(" ")
+            .find((e) => e !== "ciencias" && e.length > 2)
+            ?.substring(0, 3);
+
+        return newTitle;
+    }
+
     const url = process.env.NEXT_PUBLIC_API_URL + `/api/world`;
 
     try {
@@ -388,19 +404,11 @@ export async function getStaticProps({ params }: any) {
         if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
         const json: { id_subject: number; name: string; simple: string }[] = await response.json();
-        const data = json.find(
-            (e) =>
-                String(e.name)
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .substring(0, 3)
-                    .toLowerCase() === params.subject
-        );
-
+        const data = json.find((e) => getName(e.name) === params.subject);
         if (data) data.simple = params.subject;
 
         return {
-            props: { data },
+            props: data,
         };
     } catch {
         return {
@@ -413,7 +421,7 @@ export async function getStaticProps({ params }: any) {
 
 export async function getStaticPaths() {
     return {
-        paths: ["/social/mat"],
+        paths: ["/social/mat", "/social/nat"],
         fallback: false,
     };
 }

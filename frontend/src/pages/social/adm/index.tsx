@@ -15,7 +15,7 @@ export default function ControlPanel() {
 
     useEffect(() => {
         if (user?.type === undefined) return;
-        if (!user.type) router.push("/");
+        if (!user.type) router.push("/solo");
     }, [user?.type]);
 
     if (!user.type)

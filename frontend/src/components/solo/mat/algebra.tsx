@@ -1,6 +1,6 @@
 import QuizCircle from "../quizCircle";
 
-export default function MathAlgebra(props: { data: any[] }) {
+export default function MatAlgebra(props: { data: any[] }) {
     return (
         <>
             <div className="mt-8 flex w-full [&>div]:mx-auto">

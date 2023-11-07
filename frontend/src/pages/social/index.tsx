@@ -19,21 +19,31 @@ export default function Social({ cardData }: any) {
         (async function () {
             if (!cardData) return;
 
+            function getName(title: String) {
+                title = String(title)
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "")
+                    .toLowerCase();
+
+                if (title.split(" ")[0].substring(0, 3) !== "cie") return title.split(" ")[0].substring(0, 3);
+
+                const newTitle = title
+                    .split(" ")
+                    .find((e) => e !== "ciencias" && e.length > 2)
+                    ?.substring(0, 3);
+
+                return newTitle;
+            }
+
             const dataCards = cardData.map((e: any, i: number) => {
                 return (
                     <Card
                         key={e.id_subject}
                         title={e.name}
-                        linksTo={
-                            "social/" +
-                            String(e.name)
-                                .normalize("NFD")
-                                .replace(/[\u0300-\u036f]/g, "")
-                                .substring(0, 3)
-                                .toLowerCase()
-                        }
+                        linksTo={"social/" + getName(e.name)}
+                        image={getName(e.name)}
                         color={cardColors[i]}
-                    ></Card>
+                    />
                 );
             });
 

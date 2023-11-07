@@ -45,7 +45,7 @@ export default function BanRequest() {
     useEffect(() => {
         if (user?.type === undefined) return;
         if (user.type !== 2) {
-            router.push("/");
+            router.push("/solo");
             return;
         }
 
