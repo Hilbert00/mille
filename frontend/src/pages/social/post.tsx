@@ -82,7 +82,9 @@ export default function Post() {
         makeAnswerDivs(answers);
 
         if (!Object.keys(data).length)
-            fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post?id=${router.query.id}`)
+            fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post?id=${router.query.id}`, {
+                credentials: "include",
+            })
                 .then((res) => res.json())
                 .then((json) => {
                     setData(json);

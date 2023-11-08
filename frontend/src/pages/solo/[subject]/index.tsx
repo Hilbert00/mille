@@ -44,7 +44,6 @@ export default function Solo(props: Props) {
     const [quizData, setQuizData] = useState([] as any);
 
     useEffect(() => {
-        console.log(props.data);
         if (!props.data.length) {
             router.push("/solo");
             return;
