@@ -38,17 +38,7 @@ export default function Home() {
                         if (date === 2023) return unlockTitle(26).then(() => router.push("/solo"));
 
                         return router.push("/solo");
-                    }
-
-                    if (res.status === 409)
-                        swal.fire({
-                            title: "Oops",
-                            text: "Este usuário já está em uso!",
-                            icon: "error",
-                            background: "#1E1E1E80",
-                            color: "#fff",
-                        });
-                    else
+                    } else
                         swal.fire({
                             title: "Oops",
                             text: "Nome de usuário e/ou senha incorreto(s)!",

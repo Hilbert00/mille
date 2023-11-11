@@ -12,10 +12,6 @@ const conn = mysql.createConnection({
 });
 
 setInterval(() => {
-    conn.query("UPDATE user SET online = 0 WHERE updated_at + INTERVAL 30 MINUTE <= NOW();", (err, _res) => {
-        if (err) console.log(err);
-    });
-
     conn.query("DELETE FROM user WHERE updated_at + INTERVAL 1 DAY <= NOW() AND active = 0;", (err, _res) => {
         if (err) console.log(err);
     });

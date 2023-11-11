@@ -37,29 +37,7 @@ router.post("/", (req, res) => {
 
         const cookie = CookieHelper.generateUserCookie(result);
 
-        query = "UPDATE user SET ?? = ? WHERE ?? = ?";
-        data = ["online", 1, "username", username];
-
-        conn.query(query, data, async (err, result) => {
-            if (err) console.error(err);
-
-            if (!result) return res.sendStatus(404);
-            if (!result.changedRows && username !== req?.user?.username) {
-                return res.sendStatus(409);
-            }
-
-            if (req?.user?.username && username !== req?.user?.username) {
-                data = ["online", 0, "username", req.user.username];
-
-                conn.query(query, data, async (err, result) => {
-                    if (err) console.error(err);
-
-                    if (!result) return res.sendStatus(404);
-
-                    return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
-                });
-            } else return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
-        });
+        return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
     });
 });
 
