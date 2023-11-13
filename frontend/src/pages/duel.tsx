@@ -185,6 +185,18 @@ export default function Duel() {
             socket.current.emit("createRoom", user);
         });
 
+        socket.current.on("alreadyInGame", () => {
+            swal.fire({
+                title: "Oops",
+                text: "Este usuário já está em um duelo!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            });
+
+            router.push("/solo");
+        });
+
         socket.current.on("joinedRoom", (state) => {
             if (router.query.roomID && !playerNumber.current) {
                 roomID.current = String(router.query.roomID);

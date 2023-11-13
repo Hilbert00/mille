@@ -87,10 +87,14 @@ const state: {
         status: 0 | 1 | 2;
     };
 } = {};
-const clientData: { id: string; room: string; playerNumber: 1 | 2 }[] = [];
+const clientData: { id: string; userId: number; room: string; playerNumber: 1 | 2 }[] = [];
 
 io.on("connection", (socket) => {
     socket.on("createRoom", (user) => {
+        const canCreate = clientData.findIndex((e) => e.userId === user.id) === -1;
+
+        if (!canCreate) return socket.emit("alreadyInGame");
+
         const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
         let result = "";
@@ -98,7 +102,7 @@ io.on("connection", (socket) => {
             result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
 
-        clientData.push({ id: socket.id, room: result, playerNumber: 1 });
+        clientData.push({ id: socket.id, userId: user.id, room: result, playerNumber: 1 });
 
         state[result] = duelHandler.initDuel();
 
@@ -112,6 +116,10 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinRoom", async (room, user) => {
+        const canJoin = clientData.findIndex((e) => e.userId === user.id) === -1;
+
+        if (!canJoin) return socket.emit("alreadyInGame");
+
         const usersInRoom = (await io.in(room).fetchSockets()).length;
 
         if (!usersInRoom) {
@@ -119,7 +127,7 @@ io.on("connection", (socket) => {
         } else if (usersInRoom > 1) {
             socket.emit("fullGame");
         } else {
-            clientData.push({ id: socket.id, room: room, playerNumber: 2 });
+            clientData.push({ id: socket.id, userId: user.id, room: room, playerNumber: 2 });
 
             state[room].players[1].name = user.username;
             state[room].players[1].level = user.user_level;
