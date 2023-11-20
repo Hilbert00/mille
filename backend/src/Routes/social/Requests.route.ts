@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/requests", verifyToken, verifyRole, (req, res) => {
     const query =
-        "SELECT br.id_request, br.status, u.id AS user_id, u.username, u.user_behavior, br.create_time FROM ban_request AS br LEFT JOIN answer_report AS ar ON br.id_reportAnswer = ar.id_report LEFT JOIN answer AS a ON a.id_answer = ar.id_answer LEFT JOIN post_report AS pr ON br.id_reportPost = pr.id_report LEFT JOIN post AS p ON p.id_post = pr.id_post LEFT JOIN user AS u ON u.id = a.id_user OR u.id = p.id_user WHERE br.status = 0;";
+        "SELECT br.id_request, br.status, u.id AS user_id, u.picture AS user_picture, u.username, u.user_behavior, br.create_time FROM ban_request AS br LEFT JOIN answer_report AS ar ON br.id_reportAnswer = ar.id_report LEFT JOIN answer AS a ON a.id_answer = ar.id_answer LEFT JOIN post_report AS pr ON br.id_reportPost = pr.id_report LEFT JOIN post AS p ON p.id_post = pr.id_post LEFT JOIN user AS u ON u.id = a.id_user OR u.id = p.id_user WHERE br.status = 0;";
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);
@@ -22,7 +22,7 @@ router.get("/requests", verifyToken, verifyRole, (req, res) => {
 router.get("/request", verifyToken, verifyRole, (req, res) => {
     if (req.query.id === undefined) return res.sendStatus(404);
 
-    const query = `SELECT br.id_request, br.status, u.id AS user_id, u.username, u.user_behavior, a.content AS answer_content, p.title AS post_title, p.description AS post_content, COALESCE(ar.description, pr.description) AS reason, COALESCE(ar.create_time, pr.create_time) AS create_time, br.create_time AS requested_at FROM ban_request AS br LEFT JOIN answer_report AS ar ON br.id_reportAnswer = ar.id_report LEFT JOIN answer AS a ON a.id_answer = ar.id_answer LEFT JOIN post_report AS pr ON br.id_reportPost = pr.id_report LEFT JOIN post AS p ON p.id_post = pr.id_post LEFT JOIN user AS u ON u.id = a.id_user OR u.id = p.id_user WHERE br.id_request = ${req.query.id} AND br.status = 0;`;
+    const query = `SELECT br.id_request, br.status, u.id AS user_id, u.picture AS user_picture, u.username, u.user_behavior, a.content AS answer_content, p.title AS post_title, p.description AS post_content, COALESCE(ar.description, pr.description) AS reason, COALESCE(ar.create_time, pr.create_time) AS create_time, br.create_time AS requested_at FROM ban_request AS br LEFT JOIN answer_report AS ar ON br.id_reportAnswer = ar.id_report LEFT JOIN answer AS a ON a.id_answer = ar.id_answer LEFT JOIN post_report AS pr ON br.id_reportPost = pr.id_report LEFT JOIN post AS p ON p.id_post = pr.id_post LEFT JOIN user AS u ON u.id = a.id_user OR u.id = p.id_user WHERE br.id_request = ${req.query.id} AND br.status = 0;`;
     conn.query(query, (err, result) => {
         if (err) console.error(err);
         result = result.length ? JSON.parse(JSON.stringify(result[0])) : {};

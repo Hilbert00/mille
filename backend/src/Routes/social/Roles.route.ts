@@ -9,7 +9,7 @@ const router = Router();
 
 router.get("/roles", verifyToken, verifyRole, (req, res) => {
     const query =
-        "SELECT id, username, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_behavior FROM user AS u LEFT JOIN moderator AS m ON m.user_id = u.id WHERE active = 1 ORDER BY username;";
+        "SELECT id, username, picture AS user_picture, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_behavior FROM user AS u LEFT JOIN moderator AS m ON m.user_id = u.id WHERE active = 1 ORDER BY username;";
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);

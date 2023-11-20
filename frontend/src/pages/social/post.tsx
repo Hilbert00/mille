@@ -35,6 +35,7 @@ const swal = withReactContent(Swal);
 
 // INTERFACES
 interface post {
+    user_picture: string;
     answers: number;
     area_name: string;
     create_time: string;
@@ -49,6 +50,7 @@ interface post {
 }
 
 interface answer {
+    user_picture: string;
     create_time: string;
     content: string;
     id_answer: number;
@@ -340,7 +342,12 @@ export default function Post() {
                         <div className="z-10 flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        e.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={40}
                                     height={40}
@@ -502,7 +509,12 @@ export default function Post() {
                                                 <div className="flex items-center gap-2">
                                                     <div className="flex items-center gap-2">
                                                         <Image
-                                                            src={"/images/usericons/default.png"}
+                                                            src={
+                                                                e2.user_picture
+                                                                    ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e2.user_picture}.webp`
+                                                                    : "/images/usericons/default.png"
+                                                            }
+                                                            className="rounded-full object-contain"
                                                             alt={"User"}
                                                             width={40}
                                                             height={40}
@@ -619,7 +631,12 @@ export default function Post() {
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        data.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${data.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={50}
                                     height={50}

@@ -260,6 +260,7 @@ export default function Duel() {
                             lvl={state.players[0].level}
                             username={`@${state.players[0].name}`}
                             title={state.players[0].title}
+                            picture={state.players[0].picture}
                         />
                         <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                         <div className={`flex w-20 flex-col items-center sm:mx-12 sm:w-56`}>
@@ -292,6 +293,7 @@ export default function Duel() {
                             lvl={state.players[0].level}
                             username={`@${state.players[0].name}`}
                             title={state.players[0].title}
+                            picture={state.players[0].picture}
                         />
                         <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                         <User
@@ -299,6 +301,7 @@ export default function Duel() {
                             lvl={state.players[1].level}
                             username={`@${state.players[1].name}`}
                             title={state.players[1].title}
+                            picture={state.players[1].picture}
                         />
                     </div>
                     {renderConfigs()}
@@ -358,6 +361,7 @@ export default function Duel() {
                         title={state.players[0].title}
                         points={state.players[0].points}
                         answers={state.players[0].questions}
+                        picture={state.players[0].picture}
                     />
                     <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
                     <User
@@ -367,6 +371,7 @@ export default function Duel() {
                         title={state.players[1].title}
                         points={state.players[1].points}
                         answers={state.players[1].questions}
+                        picture={state.players[1].picture}
                     />
                 </div>
             </main>

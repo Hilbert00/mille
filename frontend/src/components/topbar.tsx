@@ -42,6 +42,13 @@ export default function Topbar(props: TopbarProps) {
         </div>
     );
 
+    if (!Object.keys(user).length)
+        return (
+            <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
+                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl"></nav>
+            </header>
+        );
+
     if (props.type === "social")
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
@@ -53,7 +60,12 @@ export default function Topbar(props: TopbarProps) {
                     <div className="h-11 w-11">
                         <Link href={`/user?name=${user.username}`}>
                             <Image
-                                src={"/images/usericons/default.png"}
+                                src={
+                                    user.picture
+                                        ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
+                                        : "/images/usericons/default.png"
+                                }
+                                className="h-full object-contain rounded-full"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -80,7 +92,12 @@ export default function Topbar(props: TopbarProps) {
                     <div className="h-11 w-11">
                         <Link href={`/user?name=${user.username}`}>
                             <Image
-                                src={"/images/usericons/default.png"}
+                                src={
+                                    user.picture
+                                        ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
+                                        : "/images/usericons/default.png"
+                                }
+                                className="h-full object-contain rounded-full"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -104,7 +121,12 @@ export default function Topbar(props: TopbarProps) {
                 <div className="h-11 w-11">
                     <Link href={`/user?name=${user.username}`}>
                         <Image
-                            src={"/images/usericons/default.png"}
+                            src={
+                                user.picture
+                                    ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
+                                    : "/images/usericons/default.png"
+                            }
+                            className="h-full object-contain rounded-full"
                             width={100}
                             height={100}
                             alt={"User Icon"}

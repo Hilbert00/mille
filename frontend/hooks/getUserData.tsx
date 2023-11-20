@@ -5,6 +5,7 @@ interface UserData {
     id: number;
     username: string;
     title: string;
+    picture: string;
     email: string;
     user_level: number;
     user_coins: number;
@@ -52,16 +53,14 @@ export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: st
 
                 setData(data);
             } catch (err) {
-                if (calledPush) {
-                    return;
-                }
+                if (calledPush) return;
 
+                setCalledPush(true);
                 if (isLogin) router.push("/login");
                 else router.push("/solo");
-                setCalledPush(true);
             }
         })();
-    }, [data.username, userPath]);
+    }, [data.username, userPath, calledPush]);
 
     if (isProfile && !userPath) return [{} as UserData];
     return [data];

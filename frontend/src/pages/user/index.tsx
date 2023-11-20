@@ -72,38 +72,50 @@ export default function User() {
 
             <Topbar type="default" />
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
-                <div className="flex w-full flex-col items-center sm:flex-row sm:justify-between">
-                    <div className="flex w-full flex-col items-center sm:w-[45%]">
-                        <div className="w-full">
-                            <div className="relative mx-auto h-32 w-32 sm:h-56 sm:w-56">
-                                {user.isUser && (
-                                    <>
-                                        <Link href={"/user/edit"} className="absolute top-0 -left-12 h-10 w-10">
-                                            <TbEdit className="h-10 w-10" />
-                                        </Link>
-                                        <button className="absolute bottom-0 -left-12 h-10 w-10" onClick={logoff}>
-                                            <TbDoorExit className="h-10 w-10 text-red-600" />
-                                        </button>
-                                    </>
-                                )}
-                                <Behavior classname="absolute -right-12">{user.user_behavior}</Behavior>
-                                <div className="absolute bottom-0 -right-12 flex h-11 w-11 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600">
-                                    <span className="font-semibold text-primary-white">{user.user_level}</span>
+                <div className="flex w-full flex-col items-center sm:flex-row sm:justify-center">
+                    <div className="flex w-full flex-col items-center">
+                        <div className="w-full sm:flex items-center flex-col">
+                            <div className="relative flex justify-center sm:inline-block">
+                                <div className="absolute left-0 flex h-full flex-col justify-between sm:static sm:block">
+                                    {user.isUser && (
+                                        <>
+                                            <Link href={"/user/edit"} className="top-0 -left-12 h-10 w-10 sm:absolute">
+                                                <TbEdit className="h-10 w-10" />
+                                            </Link>
+                                            <button
+                                                className="bottom-0 -left-12 h-10 w-10 sm:absolute"
+                                                onClick={logoff}
+                                            >
+                                                <TbDoorExit className="h-10 w-10 text-red-600" />
+                                            </button>
+                                        </>
+                                    )}
+                                    <Behavior classname="sm:absolute -right-12">{user.user_behavior}</Behavior>
+                                    {/* <div className="bottom-0 -right-12 flex h-11 w-11 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600 sm:absolute">
+                                        <span className="font-semibold text-primary-white">{user.user_level}</span>
+                                    </div> */}
                                 </div>
-                                <Image
-                                    src={"/images/usericons/default.png"}
-                                    alt={"User"}
-                                    width={224}
-                                    height={224}
-                                    priority
-                                ></Image>
+                                <div className="h-40 w-40 self-center sm:h-56 sm:w-56">
+                                    <Image
+                                        src={
+                                            user.picture
+                                                ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
+                                                : "/images/usericons/default.png"
+                                        }
+                                        alt={"User"}
+                                        width={224}
+                                        height={224}
+                                        className="h-full object-contain rounded-full"
+                                        priority
+                                    ></Image>
+                                </div>
                             </div>
                             <div className="mt-3">
                                 <h1 className="text-center text-3xl font-semibold">@{user.username}</h1>
                                 <p className="text-center text-xl">{user.title}</p>
                             </div>
                         </div>
-                        <div className="mt-6 flex w-full justify-between">
+                        <div className="mt-10 flex w-full justify-between sm:justify-center sm:gap-32">
                             <div>
                                 <Image src="/images/sword.png" width={80} height={80} alt="duels" />
                                 <div className="mt-4">
@@ -112,14 +124,14 @@ export default function User() {
                                 </div>
                             </div>
                             <div>
-                                <Image src="/images/crown.png" width={80} height={80} alt="duels" />
+                                <Image src="/images/crown.png" width={80} height={80} alt="wins" />
                                 <div className="mt-4">
                                     <h1 className="text-center text-4xl font-black">{user.challenge_wins}</h1>
                                     <h2 className="text-center text-xl font-bold">Vitórias</h2>
                                 </div>
                             </div>
                             <div>
-                                <Image src="/images/calendar.png" width={80} height={80} alt="duels" />
+                                <Image src="/images/calendar.png" width={80} height={80} alt="days" />
                                 <div className="mt-4">
                                     <h1 className="text-center text-4xl font-black">{user.user_sequence}</h1>
                                     <h2 className="text-center text-xl font-bold">Dias</h2>
@@ -127,13 +139,13 @@ export default function User() {
                             </div>
                         </div>
                     </div>
-                    <hr className="my-5 w-full border-y-2 border-zinc-300 dark:border-zinc-900 sm:my-0 sm:h-96 sm:w-1 sm:border-x-2 sm:border-t-0" />
+                    {/* <hr className="my-5 w-full border-y-2 border-zinc-300 dark:border-zinc-900 sm:my-0 sm:h-96 sm:w-1 sm:border-x-2 sm:border-t-0" />
                     <div className="w-full sm:mb-0 sm:w-[45%]">
                         <h2 className="mb-3 text-xl font-bold">Medalhas:</h2>
                         <div className="flex h-40 w-full flex-col items-center justify-center rounded-xl bg-primary-white dark:bg-zinc-800 sm:h-96">
                             <span className="text-4xl font-semibold">EM BREVE</span>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </main>
 

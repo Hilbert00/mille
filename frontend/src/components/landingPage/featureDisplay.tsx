@@ -8,7 +8,7 @@ interface FeatureProps {
 
 export default function FeatureDisplay(props: FeatureProps) {
     return (
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 py-5 text-primary-white">
             <div className="w-[60%] sm:w-[70%]">
                 <h2 className="mb-1 text-base font-medium sm:mb-3 sm:text-3xl">{props.title}</h2>
                 <p className="text-sm font-light sm:text-2xl">{props.children}</p>

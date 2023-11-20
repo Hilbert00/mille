@@ -20,6 +20,7 @@ export function emptyPlayerSlot() {
         name: "",
         level: 0,
         title: "",
+        picture: null,
         points: 0,
         questions: [],
     };

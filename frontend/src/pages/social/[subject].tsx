@@ -30,6 +30,7 @@ const swal = withReactContent(Swal);
 
 // INTERFACES
 interface post {
+    user_picture: string;
     answers: number;
     area_name: string;
     create_time: string;
@@ -314,7 +315,17 @@ export default function Community(props: any) {
 
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <Image src={"/images/usericons/default.png"} alt={"User"} width={25} height={25}></Image>
+                            <Image
+                                src={
+                                    e.user_picture
+                                        ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
+                                        : "/images/usericons/default.png"
+                                }
+                                className="rounded-full object-contain"
+                                alt={"User"}
+                                width={25}
+                                height={25}
+                            ></Image>
                             <Link href={"/user?name=" + e.username}>@{e.username}</Link>
                         </div>
                         <p>{dayjs(e.create_time).fromNow()}</p>

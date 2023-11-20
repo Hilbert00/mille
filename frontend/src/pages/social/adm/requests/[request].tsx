@@ -23,6 +23,7 @@ import Image from "next/image";
 
 // INTERFACES
 interface request {
+    user_picture: string;
     answer_content?: string;
     create_time: string;
     id_request: number;
@@ -130,7 +131,12 @@ export default function BanRequest() {
                         <div className="flex items-center gap-2 sm:absolute sm:left-0">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        request.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${request.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={50}
                                     height={50}

@@ -23,8 +23,8 @@ router.get("/report", verifyToken, verifyRole, (req, res) => {
 
     const query =
         req.query.isPost === "true"
-            ? `SELECT pr.id_report, pr.description AS reason, 1 AS is_post, pr.status, p.id_post, u.id AS id_user, u.username, u.user_behavior, p.title, p.description, p.create_time AS post_created, pr.create_time AS report_time FROM post_report AS pr JOIN post AS p ON pr.id_post = p.id_post JOIN user AS u ON p.id_user = u.id WHERE pr.id_report = ${req.query.id} AND pr.status = 0;`
-            : `SELECT ar.id_report, ar.description AS reason, 0 AS is_post, ar.status, a.id_answer, u.id AS id_user, u.username, u.user_behavior, a.content, a.create_time AS answer_created, ar.create_time AS report_time FROM answer_report AS ar JOIN answer AS a ON ar.id_answer = a.id_answer JOIN user AS u ON a.id_user = u.id WHERE ar.id_report = ${req.query.id} AND ar.status = 0;`;
+            ? `SELECT pr.id_report, pr.description AS reason, 1 AS is_post, pr.status, p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, u.user_behavior, p.title, p.description, p.create_time AS post_created, pr.create_time AS report_time FROM post_report AS pr JOIN post AS p ON pr.id_post = p.id_post JOIN user AS u ON p.id_user = u.id WHERE pr.id_report = ${req.query.id} AND pr.status = 0;`
+            : `SELECT ar.id_report, ar.description AS reason, 0 AS is_post, ar.status, a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, u.user_behavior, a.content, a.create_time AS answer_created, ar.create_time AS report_time FROM answer_report AS ar JOIN answer AS a ON ar.id_answer = a.id_answer JOIN user AS u ON a.id_user = u.id WHERE ar.id_report = ${req.query.id} AND ar.status = 0;`;
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);

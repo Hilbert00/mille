@@ -23,6 +23,7 @@ import Image from "next/image";
 
 // INTERFACES
 interface report {
+    user_picture: string;
     answer_created?: string;
     content?: string;
     description?: string;
@@ -195,7 +196,12 @@ export default function Report() {
                         <div className="flex items-center gap-2 sm:absolute sm:left-0">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        report.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${report.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={50}
                                     height={50}
@@ -247,7 +253,7 @@ export default function Report() {
                         >
                             Recusar Denúncia
                         </Button>
-                        
+
                         <Button
                             type="button"
                             bgColor="#C81652"

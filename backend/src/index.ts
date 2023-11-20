@@ -32,6 +32,7 @@ import exit from "./Routes/auth/Exit.route.js";
 import emailVerification from "./Routes/auth/EmailVerification.route.js";
 
 import user from "./Routes/User.route.js";
+import picture from "./Routes/pictureHandler/Picture.route.js";
 import titles from "./Routes/Titles.route.js";
 import quiz from "./Routes/Quiz.route.js";
 import world from "./Routes/solo/World.route.js";
@@ -51,6 +52,7 @@ app.use("/api/auth/exit", exit);
 app.use("/api/auth/verify", emailVerification);
 
 app.use("/api/user", user);
+app.use("/api/picture", picture);
 app.use("/api/titles", titles);
 app.use("/api/quiz", quiz);
 app.use("/api/world", world);
@@ -76,6 +78,7 @@ const state: {
             name: string;
             level: number;
             title: string;
+            picture: string;
             points: number;
             questions: {}[];
         }[];
@@ -107,8 +110,9 @@ io.on("connection", (socket) => {
         state[result] = duelHandler.initDuel();
 
         state[result].players[0].name = user.username;
-        state[result].players[0].level = user.user_level;
+        // state[result].players[0].level = user.user_level;
         state[result].players[0].title = user.title;
+        state[result].players[0].picture = user.picture;
 
         socket.join(result);
 
@@ -130,8 +134,9 @@ io.on("connection", (socket) => {
             clientData.push({ id: socket.id, userId: user.id, room: room, playerNumber: 2 });
 
             state[room].players[1].name = user.username;
-            state[room].players[1].level = user.user_level;
+            // state[room].players[1].level = user.user_level;
             state[room].players[1].title = user.title;
+            state[room].players[1].picture = user.picture;
 
             socket.join(room);
             io.to(room).emit("joinedRoom", JSON.stringify(state[room]));

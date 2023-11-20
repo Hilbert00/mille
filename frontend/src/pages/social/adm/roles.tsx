@@ -20,6 +20,7 @@ const swal = withReactContent(Swal);
 
 // INTERFACES
 interface user {
+    user_picture: string;
     id: number;
     type: 0 | 1 | 2;
     user_behavior: number;
@@ -64,7 +65,12 @@ export default function BanRequests() {
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        e.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={40}
                                     height={40}

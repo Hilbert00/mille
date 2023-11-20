@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 
 import Topbar from "@/components/topbar";
 import Menubar from "@/components/menubar";
@@ -11,13 +10,15 @@ import { getUserData } from "hooks/getUserData";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
 
+const CLOUD_NAME = "dxmh73o0j";
+const CLOUD_KEY = "912131322178127";
+
 export default function User() {
     const router = useRouter();
     const [user] = getUserData(false, false);
     const [username, setUsername] = useState("");
     const [title, setTitle] = useState(-1);
     const [available, setAvailable] = useState(null as null | { title_id: number; title: string }[]);
-    const [picture, setPicture] = useState("");
 
     useEffect(() => {
         if (!Object.keys(user).length) return;
@@ -25,6 +26,7 @@ export default function User() {
             router.push("/solo");
             return;
         }
+
         if (available && available.length) {
             if (title === -1) {
                 if (user.title.toLowerCase() === "novato") setTitle(0);
@@ -34,28 +36,75 @@ export default function User() {
             return;
         }
 
-        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/titles", {
-            credentials: "include",
-        })
-            .then((res) => res.json())
-            .then((json) => setAvailable(json));
+        if (!available) {
+            fetch(process.env.NEXT_PUBLIC_API_URL + "/api/titles", {
+                credentials: "include",
+            })
+                .then((res) => res.json())
+                .then((json) => setAvailable(json));
+        }
 
         setUsername(user.username);
     }, [Object.keys(user).length, title, available]);
 
-    function updateProfile(e: FormEvent<HTMLFormElement>) {
+    async function updateProfile(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!username) return;
 
         const data = {} as { username?: string; active_title?: number; picture?: string };
+
         if (username && username !== user.username) data.username = username;
+
         if (
             available?.find((e) => e.title_id === title)?.title !== user.title &&
             title >= 0 &&
             (title === 0 || available?.findIndex((e) => e.title_id === title) !== -1)
         )
             data.active_title = title;
-        if (picture) data.picture = picture;
+
+        // @ts-ignore
+        const picture = document?.querySelector("#picture")?.files[0];
+
+        if (picture) {
+            const signatureResponse = await (
+                await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/picture/signature", {
+                    credentials: "include",
+                })
+            ).json();
+
+            if (user.picture) {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/picture/destroy", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ public_id: [user.picture] }),
+                });
+            }
+
+            const fd = new FormData();
+            fd.append("api_key", CLOUD_KEY);
+            fd.append("signature", signatureResponse.signature);
+            fd.append("timestamp", signatureResponse.timestamp);
+            fd.append("file", picture);
+
+            const uploadResponse = await (
+                await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                    method: "POST",
+                    body: fd,
+                })
+            ).json();
+
+            const photoData = {
+                public_id: uploadResponse.public_id,
+                version: uploadResponse.version,
+                signature: uploadResponse.signature,
+            };
+
+            data.picture = photoData.public_id;
+        }
 
         if (Object.keys(data).length) {
             const url = process.env.NEXT_PUBLIC_API_URL + "/api/user/update";
@@ -115,7 +164,7 @@ export default function User() {
                             id="username"
                             type="text"
                             value={username}
-                            className="h-11 flex-1 rounded-xl border-none bg-neutral-100 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
+                            className="h-11 flex-1 rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800 sm:py-0"
                             onChange={(e) => setUsername(e.target.value)}
                         />
                     </div>
@@ -149,7 +198,7 @@ export default function User() {
                             id="picture"
                             type="file"
                             className="h-11 cursor-pointer rounded-xl bg-neutral-100 pr-3 text-neutral-400 file:mr-5 file:h-11 file:cursor-pointer file:border-none dark:bg-zinc-800 sm:w-2/3"
-                            disabled
+                            accept=".png,.jpg,.jpeg,.webp"
                         />
                     </div>
 

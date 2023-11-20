@@ -20,6 +20,7 @@ import Image from "next/image";
 
 // INTERFACES
 interface request {
+    user_picture: string;
     create_time: string;
     id_request: number;
     status: boolean;
@@ -58,11 +59,16 @@ export default function BanRequests() {
                     key={e.id_request}
                     className="relative flex w-full flex-col gap-3 rounded-xl bg-primary-white p-3 transition-all duration-500 dark:bg-primary sm:hover:scale-110"
                 >
-                    <div className="flex items-center relative">
-                        <div className="flex items-center gap-2 absolute">
+                    <div className="relative flex items-center">
+                        <div className="absolute flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
-                                    src={"/images/usericons/default.png"}
+                                    src={
+                                        e.user_picture
+                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
+                                            : "/images/usericons/default.png"
+                                    }
+                                    className="rounded-full object-contain"
                                     alt={"User"}
                                     width={40}
                                     height={40}
