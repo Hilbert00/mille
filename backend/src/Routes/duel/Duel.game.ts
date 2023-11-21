@@ -12,6 +12,7 @@ export function createState() {
         questionQuantity: 0,
         questions: [],
         status: 0 as 0 | 1 | 2,
+        private: true,
     };
 }
 

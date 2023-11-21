@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface LogoType {
-    type: "basic" | "conffeti" | "full";
+    type: "basic" | "full";
 }
 
 export default function Logo(props: LogoType) {

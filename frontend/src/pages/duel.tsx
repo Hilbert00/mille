@@ -20,10 +20,12 @@ export default function Duel() {
     const [user] = getUserData(false);
     const router = useRouter();
 
-    const [state, setState] = useState({} as any);
     const roomID = useRef("");
-    const [matchResult, setMatchResult] = useState(["", ""]);
+    const [state, setState] = useState({} as any);
     const [areas, setAreas] = useState({} as any);
+    const [search, setSearch] = useState(false);
+    const [roomCode, setRoomCode] = useState("");
+    const [matchResult, setMatchResult] = useState(["", ""]);
 
     const playerNumber = useRef(0);
     const socket = useRef(
@@ -144,14 +146,7 @@ export default function Duel() {
             }
         }
 
-        if (!roomID.current || !playerNumber) {
-            socket.current.connect();
-            if (router.query.roomID) {
-                socket.current.emit("joinRoom", router.query.roomID, user);
-            } else {
-                socket.current.emit("createRoom", user);
-            }
-        }
+        if (!roomID.current || !playerNumber) socket.current.connect();
 
         socket.current.on("createdRoom", (room, state) => {
             roomID.current = room;
@@ -168,8 +163,8 @@ export default function Duel() {
                 color: "#fff",
             });
 
+            setSearch(false);
             router.replace("/duel", "", { shallow: true });
-            socket.current.emit("createRoom", user);
         });
 
         socket.current.on("fullGame", () => {
@@ -181,8 +176,20 @@ export default function Duel() {
                 color: "#fff",
             });
 
+            setSearch(false);
             router.replace("/duel", "", { shallow: true });
-            socket.current.emit("createRoom", user);
+        });
+
+        socket.current.on("noGamesFound", () => {
+            setSearch(false);
+
+            swal.fire({
+                title: "Oops",
+                text: "Nenhuma partida disponível encontrada!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            });
         });
 
         socket.current.on("alreadyInGame", () => {
@@ -198,11 +205,18 @@ export default function Duel() {
         });
 
         socket.current.on("joinedRoom", (state) => {
-            if (router.query.roomID && !playerNumber.current) {
-                roomID.current = String(router.query.roomID);
+            if (!playerNumber.current) {
+                roomID.current = roomCode;
+                setRoomCode("");
+
                 playerNumber.current = 2;
             }
 
+            setSearch(false);
+            setState(JSON.parse(state));
+        });
+
+        socket.current.on("privacyUpdated", (state) => {
             setState(JSON.parse(state));
         });
 
@@ -214,11 +228,7 @@ export default function Duel() {
             setState(JSON.parse(state));
         });
 
-        socket.current.on("exitedRoom", (newState) => {
-            if (playerNumber.current === 2) {
-                playerNumber.current = 1;
-            }
-
+        socket.current.on("exitedRoom", () => {
             swal.fire({
                 title: "Oops",
                 text: "O outro usuário deixou o duelo!",
@@ -227,11 +237,12 @@ export default function Duel() {
                 color: "#fff",
             });
 
-            setState(JSON.parse(newState));
+            playerNumber.current = 0;
+            setState({});
         });
     }, [JSON.stringify(state), Object.keys(user).length, router.query]);
 
-    if (!user.username || !Object.keys(state).length)
+    if (!user.username)
         return (
             <>
                 <Head>
@@ -239,6 +250,75 @@ export default function Duel() {
                 </Head>
 
                 <Loading />
+
+                <Menubar active={2}></Menubar>
+            </>
+        );
+
+    if (!Object.keys(state).length)
+        return (
+            <>
+                <Head>
+                    <title>Duelo - Mille</title>
+                </Head>
+
+                <Topbar type="default" />
+
+                <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
+                    <div className="mx-auto flex flex-col items-center justify-center gap-4 sm:w-2/3 [&>*:nth-child(2)]:mt-6 ">
+                        <User
+                            side="left"
+                            lvl={user.user_level}
+                            username={`@${user.username}`}
+                            title={user.title}
+                            picture={user.picture}
+                        />
+
+                        <Button
+                            type={"button"}
+                            action={() => socket.current.emit("createRoom", user)}
+                            className="w-full text-xl"
+                            bgColor="#16A44A"
+                        >
+                            Criar Sala
+                        </Button>
+
+                        <Button
+                            type={"button"}
+                            action={findMatch}
+                            bgColor="#EAB308"
+                            className="w-full text-xl"
+                            disable={search}
+                        >
+                            Procurar Sala
+                        </Button>
+
+                        <div className="flex w-full items-center justify-between gap-4">
+                            <input
+                                name="username"
+                                id="username"
+                                type="text"
+                                placeholder="Código da Sala"
+                                value={roomCode}
+                                className="flex-1 rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
+                                onChange={(e) => setRoomCode(e.target.value)}
+                            />
+
+                            <Button
+                                type={"button"}
+                                className="flex-1 text-xl"
+                                disable={!roomCode}
+                                action={() => {
+                                    if (!roomCode) return;
+
+                                    socket.current.emit("joinRoom", user, roomCode);
+                                }}
+                            >
+                                Entrar
+                            </Button>
+                        </div>
+                    </div>
+                </main>
 
                 <Menubar active={2}></Menubar>
             </>
@@ -254,7 +334,7 @@ export default function Duel() {
                 <Topbar type="default" />
 
                 <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
-                    <div className="flex flex-col items-center justify-between sm:flex-row">
+                    <div className="flex justify-center">
                         <User
                             side="left"
                             lvl={state.players[0].level}
@@ -262,14 +342,24 @@ export default function Duel() {
                             title={state.players[0].title}
                             picture={state.players[0].picture}
                         />
-                        <h1 className="inline select-none text-7xl font-semibold text-red-600 sm:text-9xl">&times;</h1>
-                        <div className={`flex w-20 flex-col items-center sm:mx-12 sm:w-56`}>
-                            <div className="mt-3 inline-block">
-                                <Button type={"button"} action={getInviteLink} className="text-xl">
-                                    Convide um amigo
-                                </Button>
-                            </div>
+                    </div>
+
+                    <div className="mt-20 flex flex-col items-center justify-center gap-8">
+                        <div>
+                            <h1 className="text-center text-5xl font-semibold">{roomID.current}</h1>
+                            <span className="block text-center">Código da Sala</span>
                         </div>
+
+                        <label className="me-5 relative flex cursor-pointer flex-col items-center gap-2">
+                            <input
+                                type="checkbox"
+                                value={state.private}
+                                className="peer sr-only"
+                                onChange={() => socket.current.emit("updatePrivacy", !state.private, roomID.current)}
+                            />
+                            <div className="peer relative h-7 w-14 rounded-full bg-red-600 after:absolute after:left-[4px] after:top-0.5 after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none rtl:peer-checked:after:-translate-x-full dark:border-gray-600"></div>
+                            <span className="">{state.private ? "Privada" : "Pública"}</span>
+                        </label>
                     </div>
                 </main>
 
@@ -380,15 +470,9 @@ export default function Duel() {
         </>
     );
 
-    function getInviteLink() {
-        swal.fire({
-            title: "Convite de Duelo",
-            html: `<p>Copie este link e envie para seu amigo: <a class="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" href="${
-                window.location.origin + "/duel?roomID=" + roomID.current
-            }">${window.location.origin + "/duel?roomID=" + roomID.current}</a></p>`,
-            background: "#1E1E1E80",
-            color: "#fff",
-        });
+    function findMatch() {
+        setSearch(true);
+        socket.current.emit("joinRoom", user, null);
     }
 
     function renderConfigs() {

@@ -59,10 +59,10 @@ export default function BanRequests() {
             return (
                 <div
                     key={e.id}
-                    className="relative flex w-full flex-col gap-3 rounded-xl bg-primary-white p-3 transition-all duration-500 dark:bg-primary sm:hover:scale-110"
+                    className="relative flex w-full flex-col gap-3 rounded-xl bg-primary-white p-3 transition-all duration-500 dark:bg-primary"
                 >
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between gap-5">
+                        <div className="flex items-center gap-2 flex-1">
                             <div className="flex items-center gap-2">
                                 <Image
                                     src={
@@ -77,13 +77,13 @@ export default function BanRequests() {
                                 ></Image>
                             </div>
 
-                            <div className="flex flex-col">
-                                <Link href={"/user?name=" + e.username} className="w-24 font-medium sm:w-auto">
+                            <div className="flex flex-col flex-1 gap-1">
+                                <Link href={"/user?name=" + e.username} className="w-full font-medium sm:w-auto">
                                     @{e.username}
                                 </Link>
                                 <select
                                     name="type"
-                                    className="resize-none appearance-none truncate rounded-md border-none bg-neutral-100 px-2 text-sm text-neutral-400 outline-none dark:bg-zinc-800"
+                                    className="resize-none appearance-none truncate rounded-md border-none bg-neutral-100 px-2 text-sm text-neutral-400 outline-none dark:bg-zinc-800 w-48"
                                     value={e.type}
                                     onChange={(ev) => {
                                         handleChange(e.id, Number(ev.currentTarget.value));

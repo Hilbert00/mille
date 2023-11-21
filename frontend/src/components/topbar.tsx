@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getUserData } from "hooks/getUserData";
 
 import Behavior from "./social/behavior";
+import Logo from "./logo";
 
 interface TopbarProps {
     type: "default" | "solo" | "social";
@@ -52,10 +53,20 @@ export default function Topbar(props: TopbarProps) {
     if (props.type === "social")
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
-                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
-                    <Behavior>{user.user_behavior}</Behavior>
+                <nav className="relative mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
+                    <Link href={"/social"}>
+                        <Image
+                            src={`/images/logo/mille-logo-full.png`}
+                            alt={"Logo"}
+                            width={"120"}
+                            height={"60"}
+                            priority
+                        />
+                    </Link>
 
-                    {userCoins}
+                    <Behavior classname="absolute right-0 left-0 mx-auto">{user.user_behavior}</Behavior>
+
+                    {/* {userCoins} */}
 
                     <div className="h-11 w-11">
                         <Link href={`/user?name=${user.username}`}>
@@ -65,7 +76,7 @@ export default function Topbar(props: TopbarProps) {
                                         ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                         : "/images/usericons/default.png"
                                 }
-                                className="h-full object-contain rounded-full"
+                                className="h-full rounded-full object-contain"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -81,11 +92,21 @@ export default function Topbar(props: TopbarProps) {
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
                 <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
-                    <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
+                    <Link href={"/solo"}>
+                        <Image
+                            src={`/images/logo/mille-logo-full.png`}
+                            alt={"Logo"}
+                            width={"120"}
+                            height={"60"}
+                            priority
+                        />
+                    </Link>
+
+                    {/* <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
                         <span className="absolute right-0 left-0 top-3 text-center text-xl font-extrabold tracking-wide text-primary-white">
                             {user.user_sequence ?? 0}
                         </span>
-                    </div>
+                    </div> */}
 
                     {progressbar}
 
@@ -97,7 +118,7 @@ export default function Topbar(props: TopbarProps) {
                                         ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                         : "/images/usericons/default.png"
                                 }
-                                className="h-full object-contain rounded-full"
+                                className="h-full rounded-full object-contain"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -112,11 +133,15 @@ export default function Topbar(props: TopbarProps) {
     return (
         <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
             <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
-                <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
+                <Link href={"/solo"}>
+                    <Image src={`/images/logo/mille-logo-full.png`} alt={"Logo"} width={"120"} height={"60"} priority />
+                </Link>
+
+                {/* <div className="relative h-11 w-11 bg-[url(/images/calendar.png)] bg-cover">
                     <span className="absolute right-0 left-0 top-3 text-center text-xl font-extrabold tracking-wide text-primary-white">
                         {user.user_sequence ?? 0}
                     </span>
-                </div>
+                </div> */}
 
                 <div className="h-11 w-11">
                     <Link href={`/user?name=${user.username}`}>
@@ -126,7 +151,7 @@ export default function Topbar(props: TopbarProps) {
                                     ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                     : "/images/usericons/default.png"
                             }
-                            className="h-full object-contain rounded-full"
+                            className="h-full rounded-full object-contain"
                             width={100}
                             height={100}
                             alt={"User Icon"}

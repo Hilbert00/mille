@@ -88,9 +88,10 @@ const state: {
         questionQuantity: number;
         questions: {}[];
         status: 0 | 1 | 2;
+        private: boolean;
     };
 } = {};
-const clientData: { id: string; userId: number; room: string; playerNumber: 1 | 2 }[] = [];
+let clientData: { id: string; userId: number; room: string; playerNumber: 1 | 2 }[] = [];
 
 io.on("connection", (socket) => {
     socket.on("createRoom", (user) => {
@@ -98,7 +99,7 @@ io.on("connection", (socket) => {
 
         if (!canCreate) return socket.emit("alreadyInGame");
 
-        const characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const characters = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789";
 
         let result = "";
         for (let i = 0; i < 8; i++) {
@@ -119,10 +120,16 @@ io.on("connection", (socket) => {
         socket.emit("createdRoom", result, JSON.stringify(state[result]));
     });
 
-    socket.on("joinRoom", async (room, user) => {
+    socket.on("joinRoom", async (user, room) => {
         const canJoin = clientData.findIndex((e) => e.userId === user.id) === -1;
 
         if (!canJoin) return socket.emit("alreadyInGame");
+
+        if (!room) {
+            room = Object.keys(state).find((key) => !state[key].players[1].name && !state[key].private);
+
+            if (!room) return socket.emit("noGamesFound");
+        }
 
         const usersInRoom = (await io.in(room).fetchSockets()).length;
 
@@ -143,6 +150,11 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("updatePrivacy", (isPrivate, room) => {
+        state[room] = { ...state[room], private: isPrivate };
+        io.to(room).emit("privacyUpdated", JSON.stringify(state[room]));
+    });
+
     socket.on("gameStart", (roomState, room) => {
         state[room] = { ...JSON.parse(roomState), status: 1 };
         io.to(room).emit("gameInit", JSON.stringify(state[room]));
@@ -153,31 +165,11 @@ io.on("connection", (socket) => {
 
         if (index !== -1) {
             const room = clientData[index].room;
-            const playerNumber = clientData[index].playerNumber;
 
-            if (state[room].players[1].name) {
-                if (playerNumber === 1) {
-                    state[room].players[0] = { ...state[room].players[1] };
+            delete state[room];
+            clientData = clientData.filter((e) => e.room !== room);
 
-                    const remainingPlayer = clientData.find((e) => e.room === room && e.id !== socket.id);
-                    if (remainingPlayer) remainingPlayer.playerNumber = 1;
-                }
-
-                state[room].subject = "";
-                state[room].area = "";
-                state[room].timer = 0;
-                state[room].questionQuantity = 0;
-                state[room].questions = [];
-                state[room].status = 0;
-                state[room].players[0].points = 0;
-                state[room].players[0].questions.length = 0;
-                state[room].players[1] = duelHandler.emptyPlayerSlot();
-            } else {
-                delete state[room];
-            }
-
-            clientData.splice(index, 1);
-            io.to(room).emit("exitedRoom", JSON.stringify(state[room]));
+            io.to(room).emit("exitedRoom");
         }
     });
 
