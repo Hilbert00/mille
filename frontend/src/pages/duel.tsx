@@ -301,9 +301,9 @@ export default function Duel() {
                                 name="username"
                                 id="username"
                                 type="text"
-                                placeholder="Código da Sala"
+                                placeholder="Código"
                                 value={roomCode}
-                                className="flex-1 rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
+                                className="flex-1 max-w-[50%] rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
                                 onChange={(e) => setRoomCode(e.target.value)}
                             />
 
