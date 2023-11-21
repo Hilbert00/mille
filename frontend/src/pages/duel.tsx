@@ -243,7 +243,7 @@ export default function Duel() {
             playerNumber.current = 0;
             setState({});
         });
-    }, [JSON.stringify(state), Object.keys(user).length, router.query]);
+    }, [JSON.stringify(state), Object.keys(user).length]);
 
     if (!user.username)
         return (
@@ -303,7 +303,7 @@ export default function Duel() {
                                 type="text"
                                 placeholder="Código"
                                 value={roomCode}
-                                className="flex-1 max-w-[50%] rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
+                                className="max-w-[50%] flex-1 rounded-xl border-none bg-neutral-100 py-2 px-3 text-neutral-400 outline-none dark:bg-zinc-800"
                                 onChange={(e) => setRoomCode(e.target.value)}
                             />
 
