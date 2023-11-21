@@ -7,7 +7,6 @@ import Menubar from "@/components/menubar";
 import Loading from "@/components/loading";
 import Behavior from "@/components/social/behavior";
 
-import swal from "sweetalert2";
 import { getUserData } from "hooks/getUserData";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -19,23 +18,9 @@ export default function User() {
     const [user] = getUserData(false, true, username);
 
     function logoff() {
-        const url = process.env.NEXT_PUBLIC_API_URL + "/api/auth/exit";
+        localStorage.removeItem("AuthJWT");
 
-        fetch(url, {
-            method: "PUT",
-            credentials: "include",
-        }).then((res) => {
-            if (res.ok) return router.push("/login");
-            swal.fire({
-                title: "Oops",
-                text: "Ocorreu um erro inesperado!",
-                icon: "error",
-                background: "#1E1E1E80",
-                color: "#fff",
-            }).then(() => {
-                return router.push("/solo");
-            });
-        });
+        return router.push("/login");
     }
 
     useEffect(() => {
@@ -74,7 +59,7 @@ export default function User() {
             <main className="relative mx-auto max-w-[calc(100vw-40px)] pt-10 pb-24 md:max-w-3xl">
                 <div className="flex w-full flex-col items-center sm:flex-row sm:justify-center">
                     <div className="flex w-full flex-col items-center">
-                        <div className="w-full sm:flex items-center flex-col">
+                        <div className="w-full flex-col items-center sm:flex">
                             <div className="relative flex justify-center sm:inline-block">
                                 <div className="absolute left-0 flex h-full flex-col justify-between sm:static sm:block">
                                     {user.isUser && (
@@ -105,7 +90,7 @@ export default function User() {
                                         alt={"User"}
                                         width={224}
                                         height={224}
-                                        className="h-full object-contain rounded-full"
+                                        className="h-full rounded-full object-contain"
                                         priority
                                     ></Image>
                                 </div>

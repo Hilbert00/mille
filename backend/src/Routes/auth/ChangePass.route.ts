@@ -1,6 +1,5 @@
 import * as express from "express";
 import * as HashHelper from "../../Helpers/Hash.helper.js";
-import * as CookieHelper from "../../Helpers/Cookie.helper.js";
 import conn from "../../Config/Database.config.js";
 
 const router = express.Router();
@@ -33,9 +32,7 @@ router.put("/", (req, res) => {
                 console.error(err);
             }
 
-            const cookie = CookieHelper.generateUserCookie(result);
-
-            return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
+            return res.json(result);
         });
     });
 });

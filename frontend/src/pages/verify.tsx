@@ -61,6 +61,7 @@ export default function Home() {
                 body: JSON.stringify({ ...sendData, email }),
                 headers: {
                     Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                     "Content-Type": "application/json",
                 },
                 method: "PUT",

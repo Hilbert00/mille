@@ -86,6 +86,7 @@ export default function Post() {
         if (!Object.keys(data).length)
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post?id=${router.query.id}`, {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((json) => {
@@ -96,6 +97,7 @@ export default function Post() {
         if (!Object.keys(answers).length)
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/answers?id=${router.query.id}`, {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((json) => {
@@ -115,7 +117,7 @@ export default function Post() {
 
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/${route}/like`, {
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
             body: JSON.stringify({ postID, answerID, value }),
             method: "POST",
         });
@@ -176,7 +178,7 @@ export default function Post() {
     function handleBest(value: boolean, postID: number, answerID: number) {
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/answer/best`, {
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
             body: JSON.stringify({ postID, answerID, value }),
             method: "PUT",
         });
@@ -212,7 +214,7 @@ export default function Post() {
 
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/answer`, {
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
             body: JSON.stringify({ content: replyID ? reply : answer, postID, replyID }),
             method: "POST",
         })
@@ -230,6 +232,7 @@ export default function Post() {
                         setAnswer("");
                         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/answers`, {
                             credentials: "include",
+                            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
                         })
                             .then((res) => res.json())
                             .then((data) => {
@@ -281,7 +284,10 @@ export default function Post() {
 
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/${route}/report`, {
                 credentials: "include",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({ description, postID: id, answerID: id }),
                 method: "POST",
             })

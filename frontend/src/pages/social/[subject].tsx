@@ -66,6 +66,7 @@ export default function Community(props: any) {
 
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/world/${props.simple}`, {
             credentials: "include",
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
         })
             .then((res) => res.json())
             .then((data) => {
@@ -89,6 +90,7 @@ export default function Community(props: any) {
 
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/posts?subject=${props.id_subject}`, {
             credentials: "include",
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
         })
             .then((res) => res.json())
             .then((data) => {
@@ -101,7 +103,7 @@ export default function Community(props: any) {
     function handleVote(value: 1 | 0 | -1, postID: number) {
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post/like`, {
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
             body: JSON.stringify({ postID, value, all: true }),
             method: "POST",
         });
@@ -235,6 +237,7 @@ export default function Community(props: any) {
                     `/api/social/posts?subject=${props.id_subject}&recent=${filter?.recent}&solved=${filter?.solved}&area=${filter?.area}`,
                 {
                     credentials: "include",
+                    headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
                 }
             )
                 .then((res) => res.json())
@@ -410,7 +413,7 @@ export async function getStaticProps({ params }: any) {
     const url = process.env.NEXT_PUBLIC_API_URL + `/api/world`;
 
     try {
-        const response = await fetch(url, { credentials: "include" });
+        const response = await fetch(url);
 
         if (!response.ok) throw `${response.status}: ${response.statusText}`;
 

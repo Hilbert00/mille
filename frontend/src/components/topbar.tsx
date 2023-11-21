@@ -4,7 +4,6 @@ import Link from "next/link";
 import { getUserData } from "hooks/getUserData";
 
 import Behavior from "./social/behavior";
-import Logo from "./logo";
 
 interface TopbarProps {
     type: "default" | "solo" | "social";
@@ -30,7 +29,7 @@ export default function Topbar(props: TopbarProps) {
     );
 
     const progressbar = (
-        <div className="relative w-2/5">
+        <div className="right-0 left-0 mx-auto w-2/5 sm:absolute">
             <div className="relative flex h-8 w-full items-center overflow-hidden rounded-xl bg-neutral-200 dark:bg-neutral-700">
                 <div
                     className="flex h-8 items-center justify-center bg-green-600 transition-all"
@@ -64,7 +63,7 @@ export default function Topbar(props: TopbarProps) {
                         />
                     </Link>
 
-                    <Behavior classname="absolute right-0 left-0 mx-auto">{user.user_behavior}</Behavior>
+                    <Behavior classname="sm:absolute right-0 left-0 mx-auto">{user.user_behavior}</Behavior>
 
                     {/* {userCoins} */}
 
@@ -91,7 +90,7 @@ export default function Topbar(props: TopbarProps) {
     if (props.type === "solo")
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
-                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
+                <nav className="relative mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
                     <Link href={"/solo"}>
                         <Image
                             src={`/images/logo/mille-logo-full.png`}

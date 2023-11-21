@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 const { JWT_SECRET } = process.env;
 
 export default function verifyToken(req: Request, res: Response, next: NextFunction) {
-    const token: string = req.cookies.AuthJWT;
+    const token: string = req.headers.authorization.split(" ")[1];
 
     if (token == null) {
         return res.sendStatus(401);
@@ -18,6 +18,8 @@ export default function verifyToken(req: Request, res: Response, next: NextFunct
             console.log(err);
             return res.sendStatus(403);
         }
+
+        // @ts-ignore
         req.user = user;
         next();
     });

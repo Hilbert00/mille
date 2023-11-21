@@ -39,6 +39,7 @@ export default function User() {
         if (!available) {
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/titles", {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((json) => setAvailable(json));
@@ -69,6 +70,7 @@ export default function User() {
             const signatureResponse = await (
                 await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/picture/signature", {
                     credentials: "include",
+                    headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
                 })
             ).json();
 
@@ -78,6 +80,7 @@ export default function User() {
                     credentials: "include",
                     headers: {
                         Accept: "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ public_id: [user.picture] }),
@@ -114,6 +117,7 @@ export default function User() {
                 body: JSON.stringify(data),
                 headers: {
                     Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                     "Content-Type": "application/json",
                 },
             }).then((res) => {

@@ -93,7 +93,11 @@ export default function Solo(props: Props) {
                 await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                     credentials: "include",
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                        "Content-Type": "application/json",
+                    },
                     body: JSON.stringify(bodyData),
                 });
 
@@ -195,7 +199,7 @@ export async function getStaticProps({ params }: any) {
     const url = process.env.NEXT_PUBLIC_API_URL + `/api/world/${params.subject}`;
 
     try {
-        const response = await fetch(url, { credentials: "include" });
+        const response = await fetch(url);
 
         if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
@@ -204,7 +208,7 @@ export async function getStaticProps({ params }: any) {
         const url2 = process.env.NEXT_PUBLIC_API_URL + "/api/world";
 
         try {
-            const response = await fetch(url2, { credentials: "include" });
+            const response = await fetch(url2);
 
             if (!response.ok) throw `${response.status}: ${response.statusText}`;
 

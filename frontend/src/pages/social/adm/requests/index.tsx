@@ -44,6 +44,7 @@ export default function BanRequests() {
         if (!requests.length)
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/social/requests", {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {

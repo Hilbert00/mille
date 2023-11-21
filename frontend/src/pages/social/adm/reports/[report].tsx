@@ -66,6 +66,7 @@ export default function Report() {
         if (!Object.keys(report).length && typeof isPost === "boolean")
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/report?id=${id}&isPost=${isPost}`, {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {
@@ -88,6 +89,7 @@ export default function Report() {
             }),
             headers: {
                 Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                 "Content-Type": "application/json",
             },
             method: "PUT",
@@ -120,6 +122,7 @@ export default function Report() {
             }),
             headers: {
                 Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                 "Content-Type": "application/json",
             },
             method: "PUT",
@@ -134,6 +137,7 @@ export default function Report() {
                         }),
                         headers: {
                             Accept: "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                             "Content-Type": "application/json",
                         },
                         method: "POST",

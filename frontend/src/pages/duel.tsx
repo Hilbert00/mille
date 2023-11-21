@@ -113,6 +113,7 @@ export default function Duel() {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                             "Content-Type": "application/json",
                         },
                         credentials: "include",
@@ -125,6 +126,7 @@ export default function Duel() {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                             "Content-Type": "application/json",
                         },
                         credentials: "include",
@@ -137,6 +139,7 @@ export default function Duel() {
                         method: "PUT",
                         headers: {
                             Accept: "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                             "Content-Type": "application/json",
                         },
                         credentials: "include",
@@ -604,6 +607,7 @@ export default function Duel() {
             method: "POST",
             headers: {
                 Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                 "Content-Type": "application/json",
             },
             credentials: "include",

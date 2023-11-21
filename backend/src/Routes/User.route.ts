@@ -1,6 +1,5 @@
 import { Router } from "express";
 import conn from "../Config/Database.config.js";
-import * as CookieHelper from "../Helpers/Cookie.helper.js";
 
 // MIDDLEWARES
 import verifyToken from "../Middlewares/Auth.middleware.js";
@@ -8,6 +7,7 @@ import verifyToken from "../Middlewares/Auth.middleware.js";
 const router = Router();
 
 router.get("/:user", verifyToken, (req, res) => {
+    // @ts-ignore
     const userToken = req.user;
     const userParams = req.params.user;
 
@@ -29,6 +29,7 @@ router.get("/:user", verifyToken, (req, res) => {
 });
 
 router.get("/", verifyToken, (req, res) => {
+    // @ts-ignore
     const username = req.user.username;
 
     const query =
@@ -46,6 +47,7 @@ router.get("/", verifyToken, (req, res) => {
 });
 
 router.put("/update", verifyToken, (req, res) => {
+    // @ts-ignore
     const userToken = req.user;
     const requestBody: {
         username?: string;
@@ -104,9 +106,8 @@ router.put("/update", verifyToken, (req, res) => {
 
         delete userToken.iat;
         delete userToken.exp;
-        const cookie = CookieHelper.generateUserCookie({ ...userToken, ...updateData });
 
-        return res.setHeader("Set-Cookie", cookie).json({ message: "success" });
+        return res.json({ ...userToken, ...updateData });
     });
 });
 

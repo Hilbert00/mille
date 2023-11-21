@@ -45,6 +45,7 @@ export default function BanRequests() {
         if (!users.length)
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/social/roles", {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {
@@ -62,7 +63,7 @@ export default function BanRequests() {
                     className="relative flex w-full flex-col gap-3 rounded-xl bg-primary-white p-3 transition-all duration-500 dark:bg-primary"
                 >
                     <div className="flex items-center justify-between gap-5">
-                        <div className="flex items-center gap-2 flex-1">
+                        <div className="flex flex-1 items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <Image
                                     src={
@@ -77,13 +78,13 @@ export default function BanRequests() {
                                 ></Image>
                             </div>
 
-                            <div className="flex flex-col flex-1 gap-1">
+                            <div className="flex flex-1 flex-col gap-1">
                                 <Link href={"/user?name=" + e.username} className="w-full font-medium sm:w-auto">
                                     @{e.username}
                                 </Link>
                                 <select
                                     name="type"
-                                    className="resize-none appearance-none truncate rounded-md border-none bg-neutral-100 px-2 text-sm text-neutral-400 outline-none dark:bg-zinc-800 w-48"
+                                    className="w-48 resize-none appearance-none truncate rounded-md border-none bg-neutral-100 px-2 text-sm text-neutral-400 outline-none dark:bg-zinc-800"
                                     value={e.type}
                                     onChange={(ev) => {
                                         handleChange(e.id, Number(ev.currentTarget.value));
@@ -126,6 +127,7 @@ export default function BanRequests() {
                 body: JSON.stringify({ value: e.type, userId: e.id }),
                 headers: {
                     Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                     "Content-Type": "application/json",
                 },
                 method: "POST",

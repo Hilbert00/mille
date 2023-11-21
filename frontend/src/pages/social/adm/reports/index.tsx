@@ -46,6 +46,7 @@ export default function Reports() {
         if (!reports.length)
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/social/reports", {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {

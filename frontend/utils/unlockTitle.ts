@@ -7,10 +7,11 @@ export default async function unlockTitle(titles: number | number[]) {
         method: "POST",
         headers: {
             Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
             "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ title_id: titles }),
+        body: JSON.stringify({ title_id: titlesUpdated }),
     }).then(async (res) => {
         if (!res.ok) return;
 

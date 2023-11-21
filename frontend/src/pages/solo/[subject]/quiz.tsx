@@ -40,7 +40,10 @@ export default function Quiz() {
             process.env.NEXT_PUBLIC_API_URL +
             `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}`;
 
-        const response = await fetch(url, { credentials: "include" });
+        const response = await fetch(url, {
+            credentials: "include",
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
+        });
 
         if (response.status === 204) {
             if (calledPush) {
@@ -302,7 +305,7 @@ export default function Quiz() {
         const oldD = await fetch(
             process.env.NEXT_PUBLIC_API_URL +
                 `/api/quiz/get/${quizSettings.current.quizType}?num=${quizSettings.current.quizID}&parsed=${false}`,
-            { credentials: "include" }
+            { credentials: "include", headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` } }
         );
 
         const oldData = await oldD.json();
@@ -404,7 +407,11 @@ export default function Quiz() {
             const updateResponse = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/update", {
                 credentials: "include",
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(bodyData),
             });
 
@@ -439,7 +446,11 @@ export default function Quiz() {
             await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                 credentials: "include",
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(bodyData),
             });
 
@@ -456,7 +467,11 @@ export default function Quiz() {
         await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
             credentials: "include",
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(bodyData),
         });
 

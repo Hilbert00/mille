@@ -150,6 +150,7 @@ export default function QuizCircle(props: Props) {
                         process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get/${props.type}?num=${props.linksTo}`,
                         {
                             credentials: "include",
+                            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
                         }
                     );
 

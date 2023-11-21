@@ -28,6 +28,7 @@ export default function Home() {
                 body: JSON.stringify({ ...objectPayload, changePass: true }),
                 headers: {
                     Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                     "Content-Type": "application/json",
                 },
                 method: "POST",

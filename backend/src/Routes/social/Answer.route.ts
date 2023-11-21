@@ -22,8 +22,10 @@ const router = Router();
 
 router.get("/answers", verifyToken, (req, res) => {
     const query = req.query.id
-        ? `SELECT a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE NOT EXISTS (SELECT ar.id_report FROM answer_report AS ar WHERE (a.id_answer = ar.id_answer OR a.reply_to = ar.id_answer) AND ar.status = 1) AND a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`
-        : `SELECT a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE u.id = ${req.user.id} AND a.reply_to IS NULL GROUP BY a.id_answer;`;
+        ? // @ts-ignore
+          `SELECT a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE NOT EXISTS (SELECT ar.id_report FROM answer_report AS ar WHERE (a.id_answer = ar.id_answer OR a.reply_to = ar.id_answer) AND ar.status = 1) AND a.id_post = ${req.query.id} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`
+        : // @ts-ignore
+          `SELECT a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE u.id = ${req.user.id} AND a.reply_to IS NULL GROUP BY a.id_answer;`;
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);
@@ -50,12 +52,15 @@ router.post("/answer", verifyToken, (req, res) => {
     if (!req.body.content || !req.body.postID) return res.sendStatus(404);
 
     const query = req.body.replyID
-        ? `INSERT INTO answer (content, id_post, id_user, reply_to) VALUES ("${req.body.content}", ${req.body.postID}, ${req.user.id}, ${req.body.replyID});`
-        : `INSERT INTO answer (content, id_post, id_user) VALUES ("${req.body.content}", ${req.body.postID}, ${req.user.id});`;
+        ? // @ts-ignore
+          `INSERT INTO answer (content, id_post, id_user, reply_to) VALUES ("${req.body.content}", ${req.body.postID}, ${req.user.id}, ${req.body.replyID});`
+        : // @ts-ignore
+          `INSERT INTO answer (content, id_post, id_user) VALUES ("${req.body.content}", ${req.body.postID}, ${req.user.id});`;
 
     conn.query(query, (err, _result) => {
         if (err) console.error(err);
 
+        // @ts-ignore
         const query = `SELECT a.id_answer, u.id AS id_user, u.picture AS user_picture, u.username, a.content, a.is_best, a.reply_to, COALESCE(av.votes, 0) AS votes, COALESCE(av2.value, 0) AS user_vote, a.create_time FROM answer AS a JOIN user AS u ON a.id_user = u.id LEFT JOIN (SELECT id_answer, COALESCE(SUM(av.value), 0) AS votes FROM answer_vote AS av GROUP BY av.id_answer) av ON a.id_answer = av.id_answer LEFT JOIN answer_vote AS av2 ON av2.id_answer = a.id_answer AND av2.id_user = ${req.user.id} WHERE a.id_post = ${req.body.postID} GROUP BY a.id_answer ORDER BY a.is_best DESC, votes DESC;`;
 
         conn.query(query, (err, result) => {
@@ -85,8 +90,10 @@ router.post("/answer/like", verifyToken, (req, res) => {
 
     const query =
         req.body.value !== 0
-            ? `INSERT INTO answer_vote (value, id_user, id_answer) VALUES (${req.body.value}, ${req.user.id}, ${req.body.answerID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
-            : `DELETE FROM answer_vote WHERE id_answer = ${req.body.answerID} AND id_user = ${req.user.id};`;
+            ? // @ts-ignore
+              `INSERT INTO answer_vote (value, id_user, id_answer) VALUES (${req.body.value}, ${req.user.id}, ${req.body.answerID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
+            : // @ts-ignore
+              `DELETE FROM answer_vote WHERE id_answer = ${req.body.answerID} AND id_user = ${req.user.id};`;
 
     conn.query(query, (err, _result) => {
         if (err) console.error(err);
@@ -99,8 +106,10 @@ router.post("/answer/like", verifyToken, (req, res) => {
 
     const query =
         req.body.value !== 0
-            ? `INSERT INTO answer_vote (value, id_user, id_answer) VALUES (${req.body.value}, ${req.user.id}, ${req.body.answerID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
-            : `DELETE FROM answer_vote WHERE id_answer = ${req.body.answerID} AND id_user = ${req.user.id};`;
+            ? // @ts-ignore
+              `INSERT INTO answer_vote (value, id_user, id_answer) VALUES (${req.body.value}, ${req.user.id}, ${req.body.answerID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
+            : // @ts-ignore
+              `DELETE FROM answer_vote WHERE id_answer = ${req.body.answerID} AND id_user = ${req.user.id};`;
 
     conn.query(query, (err, _result) => {
         if (err) console.error(err);

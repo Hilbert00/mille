@@ -7,6 +7,7 @@ import verifyToken from "../Middlewares/Auth.middleware.js";
 const router = Router();
 
 router.get("/", verifyToken, (req, res) => {
+    // @ts-ignore
     const id = req.user.id;
 
     const query =
@@ -25,6 +26,7 @@ router.get("/", verifyToken, (req, res) => {
 
 router.post("/unlock", verifyToken, (req, res) => {
     let titleId = req.body.title_id;
+    // @ts-ignore
     const userId = req.user.id;
 
     if (!titleId || titleId.length === 0) return res.sendStatus(400);

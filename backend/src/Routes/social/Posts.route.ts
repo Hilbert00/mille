@@ -36,8 +36,10 @@ router.get("/posts", verifyToken, (req, res) => {
     })();
 
     const query = req.query.subject
-        ? `SELECT p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, p.title, p.description, a.name AS area_name, COALESCE(a3.is_best, 0) AS solved, COUNT(DISTINCT a2.id_answer) AS answers, COALESCE(pv.votes, 0) AS votes, COALESCE(pv2.value, 0) AS user_vote, p.create_time FROM post AS p JOIN user AS u ON p.id_user = u.id JOIN area AS a ON p.id_area = a.id_area LEFT JOIN (SELECT pv.id_post, COALESCE(SUM(pv.value), 0) AS votes FROM post_vote AS pv GROUP BY pv.id_post) pv ON p.id_post = pv.id_post LEFT JOIN post_vote AS pv2 ON pv2.id_user = ${req.user.id} AND pv2.id_post = p.id_post LEFT JOIN answer AS a2 ON p.id_post = a2.id_post LEFT JOIN answer AS a3 ON p.id_post = a3.id_post AND a3.is_best = 1 WHERE NOT EXISTS (SELECT pr.id_report FROM post_report AS pr WHERE p.id_post = pr.id_post AND pr.status = 1) AND a.id_subject = ${req.query.subject} ${showSolved} ${sortArea} GROUP BY p.id_post ${sortRecent};`
-        : `SELECT p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, p.title, p.description, a.name AS area_name, COALESCE(a3.is_best, 0) AS solved, COUNT(DISTINCT a2.id_answer) AS answers, COALESCE(pv.votes, 0) AS votes, COALESCE(pv2.value, 0) AS user_vote, p.create_time FROM post AS p JOIN user AS u ON p.id_user = u.id JOIN area AS a ON p.id_area = a.id_area LEFT JOIN (SELECT pv.id_post, COALESCE(SUM(pv.value), 0) AS votes FROM post_vote AS pv GROUP BY pv.id_post) pv ON p.id_post = pv.id_post LEFT JOIN post_vote AS pv2 ON pv2.id_user = ${req.user.id} AND pv2.id_post = p.id_post LEFT JOIN answer AS a2 ON p.id_post = a2.id_post LEFT JOIN answer AS a3 ON p.id_post = a3.id_post AND a3.is_best = 1 WHERE u.id = ${req.user.id} GROUP BY p.id_post;`;
+        ? // @ts-ignore
+          `SELECT p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, p.title, p.description, a.name AS area_name, COALESCE(a3.is_best, 0) AS solved, COUNT(DISTINCT a2.id_answer) AS answers, COALESCE(pv.votes, 0) AS votes, COALESCE(pv2.value, 0) AS user_vote, p.create_time FROM post AS p JOIN user AS u ON p.id_user = u.id JOIN area AS a ON p.id_area = a.id_area LEFT JOIN (SELECT pv.id_post, COALESCE(SUM(pv.value), 0) AS votes FROM post_vote AS pv GROUP BY pv.id_post) pv ON p.id_post = pv.id_post LEFT JOIN post_vote AS pv2 ON pv2.id_user = ${req.user.id} AND pv2.id_post = p.id_post LEFT JOIN answer AS a2 ON p.id_post = a2.id_post LEFT JOIN answer AS a3 ON p.id_post = a3.id_post AND a3.is_best = 1 WHERE NOT EXISTS (SELECT pr.id_report FROM post_report AS pr WHERE p.id_post = pr.id_post AND pr.status = 1) AND a.id_subject = ${req.query.subject} ${showSolved} ${sortArea} GROUP BY p.id_post ${sortRecent};`
+        : // @ts-ignore
+          `SELECT p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, p.title, p.description, a.name AS area_name, COALESCE(a3.is_best, 0) AS solved, COUNT(DISTINCT a2.id_answer) AS answers, COALESCE(pv.votes, 0) AS votes, COALESCE(pv2.value, 0) AS user_vote, p.create_time FROM post AS p JOIN user AS u ON p.id_user = u.id JOIN area AS a ON p.id_area = a.id_area LEFT JOIN (SELECT pv.id_post, COALESCE(SUM(pv.value), 0) AS votes FROM post_vote AS pv GROUP BY pv.id_post) pv ON p.id_post = pv.id_post LEFT JOIN post_vote AS pv2 ON pv2.id_user = ${req.user.id} AND pv2.id_post = p.id_post LEFT JOIN answer AS a2 ON p.id_post = a2.id_post LEFT JOIN answer AS a3 ON p.id_post = a3.id_post AND a3.is_best = 1 WHERE u.id = ${req.user.id} GROUP BY p.id_post;`;
 
     conn.query(query, (err, result) => {
         if (err) console.error(err);
@@ -49,6 +51,7 @@ router.get("/posts", verifyToken, (req, res) => {
 router.get("/post", verifyToken, (req, res) => {
     if (!req.query.id) return res.sendStatus(404);
 
+    // @ts-ignore
     const query = `SELECT p.id_post, u.id AS id_user, u.picture AS user_picture, u.username, p.title, p.description, a.name AS area_name, COALESCE(a3.is_best, 0) AS solved, COUNT(DISTINCT a2.id_answer) AS answers, COALESCE(pv.votes, 0) AS votes, COALESCE(pv2.value, 0) AS user_vote, p.create_time FROM post AS p JOIN user AS u ON p.id_user = u.id JOIN area AS a ON p.id_area = a.id_area LEFT JOIN (SELECT pv.id_post, COALESCE(SUM(pv.value), 0) AS votes FROM post_vote AS pv GROUP BY pv.id_post) pv ON p.id_post = pv.id_post LEFT JOIN post_vote AS pv2 ON pv2.id_user = ${req.user.id} AND pv2.id_post = p.id_post LEFT JOIN answer AS a2 ON p.id_post = a2.id_post LEFT JOIN answer AS a3 ON p.id_post = a3.id_post AND a3.is_best = 1 WHERE p.id_post = ${req.query.id} GROUP BY p.id_post;`;
 
     conn.query(query, (err, result) => {
@@ -61,6 +64,7 @@ router.get("/post", verifyToken, (req, res) => {
 router.post("/post", verifyToken, (req, res) => {
     if (!req.body.title || !req.body.content || !req.body.area) return res.sendStatus(404);
 
+    // @ts-ignore
     const query = `INSERT INTO post (title, description, id_user, id_area) VALUES ("${req.body.title}", "${req.body.content}", ${req.user.id}, ${req.body.area});`;
 
     conn.query(query, (err, _result) => {
@@ -74,8 +78,10 @@ router.post("/post/like", verifyToken, (req, res) => {
 
     const query =
         req.body.value !== 0
-            ? `INSERT INTO post_vote (value, id_user, id_post) VALUES (${req.body.value}, ${req.user.id}, ${req.body.postID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
-            : `DELETE FROM post_vote WHERE id_post = ${req.body.postID} AND id_user = ${req.user.id};`;
+            ? // @ts-ignore
+              `INSERT INTO post_vote (value, id_user, id_post) VALUES (${req.body.value}, ${req.user.id}, ${req.body.postID}) ON DUPLICATE KEY UPDATE value = ${req.body.value};`
+            : // @ts-ignore
+              `DELETE FROM post_vote WHERE id_post = ${req.body.postID} AND id_user = ${req.user.id};`;
 
     conn.query(query, (err, _result) => {
         if (err) console.error(err);

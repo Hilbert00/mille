@@ -55,7 +55,6 @@ export default function Home() {
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/signup", {
                 body: payload,
                 method: "POST",
-                credentials: "include",
             })
                 .then((res) => {
                     if (res.ok) {

@@ -81,6 +81,7 @@ router.post("/create", verifyToken, verifysubject, async (req, res) => {
 
     const resultQuestions = await getQObjects(questions);
 
+    // @ts-ignore
     const userID = await UserHelper.getUserID(req.user.username);
 
     const availableAnswers = resultQuestions.map((e) => {
@@ -130,6 +131,7 @@ router.get("/get/:type", verifyToken, async (req, res) => {
     const typeArray = typeof req.query.typeArray === "undefined" ? false : String(req.query.typeArray).split(",");
 
     async function getData() {
+        // @ts-ignore
         const userID = await UserHelper.getUserID(req.user.username);
 
         async function tryQuerie(query: string) {
@@ -314,6 +316,7 @@ router.put("/update", verifyToken, async (req, res) => {
     const { quizType } = req.body;
     const { quizNumber } = req.body;
     const { data } = req.body;
+    // @ts-ignore
     const userID = await UserHelper.getUserID(req.user.username);
 
     try {

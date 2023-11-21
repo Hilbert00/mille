@@ -45,12 +45,13 @@ export default function Publish() {
 
         fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/post`, {
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
             body: JSON.stringify({ title: title.trim(), content: content.trim(), area }),
             method: "POST",
         }).then(() => {
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/posts`, {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {

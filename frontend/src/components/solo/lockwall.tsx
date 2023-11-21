@@ -56,15 +56,14 @@ export default function LockWall(props: LockWallProps) {
                     quizNumber: 1,
                 };
 
-
                 if (props.currentValue >= props.necessaryValue && !apiCalled) {
                     unlockTitle(22);
 
                     (async function () {
                         const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/quiz/create", {
                             credentials: "include",
+                            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`, "Content-Type": "application/json" },
                             method: "POST",
-                            headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(bodyData),
                         });
 

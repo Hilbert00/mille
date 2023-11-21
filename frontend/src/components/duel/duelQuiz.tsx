@@ -46,7 +46,10 @@ export default function DuelQuiz(props: DuelProps) {
 
         async function getData() {
             const url = process.env.NEXT_PUBLIC_API_URL + `/api/quiz/get?data=${JSON.stringify(props.data)}`;
-            const response = await fetch(url, { credentials: "include" });
+            const response = await fetch(url, {
+                credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
+            });
 
             const json = await response.json();
 

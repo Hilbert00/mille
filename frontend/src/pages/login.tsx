@@ -29,16 +29,10 @@ export default function Home() {
             fetch(process.env.NEXT_PUBLIC_API_URL + "/api/auth/login", {
                 method: "POST",
                 body: payload,
-                credentials: "include",
             })
                 .then((res) => {
-                    if (res.ok) {
-                        const date = new Date().getFullYear();
-
-                        if (date === 2023) return unlockTitle(26).then(() => router.push("/solo"));
-
-                        return router.push("/solo");
-                    } else
+                    if (res.ok) return res.json();
+                    else
                         swal.fire({
                             title: "Oops",
                             text: "Nome de usuário e/ou senha incorreto(s)!",
@@ -48,6 +42,15 @@ export default function Home() {
                         });
 
                     setDisabled(false);
+                })
+                .then(async (json) => {
+                    localStorage.setItem("AuthJWT", json.token);
+
+                    const date = new Date().getFullYear();
+
+                    if (date === 2023) await unlockTitle(26);
+
+                    return router.push("/solo");
                 })
                 .catch((err) => {
                     console.log(err);

@@ -57,6 +57,7 @@ export default function BanRequest() {
         if (!Object.keys(request).length && !Number.isNaN(id))
             fetch(process.env.NEXT_PUBLIC_API_URL + `/api/social/request?id=${router.query.request}`, {
                 credentials: "include",
+                headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
             })
                 .then((res) => res.json())
                 .then((data) => {
@@ -71,6 +72,7 @@ export default function BanRequest() {
             body: JSON.stringify({ value, requestId: request.id_request, userId: request.user_id }),
             headers: {
                 Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                 "Content-Type": "application/json",
             },
             method: "PUT",

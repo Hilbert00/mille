@@ -29,7 +29,10 @@ export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: st
         : process.env.NEXT_PUBLIC_API_URL + "/api/user";
 
     async function getData() {
-        const response = await fetch(url, { credentials: "include" });
+        const response = await fetch(url, {
+            credentials: "include",
+            headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },
+        });
 
         if (!response.ok) throw `${response.status}: ${response.statusText}`;
 
