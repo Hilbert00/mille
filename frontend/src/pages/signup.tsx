@@ -168,7 +168,7 @@ export default function Home() {
                     </Button>
                 </form>
 
-                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-neutral-400 sm:bottom-16">
+                <div className="absolute bottom-28 left-0 right-0 flex flex-col gap-2 text-center text-sm text-neutral-400">
                     <p>
                         Já tem uma conta?{" "}
                         <Link href={"/login"} className="text-blue-600">
