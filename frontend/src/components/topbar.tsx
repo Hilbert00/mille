@@ -45,7 +45,9 @@ export default function Topbar(props: TopbarProps) {
     if (!Object.keys(user).length)
         return (
             <header className="sticky top-0 z-20 w-full border-b-4 border-primary-white bg-white dark:border-primary dark:bg-bgBlack">
-                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl"></nav>
+                <nav className="mx-auto flex h-16 w-full max-w-[calc(100vw-40px)] items-center justify-between md:max-w-3xl">
+                    <Image src={`/images/logo/mille-logo-full.png`} alt={"Logo"} width={"120"} height={"60"} priority />
+                </nav>
             </header>
         );
 
