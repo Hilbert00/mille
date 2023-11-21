@@ -70,7 +70,7 @@ export default function UserDuel(props: UserProps) {
 
     return (
         <div className={`flex w-20 flex-col items-center sm:mx-12 sm:w-56`}>
-            <div className="relative flex w-32 justify-center sm:w-56">
+            <div className="relative flex justify-center w-56">
                 {/* <div
                     className={`absolute top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-blue-700 bg-blue-600 sm:h-10 sm:w-10`}
                     style={side}
@@ -83,7 +83,7 @@ export default function UserDuel(props: UserProps) {
                             ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${props.picture}.webp`
                             : "/images/usericons/default.png"
                     }
-                    className="h-56 w-56 rounded-full object-cover"
+                    className="w-full rounded-full object-cover h-56"
                     alt={"User"}
                     width={224}
                     height={224}
