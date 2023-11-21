@@ -16,6 +16,7 @@ interface UserData {
     active: number;
     type: 0 | 1 | 2;
     banned: 0 | 1;
+    created_at: string;
     isUser?: boolean;
 }
 

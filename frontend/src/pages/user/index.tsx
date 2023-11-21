@@ -118,7 +118,11 @@ export default function User() {
                             <div>
                                 <Image src="/images/calendar.png" width={80} height={80} alt="days" />
                                 <div className="mt-4">
-                                    <h1 className="text-center text-4xl font-black">{user.user_sequence}</h1>
+                                    <h1 className="text-center text-4xl font-black">
+                                        {Math.round(
+                                            Math.abs((+new Date(user.created_at) - +new Date()) / (24 * 60 * 60 * 1000))
+                                        )}
+                                    </h1>
                                     <h2 className="text-center text-xl font-bold">Dias</h2>
                                 </div>
                             </div>

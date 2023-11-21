@@ -13,8 +13,8 @@ router.get("/:user", verifyToken, (req, res) => {
 
     const query =
         userToken.username === userParams
-            ? "SELECT username, picture, COALESCE(t.title, 'Novato') AS title, user_level, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?"
-            : "SELECT u.id, username, picture, COALESCE(t.title, 'Novato') AS title, user_level, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins, active FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?";
+            ? "SELECT username, picture, COALESCE(t.title, 'Novato') AS title, user_level, u.created_at, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?"
+            : "SELECT u.id, username, picture, COALESCE(t.title, 'Novato') AS title, user_level, u.created_at, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins, active FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?";
     const data = ["username", userParams];
 
     conn.query(query, data, (err, result) => {
@@ -33,7 +33,7 @@ router.get("/", verifyToken, (req, res) => {
     const username = req.user.username;
 
     const query =
-        "SELECT u.id, username, picture, COALESCE(t.title, 'Novato') AS title, user_level, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins, active FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?";
+        "SELECT u.id, username, picture, COALESCE(t.title, 'Novato') AS title, user_level, u.created_at, COALESCE(type, 0) AS type, EXISTS (SELECT id_banned FROM banned AS b WHERE b.id_banned = u.id) AS banned, user_coins, user_behavior, user_sequence, challenge_matches, challenge_wins, active FROM user as u LEFT JOIN moderator AS m ON m.user_id = u.id LEFT JOIN title AS t ON u.active_title = t.id_title WHERE ?? = ?";
     const data = ["username", username];
 
     conn.query(query, data, (err, result) => {
