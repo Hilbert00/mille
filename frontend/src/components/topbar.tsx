@@ -77,7 +77,7 @@ export default function Topbar(props: TopbarProps) {
                                         ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                         : "/images/usericons/default.png"
                                 }
-                                className="h-full rounded-full object-contain"
+                                className="h-full rounded-full object-cover"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -119,7 +119,7 @@ export default function Topbar(props: TopbarProps) {
                                         ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                         : "/images/usericons/default.png"
                                 }
-                                className="h-full rounded-full object-contain"
+                                className="h-full rounded-full object-cover"
                                 width={100}
                                 height={100}
                                 alt={"User Icon"}
@@ -152,7 +152,7 @@ export default function Topbar(props: TopbarProps) {
                                     ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${user.picture}.webp`
                                     : "/images/usericons/default.png"
                             }
-                            className="h-full rounded-full object-contain"
+                            className="h-full rounded-full object-cover"
                             width={100}
                             height={100}
                             alt={"User Icon"}

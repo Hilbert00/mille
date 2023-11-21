@@ -49,7 +49,7 @@ export default function UserDuel(props: UserProps) {
                                 ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${props.picture}.webp`
                                 : "/images/usericons/default.png"
                         }
-                        className="h-full w-auto rounded-full object-contain"
+                        className="h-56 w-56 rounded-full object-cover"
                         alt={"User"}
                         width={224}
                         height={224}
@@ -83,10 +83,10 @@ export default function UserDuel(props: UserProps) {
                             ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${props.picture}.webp`
                             : "/images/usericons/default.png"
                     }
-                    className="h-full w-auto rounded-full object-contain"
+                    className="h-56 w-56 rounded-full object-cover"
                     alt={"User"}
-                    width={100}
-                    height={100}
+                    width={224}
+                    height={224}
                     priority
                 ></Image>
             </div>

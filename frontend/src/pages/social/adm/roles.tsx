@@ -64,21 +64,19 @@ export default function BanRequests() {
                 >
                     <div className="flex items-center justify-between gap-5">
                         <div className="flex flex-1 items-center gap-2">
-                            <div className="flex items-center gap-2">
-                                <Image
-                                    src={
-                                        e.user_picture
-                                            ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
-                                            : "/images/usericons/default.png"
-                                    }
-                                    className="rounded-full object-contain"
-                                    alt={"User"}
-                                    width={40}
-                                    height={40}
-                                ></Image>
-                            </div>
+                            <Image
+                                src={
+                                    e.user_picture
+                                        ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${e.user_picture}.webp`
+                                        : "/images/usericons/default.png"
+                                }
+                                className="h-10 w-10 rounded-full object-cover"
+                                alt={"User"}
+                                width={40}
+                                height={40}
+                            ></Image>
 
-                            <div className="flex flex-1 flex-col gap-1">
+                            <div className="flex flex-col gap-1">
                                 <Link href={"/user?name=" + e.username} className="w-full font-medium sm:w-auto">
                                     @{e.username}
                                 </Link>

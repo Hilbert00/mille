@@ -205,7 +205,7 @@ export default function Report() {
                                             ? `https://res.cloudinary.com/dxmh73o0j/image/upload/v1699888122/${report.user_picture}.webp`
                                             : "/images/usericons/default.png"
                                     }
-                                    className="rounded-full object-contain"
+                                    className="h-10 w-10 rounded-full object-cover"
                                     alt={"User"}
                                     width={50}
                                     height={50}

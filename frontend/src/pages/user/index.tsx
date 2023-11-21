@@ -90,7 +90,7 @@ export default function User() {
                                         alt={"User"}
                                         width={224}
                                         height={224}
-                                        className="h-full rounded-full object-contain"
+                                        className="h-full rounded-full object-cover"
                                         priority
                                     ></Image>
                                 </div>
