@@ -9,6 +9,7 @@ import swal from "sweetalert2";
 import { getUserData } from "hooks/getUserData";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect, useState } from "react";
+import { TbTrash } from "react-icons/tb";
 
 const CLOUD_NAME = "dxmh73o0j";
 const CLOUD_KEY = "912131322178127";
@@ -17,6 +18,7 @@ export default function User() {
     const router = useRouter();
     const [user] = getUserData(false, false);
     const [username, setUsername] = useState("");
+    const [saving, setSaving] = useState(false);
     const [title, setTitle] = useState(-1);
     const [available, setAvailable] = useState(null as null | { title_id: number; title: string }[]);
 
@@ -46,11 +48,40 @@ export default function User() {
         }
 
         setUsername(user.username);
-    }, [Object.keys(user).length, title, available]);
+    }, [Object.keys(user).length, title, available, saving]);
+
+    function removePicture() {
+        setSaving(true);
+
+        fetch(process.env.NEXT_PUBLIC_API_URL + "/api/picture/destroy", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ public_id: [user.picture], clear: true }),
+        }).then((res) => {
+            if (res.ok) return router.push(`/user?name=${username}`);
+
+            setSaving(false);
+
+            swal.fire({
+                title: "Oops",
+                text: "Um erro inesperado ocorreu!",
+                icon: "error",
+                background: "#1E1E1E80",
+                color: "#fff",
+            });
+        });
+    }
 
     async function updateProfile(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!username) return;
+
+        setSaving(true);
 
         const data = {} as { username?: string; active_title?: number; picture?: string };
 
@@ -122,6 +153,9 @@ export default function User() {
                 },
             }).then((res) => {
                 if (res.ok) return router.push(`/user?name=${username}`);
+
+                setSaving(false);
+
                 swal.fire({
                     title: "Oops",
                     text: "Alguns dados estão inválidos ou o nome de usuário já está sendo utilizado!",
@@ -194,19 +228,40 @@ export default function User() {
                     </div>
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <label htmlFor="picture" className="font-medium sm:text-xl">
-                            Foto do perfil:
-                        </label>
-                        <input
-                            name="picture"
-                            id="picture"
-                            type="file"
-                            className="h-11 cursor-pointer rounded-xl bg-neutral-100 pr-3 text-neutral-400 file:mr-5 file:h-11 file:cursor-pointer file:border-none dark:bg-zinc-800 sm:w-2/3"
-                            accept=".png,.jpg,.jpeg,.webp"
-                        />
+                        <div className="flex items-center justify-between gap-5">
+                            <label htmlFor="picture" className="font-medium sm:text-xl">
+                                Foto do perfil:
+                            </label>
+                            {user.picture && (
+                                <button type="button" className="sm:hidden" disabled={saving} onClick={removePicture}>
+                                    <TbTrash className="h-10 w-10 text-red-600" />
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="flex flex-1 items-center justify-between gap-5">
+                            <input
+                                name="picture"
+                                id="picture"
+                                type="file"
+                                className="h-11 flex-1 cursor-pointer rounded-xl bg-neutral-100 pr-3 text-neutral-400 file:mr-5 file:h-11 file:cursor-pointer file:border-none dark:bg-zinc-800"
+                                accept=".png,.jpg,.jpeg,.webp"
+                            />
+
+                            {user.picture && (
+                                <button
+                                    type="button"
+                                    className="hidden sm:block"
+                                    disabled={saving}
+                                    onClick={removePicture}
+                                >
+                                    <TbTrash className="h-10 w-10 text-red-600" />
+                                </button>
+                            )}
+                        </div>
                     </div>
 
-                    <Button type="submit" className="mt-5" disable={!username}>
+                    <Button type="submit" className="mt-5" disable={!username || saving}>
                         Confirmar Alterações
                     </Button>
                 </form>
