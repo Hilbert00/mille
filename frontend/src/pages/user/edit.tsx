@@ -151,19 +151,30 @@ export default function User() {
                     Authorization: `Bearer ${localStorage.getItem("AuthJWT")}`,
                     "Content-Type": "application/json",
                 },
-            }).then((res) => {
-                if (res.ok) return router.push(`/user?name=${username}`);
+            })
+                .then((res) => {
+                    if (!res.ok) {
+                        setSaving(false);
 
-                setSaving(false);
+                        swal.fire({
+                            title: "Oops",
+                            text: "Alguns dados estão inválidos ou o nome de usuário já está sendo utilizado!",
+                            icon: "error",
+                            background: "#1E1E1E80",
+                            color: "#fff",
+                        });
 
-                swal.fire({
-                    title: "Oops",
-                    text: "Alguns dados estão inválidos ou o nome de usuário já está sendo utilizado!",
-                    icon: "error",
-                    background: "#1E1E1E80",
-                    color: "#fff",
+                        return {} as any;
+                    }
+
+                    return res.json();
+                })
+                .then((json) => {
+                    if (!Object.keys(json).length) return;
+
+                    localStorage.setItem("AuthJWT", json.token);
+                    return router.push(`/user?name=${username}`);
                 });
-            });
         } else return router.push(`/user?name=${user.username}`);
     }
 

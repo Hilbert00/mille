@@ -23,13 +23,13 @@ interface UserData {
 export function getUserData(isLogin: boolean, isProfile?: boolean, userPath?: string) {
     const [data, setData] = useState({} as UserData);
     const [calledPush, setCalledPush] = useState(false);
-
     const router = useRouter();
-    const url = userPath
-        ? process.env.NEXT_PUBLIC_API_URL + `/api/user/${userPath}`
-        : process.env.NEXT_PUBLIC_API_URL + "/api/user";
 
     async function getData() {
+        const url = userPath
+            ? process.env.NEXT_PUBLIC_API_URL + `/api/user/${userPath}`
+            : process.env.NEXT_PUBLIC_API_URL + "/api/user";
+
         const response = await fetch(url, {
             credentials: "include",
             headers: { Authorization: `Bearer ${localStorage.getItem("AuthJWT")}` },

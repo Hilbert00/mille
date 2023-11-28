@@ -4,6 +4,8 @@ import conn from "../Config/Database.config.js";
 // MIDDLEWARES
 import verifyToken from "../Middlewares/Auth.middleware.js";
 
+import * as TokenHelper from "../Helpers/Token.helper.js";
+
 const router = Router();
 
 router.get("/:user", verifyToken, (req, res) => {
@@ -104,10 +106,9 @@ router.put("/update", verifyToken, (req, res) => {
     conn.query(query, data, (err) => {
         if (err) return res.sendStatus(404);
 
-        delete userToken.iat;
-        delete userToken.exp;
+        const token = TokenHelper.generateUserToken({ ...userToken, ...updateData });
 
-        return res.json({ ...userToken, ...updateData });
+        return res.json({ token });
     });
 });
 

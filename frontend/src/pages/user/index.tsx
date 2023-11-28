@@ -35,7 +35,7 @@ export default function User() {
 
     if (
         !Object.keys(user).length ||
-        String(router.query.name).toLocaleLowerCase() !== user.username.toLocaleLowerCase()
+        String(router.query.name).toLocaleLowerCase() !== user?.username?.toLocaleLowerCase()
     )
         return (
             <>
